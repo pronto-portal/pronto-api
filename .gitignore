@@ -1,6 +1,6 @@
 dist
 node_modules
-db
 data
 .env
 db.yaml
+postgres
