@@ -7,10 +7,10 @@ import express from "express";
 import { json } from "body-parser";
 import cors from "cors";
 import getAppDataSource from "./datasource/datasource";
+import schema from "./graphql/schema/schema";
 
 const server = new ApolloServer({
-  typeDefs: "type Query { x: ID }",
-  resolvers: { Query: { x: () => "hi!" } },
+  schema,
 });
 
 server.startInBackgroundHandlingStartupErrorsByLoggingAndFailingAllRequests();
@@ -23,14 +23,14 @@ app.use(
     context: async ({ req, res }) => {
       // API Gateway event and Lambda Context
       const { event, context } = getCurrentInvoke();
-      const db = getAppDataSource();
+      const prisma = getAppDataSource();
 
       return {
         expressRequest: req,
         expressResponse: res,
         lambdaEvent: event,
         lambdaContext: context,
-        db,
+        prisma,
       };
     },
   })

@@ -11,6 +11,9 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "prisma": {
+    "schema": "src/prisma/schema.prisma"
+  },
   "devDependencies": {
     "@types/node": "^18.11.19",
     "prisma": "^4.9.0",
@@ -31,6 +34,8 @@
     "cors": "^2.8.5",
     "express": "^4.18.2",
     "graphql": "^16.6.0",
+    "nexus": "^1.3.0",
+    "nexus-prisma": "^1.0.4",
     "pg": "^8.9.0",
     "reflect-metadata": "^0.1.13"
   }
