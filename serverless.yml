@@ -1,11 +1,11 @@
 service: pronto-api
 provider:
   name: aws
-  runtime: nodejs12.x
+  runtime: nodejs14.x
   region: us-east-2
 functions:
-  graphql:
-    handler: dist/index.graphqlHandler
+  index:
+    handler: dist/index.handler
     events:
       - http:
           path: graphql

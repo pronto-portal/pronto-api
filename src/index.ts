@@ -9,31 +9,43 @@ import cors from "cors";
 import getAppDataSource from "./datasource/datasource";
 import schema from "./graphql/schema/schema";
 
-const server = new ApolloServer({
-  schema,
-});
+const prisma = getAppDataSource();
 
-server.startInBackgroundHandlingStartupErrorsByLoggingAndFailingAllRequests();
+const main = async () => {
+  const server = new ApolloServer({
+    schema,
+  });
 
-const app = express();
-app.use(
-  cors(),
-  json(),
-  expressMiddleware(server, {
-    context: async ({ req, res }) => {
-      // API Gateway event and Lambda Context
-      const { event, context } = getCurrentInvoke();
-      const prisma = getAppDataSource();
+  //server.startInBackgroundHandlingStartupErrorsByLoggingAndFailingAllRequests();
+  await server.start();
 
-      return {
-        expressRequest: req,
-        expressResponse: res,
-        lambdaEvent: event,
-        lambdaContext: context,
-        prisma,
-      };
-    },
-  })
-);
+  const app = express();
+  app.use(
+    cors(),
+    json(),
+    expressMiddleware(server, {
+      context: async ({ req, res }) => {
+        // API Gateway event and Lambda Context
+        const { event, context } = getCurrentInvoke();
 
-exports.graphqlHandler = serverlessExpress({ app });
+        return {
+          expressRequest: req,
+          expressResponse: res,
+          lambdaEvent: event,
+          lambdaContext: context,
+          prisma,
+        };
+      },
+    })
+  );
+
+  app.listen(4000, () => {
+    console.log("NOW LISTENING");
+  });
+
+  return serverlessExpress({ app });
+};
+
+main();
+
+//exports.handler = handler;
