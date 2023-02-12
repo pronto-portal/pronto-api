@@ -1,8 +1,15 @@
-import { booleanArg, mutationType, nonNull, stringArg } from "nexus";
-import { Context } from "../schema/context";
-import { UserType } from "../types";
+import {
+  booleanArg,
+  extendType,
+  mutationType,
+  nonNull,
+  stringArg,
+} from "nexus";
+import { Context } from "../../schema/context";
+import { UserType } from "../../types";
 
-export const UserMutations = mutationType({
+export const CreateUser = extendType({
+  type: "Mutation",
   definition(t) {
     t.nonNull.field("createUser", {
       type: UserType,

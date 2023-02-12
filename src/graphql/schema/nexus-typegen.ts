@@ -165,13 +165,13 @@ export interface NexusGenFieldTypeNames {
 export interface NexusGenArgTypes {
   Mutation: {
     createUser: { // args
-      email: string; // String!
-      firstName: string; // String!
-      isManager: boolean; // Boolean!
-      isTranslator: boolean; // Boolean!
-      lastName: string; // String!
-      phone: string; // String!
-      profilePic: string; // String!
+      firstName?: string | null; // String
+      id: string; // String!
+      isManager?: boolean | null; // Boolean
+      isTranslator?: boolean | null; // Boolean
+      lastName?: string | null; // String
+      phone?: string | null; // String
+      profilePic?: string | null; // String
     }
   }
 }
