@@ -31,17 +31,38 @@ type Claimant {
   lastName: String
 }
 
+input CreateUserInput {
+  email: String!
+  firstName: String!
+  isManager: Boolean! = false
+  isTranslator: Boolean! = false
+  lastName: String!
+  phone: String!
+  profilePic: String! = ""
+}
+
 """
 A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.
 """
 scalar DateTime
 
 type Mutation {
-  createUser(firstName: String, id: String!, isManager: Boolean, isTranslator: Boolean, lastName: String, phone: String, profilePic: String): User!
+  createUser(input: CreateUserInput!): User!
+  updateUser(data: UpdateUserInput!): User
 }
 
 type Query {
   ok: Boolean!
+}
+
+input UpdateUserInput {
+  email: String
+  firstName: String
+  isManager: Boolean = false
+  isTranslator: Boolean = false
+  lastName: String
+  phone: String
+  profilePic: String = ""
 }
 
 type User {
@@ -50,7 +71,7 @@ type User {
   createdAt: DateTime
   email: String
   firstName: String
-  id: String
+  id: String!
   isBanned: Boolean
   isManager: Boolean
   isTranslator: Boolean

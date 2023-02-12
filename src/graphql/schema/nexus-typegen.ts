@@ -29,6 +29,24 @@ declare global {
 }
 
 export interface NexusGenInputs {
+  CreateUserInput: { // input type
+    email: string; // String!
+    firstName: string; // String!
+    isManager: boolean; // Boolean!
+    isTranslator: boolean; // Boolean!
+    lastName: string; // String!
+    phone: string; // String!
+    profilePic: string; // String!
+  }
+  UpdateUserInput: { // input type
+    email?: string | null; // String
+    firstName?: string | null; // String
+    isManager?: boolean | null; // Boolean
+    isTranslator?: boolean | null; // Boolean
+    lastName?: string | null; // String
+    phone?: string | null; // String
+    profilePic?: string | null; // String
+  }
 }
 
 export interface NexusGenEnums {
@@ -91,6 +109,7 @@ export interface NexusGenFieldTypes {
   }
   Mutation: { // field return type
     createUser: NexusGenRootTypes['User']; // User!
+    updateUser: NexusGenRootTypes['User'] | null; // User
   }
   Query: { // field return type
     ok: boolean; // Boolean!
@@ -101,7 +120,7 @@ export interface NexusGenFieldTypes {
     createdAt: NexusGenScalars['DateTime'] | null; // DateTime
     email: string | null; // String
     firstName: string | null; // String
-    id: string | null; // String
+    id: string; // String!
     isBanned: boolean | null; // Boolean
     isManager: boolean | null; // Boolean
     isTranslator: boolean | null; // Boolean
@@ -141,6 +160,7 @@ export interface NexusGenFieldTypeNames {
   }
   Mutation: { // field return type name
     createUser: 'User'
+    updateUser: 'User'
   }
   Query: { // field return type name
     ok: 'Boolean'
@@ -165,13 +185,10 @@ export interface NexusGenFieldTypeNames {
 export interface NexusGenArgTypes {
   Mutation: {
     createUser: { // args
-      firstName?: string | null; // String
-      id: string; // String!
-      isManager?: boolean | null; // Boolean
-      isTranslator?: boolean | null; // Boolean
-      lastName?: string | null; // String
-      phone?: string | null; // String
-      profilePic?: string | null; // String
+      input: NexusGenInputs['CreateUserInput']; // CreateUserInput!
+    }
+    updateUser: { // args
+      data: NexusGenInputs['UpdateUserInput']; // UpdateUserInput!
     }
   }
 }
@@ -184,7 +201,7 @@ export interface NexusGenTypeInterfaces {
 
 export type NexusGenObjectNames = keyof NexusGenObjects;
 
-export type NexusGenInputNames = never;
+export type NexusGenInputNames = keyof NexusGenInputs;
 
 export type NexusGenEnumNames = never;
 

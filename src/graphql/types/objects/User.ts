@@ -5,7 +5,7 @@ import { AssignmentType } from "./Assignment";
 export const UserType = objectType({
   name: "User",
   definition(t) {
-    t.string("id");
+    t.nonNull.string("id");
     t.date("createdAt");
     t.date("updatedAt");
     t.string("email");

@@ -1,36 +1,32 @@
-import {
-  booleanArg,
-  extendType,
-  mutationType,
-  nonNull,
-  nullable,
-  stringArg,
-} from "nexus";
+import { mutationField, nonNull } from "nexus";
 import { Context } from "../../schema/context";
 import { UserType } from "../../types";
+import { UpdateUserInput } from "../../types/inputTypes/User/updateUser";
 
-export const UpdateUser = extendType({
-  type: "Mutation",
-  definition(t) {
-    t.nonNull.field("createUser", {
-      type: UserType,
-      args: {
-        id: nonNull(stringArg()),
-        phone: nullable(stringArg()),
-        firstName: nullable(stringArg()),
-        lastName: nullable(stringArg()),
-        profilePic: nullable(stringArg()),
-        isManager: nullable(booleanArg()),
-        isTranslator: nullable(booleanArg()),
-      },
-      async resolve(_root, { id, ...args }, ctx: Context) {
-        const user = await ctx.prisma.user.update({
-          where: { id },
-          data: args,
-        });
-
-        return user;
+export const UpdateUser = mutationField("updateUser", {
+  type: UserType,
+  args: {
+    data: nonNull(UpdateUserInput),
+  },
+  async resolve(
+    _root,
+    {
+      data: { firstName, lastName, phone, profilePic, isManager, isTranslator },
+    },
+    ctx: Context
+  ) {
+    const user = await ctx.prisma.user.update({
+      where: { id: ctx.userId },
+      data: {
+        phone: phone || undefined,
+        firstName: firstName || undefined,
+        lastName: lastName || undefined,
+        profilePic: profilePic || undefined,
+        isManager: isManager || undefined,
+        isTranslator: isTranslator || undefined,
       },
     });
+
+    return user;
   },
 });
