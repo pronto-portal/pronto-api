@@ -1,6 +1,4 @@
 import { User } from "@prisma/client";
-import { AES } from "crypto-js";
-import { Response } from "express";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import { Context } from "../../graphql/schema/context";
 import { decryptRefreshToken } from "./decryptRefreshToken";
