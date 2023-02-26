@@ -16,7 +16,7 @@ export const CreateUser = extendType({
           data: input,
         });
 
-        authenticate(user, ctx.res);
+        authenticate(user, ctx);
 
         return user;
       },
