@@ -1,4 +1,5 @@
 import { extendType, nonNull } from "nexus";
+import { authenticate } from "../../../utils/auth/authenticate";
 import { Context } from "../../schema/context";
 import { CreateUserInput, UserType } from "../../types";
 
@@ -14,6 +15,8 @@ export const CreateUser = extendType({
         const user = await ctx.prisma.user.create({
           data: input,
         });
+
+        authenticate(user, ctx.res);
 
         return user;
       },

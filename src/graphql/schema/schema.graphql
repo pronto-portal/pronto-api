@@ -52,7 +52,7 @@ type Mutation {
 }
 
 type Query {
-  ok: Boolean!
+  GetUser: String!
 }
 
 input UpdateUserInput {
