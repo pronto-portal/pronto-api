@@ -14,6 +14,8 @@ export const verifyGoogleToken = async (token: string) => {
     //[CLIENT_ID_1, CLIENT_ID_2, CLIENT_ID_3]
   });
   const payload = ticket.getPayload() as TokenPayload;
+
+  return payload;
   const userid = payload["sub"];
   // If request specified a G Suite domain:
   // const domain = payload['hd'];

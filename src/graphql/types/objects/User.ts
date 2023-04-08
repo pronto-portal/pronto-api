@@ -8,11 +8,11 @@ export const UserType = objectType({
     t.nonNull.string("id");
     t.date("createdAt");
     t.date("updatedAt");
-    t.string("email");
-    t.string("phone");
-    t.string("firstName");
-    t.string("lastName");
-    t.string("profilePic");
+    t.nonNull.string("email");
+    t.nullable.string("phone");
+    t.nullable.string("firstName");
+    t.nullable.string("lastName");
+    t.nullable.string("profilePic");
     t.boolean("isManager");
     t.boolean("isTranslator");
     t.boolean("isBanned");

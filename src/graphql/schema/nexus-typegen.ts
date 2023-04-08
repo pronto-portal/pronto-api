@@ -32,12 +32,9 @@ declare global {
 export interface NexusGenInputs {
   CreateUserInput: { // input type
     email: string; // String!
-    firstName: string; // String!
-    isManager: boolean; // Boolean!
-    isTranslator: boolean; // Boolean!
-    lastName: string; // String!
-    phone: string; // String!
-    profilePic: string; // String!
+    firstName?: string | null; // String
+    lastName?: string | null; // String
+    phone?: string | null; // String
   }
   UpdateUserInput: { // input type
     email?: string | null; // String
@@ -110,6 +107,7 @@ export interface NexusGenFieldTypes {
   }
   Mutation: { // field return type
     createUser: NexusGenRootTypes['User']; // User!
+    login: NexusGenRootTypes['User']; // User!
     updateUser: NexusGenRootTypes['User'] | null; // User
   }
   Query: { // field return type
@@ -119,7 +117,7 @@ export interface NexusGenFieldTypes {
     assignedTo: Array<NexusGenRootTypes['Assignment'] | null> | null; // [Assignment]
     assignments: Array<NexusGenRootTypes['Assignment'] | null> | null; // [Assignment]
     createdAt: NexusGenScalars['DateTime'] | null; // DateTime
-    email: string | null; // String
+    email: string; // String!
     firstName: string | null; // String
     id: string; // String!
     isBanned: boolean | null; // Boolean
@@ -161,6 +159,7 @@ export interface NexusGenFieldTypeNames {
   }
   Mutation: { // field return type name
     createUser: 'User'
+    login: 'User'
     updateUser: 'User'
   }
   Query: { // field return type name
@@ -186,6 +185,9 @@ export interface NexusGenFieldTypeNames {
 export interface NexusGenArgTypes {
   Mutation: {
     createUser: { // args
+      input: NexusGenInputs['CreateUserInput']; // CreateUserInput!
+    }
+    login: { // args
       input: NexusGenInputs['CreateUserInput']; // CreateUserInput!
     }
     updateUser: { // args

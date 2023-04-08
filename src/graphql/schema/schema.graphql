@@ -33,12 +33,9 @@ type Claimant {
 
 input CreateUserInput {
   email: String!
-  firstName: String!
-  isManager: Boolean! = false
-  isTranslator: Boolean! = false
-  lastName: String!
-  phone: String!
-  profilePic: String! = ""
+  firstName: String
+  lastName: String
+  phone: String
 }
 
 """
@@ -48,6 +45,7 @@ scalar DateTime
 
 type Mutation {
   createUser(input: CreateUserInput!): User!
+  login(input: CreateUserInput!): User!
   updateUser(data: UpdateUserInput!): User
 }
 
@@ -69,7 +67,7 @@ type User {
   assignedTo: [Assignment]
   assignments: [Assignment]
   createdAt: DateTime
-  email: String
+  email: String!
   firstName: String
   id: String!
   isBanned: Boolean

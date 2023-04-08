@@ -5,12 +5,49 @@ import { decryptRefreshToken } from "./decryptRefreshToken";
 import { encryptRefreshToken } from "./encryptRefreshToken";
 import { isTokenExpired } from "./istokenExpired";
 import { isRefreshTokenValid } from "./isTokenValid";
+import { verifyGoogleToken } from "./verifyGoogleToken";
+import { NexusGenInputs } from "../../graphql/schema/nexus-typegen";
 
-export const authenticate = async (user: User, { res, prisma }: Context) => {
+// Returns a user if auth is successful
+export const authenticate = async (
+  { res, req, prisma }: Context,
+  userArgs?: NexusGenInputs["CreateUserInput"]
+) => {
+  const authToken = req.headers.authorization?.replace("Bearer ", "");
+
+  if (!authToken) throw new Error("Invalid token format");
+
+  console.log("VERIFYING GOOGLE SUB");
+  const { sub } = await verifyGoogleToken(authToken);
+  console.log("VERIFIED GOOGLE SUB", sub);
+
+  // Check if first time user else create user
+  const user =
+    (await prisma.user.findUnique({ where: { id: sub } })) ||
+    (userArgs !== undefined
+      ? await prisma.user.create({
+          data: {
+            id: sub,
+            ...userArgs,
+          },
+        })
+      : null);
+
+  console.log("AUTH USER", user);
+
+  if (!user) {
+    console.log("BAD USER ARGS");
+    throw new Error("bad user arguments");
+  }
+
+  console.log("SIGNING JWT!");
   const token = jwt.sign(user, process.env.JWT_SECRET!, {
     expiresIn: 10 * 60 * 60, // expires in 10 hours
   });
 
+  console.log("TOKEN: ", token);
+
+  console.log("FINDING REFRESH TOKEN");
   // Decrypt refresh token if exists
   const userRefreshToken = await prisma.refreshToken.findUnique({
     where: {
@@ -22,10 +59,20 @@ export const authenticate = async (user: User, { res, prisma }: Context) => {
   });
 
   if (userRefreshToken && userRefreshToken.token) {
-    const decryptedRefreshToken = decryptRefreshToken(userRefreshToken.token);
-    const isValid = await isRefreshTokenValid(decryptedRefreshToken);
+    console.log("FOUND REFRESH TOKEN!", userRefreshToken.token);
 
-    if (!isValid) throw new Error("invalid refreshtoken");
+    // send encrypted refresh token back
+    res.cookie("x-refresh-token", userRefreshToken.token);
+
+    const decryptedRefreshToken = decryptRefreshToken(userRefreshToken.token);
+    console.log("DECRYPTED REFRESH TOKEN!", decryptedRefreshToken);
+    const isValid = await isRefreshTokenValid(decryptedRefreshToken);
+    console.log("VALIDATED REFRESH TOKEN!");
+
+    if (!isValid) {
+      console.log("INVALID TOKEN!");
+      throw new Error("token is not valid");
+    }
 
     // Decode refresh token
     const decodedRefreshToken = jwt.decode(decryptedRefreshToken) as JwtPayload;
@@ -47,22 +94,19 @@ export const authenticate = async (user: User, { res, prisma }: Context) => {
         },
       });
 
-      res.cookie("x-refresh-token", decryptedRefreshToken, {
-        httpOnly: true,
-      });
-    } else {
-      // if token is valid and not expired then set the
-      res.cookie("x-refresh-token", decryptedRefreshToken, {
-        httpOnly: true,
-      });
+      // send updated encrypted refresh token back
+      res.cookie("x-refresh-token", newRefreshToken);
     }
   } else {
     // if no refresh token, create a new one for the user
+    console.log("NO REFRESH TOKEN AVAILABLE, ENCRYPTING NEW ONE");
     let newRefreshToken = encryptRefreshToken(
       jwt.sign(user, process.env.REFRESH_SECRET!, {
         expiresIn: 7 * 24 * 60 * 60, // expires in 7 days
       })
     );
+
+    console.log("ENCRYPTED REFRESH TOKEN!", newRefreshToken);
 
     await prisma.refreshToken.create({
       data: {
@@ -75,16 +119,15 @@ export const authenticate = async (user: User, { res, prisma }: Context) => {
       },
     });
 
-    res.cookie("x-refresh-token", newRefreshToken, {
-      httpOnly: true,
-    });
+    console.log("CREATED NEW REFRESH TOKEN!");
+
+    // send new encrypted refresh token back
+    res.cookie("x-refresh-token", newRefreshToken);
   }
 
-  // const refresh = jwt.sign({
-  //   ...user,
-  //   count: user.tokenCount}, process.env.REFRESH_SECRET!)
+  console.log("authenticate token", token);
 
-  res.cookie("x-access-token", token, {
-    httpOnly: true,
-  });
+  res.cookie("x-access-token", token);
+
+  return user;
 };

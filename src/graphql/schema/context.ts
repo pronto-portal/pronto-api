@@ -8,8 +8,13 @@ export interface Context {
   userId?: string;
   req: Request;
   res: Response;
+  user: User | null;
 }
 
-export function createContext(req: Request, res: Response): Context {
-  return { prisma, userId: "", req, res };
+export function createContext(
+  req: Request,
+  res: Response,
+  user: User
+): Context {
+  return { prisma, userId: "", req, res, user };
 }

@@ -3,17 +3,20 @@ import { authenticate } from "../../../utils/auth/authenticate";
 import { Context } from "../../schema/context";
 import { CreateUserInput, UserType } from "../../types";
 
-export const CreateUser = extendType({
+export const Login = extendType({
   type: "Mutation",
   definition(t) {
-    t.nonNull.field("createUser", {
+    t.nonNull.field("login", {
       type: UserType,
       args: {
         input: nonNull(CreateUserInput),
       },
       async resolve(_root, { input }, ctx: Context) {
-        const user = await authenticate(ctx, input);
+        // Login with google
 
+        console.log("AUTHENTICATING");
+        const user = await authenticate(ctx, input);
+        console.log("AUTHENTICATED! CONGRATS!");
         return user;
       },
     });

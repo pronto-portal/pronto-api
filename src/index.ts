@@ -1,73 +1,77 @@
 import { ApolloServer } from "@apollo/server";
 import { expressMiddleware } from "@apollo/server/express4";
-import serverlessExpress, {
-  getCurrentInvoke,
-} from "@vendia/serverless-express";
 import express from "express";
 import { json } from "body-parser";
 import cors from "cors";
 import getAppDataSource from "./datasource/datasource";
 import schema from "./graphql/schema/schema";
 import cookieParser from "cookie-parser";
-import jwt from "jsonwebtoken";
+import http from "http";
+import jwt, { JwtPayload } from "jsonwebtoken";
 import { Context } from "./graphql/schema/context";
+import { isJWTTokenValid } from "./utils/auth/isTokenValid";
 
 const prisma = getAppDataSource();
 
 const main = async () => {
+  const app = express();
+  const httpServer = http.createServer(app);
+
   const server = new ApolloServer({
     schema,
   });
 
-  //server.startInBackgroundHandlingStartupErrorsByLoggingAndFailingAllRequests();
   await server.start();
-
-  const app = express();
 
   app.use(cookieParser());
   app.use(
+    "/",
     cors({
-      origin: "*", // frontend domain
-      credentials: false,
+      origin: ["http://localhost:3000"], // frontend domain
+      credentials: true,
     }),
     json(),
     expressMiddleware(server, {
       context: async ({ req, res }) => {
         // API Gateway event and Lambda Context
-        const { event, context } = getCurrentInvoke();
         console.log("my ctx");
 
-        console.log(req.url);
+        console.log("URL", req.originalUrl);
+        console.log("URL", req.baseUrl);
+        console.log("URL", req.url);
 
-        // console.log("ctx");
-        // const token = req.cookies["next-auth.session-token"];
-        // console.log(req.cookies);
-        //console.log(token);
-        // try {
-        //   const verified = jwt.decode(token);
-        //   console.log("verified", verified);
-        // } catch (e) {
-        //   console.log(e);
+        const token = req.cookies["x-access-token"];
+        console.log("req cookies", req.cookies);
+        console.log("x-access-token", token);
+        // decode access token then get user
+        //const isJWTValid: boolean = await isJWTTokenValid(token);
+        //console.log("isJWTValid", isJWTValid);
+
+        let user = null;
+        // if (isJWTValid) {
+        //   const decodedJWT = jwt.decode(token) as JwtPayload;
+
+        //   user = await prisma.user.findUnique({
+        //     where: {
+        //       id: decodedJWT.sub,
+        //     },
+        //   });
         // }
 
         return {
-          req: req,
-          res: res,
-          lambdaEvent: event,
-          lambdaContext: context,
+          req,
+          res,
+          user,
           prisma,
         };
       },
     })
   );
 
-  app.listen(4000, () => {
-    console.log("NOW LISTENING");
-  });
-
-  //return serverlessExpress({ app });
+  await new Promise<void>((resolve) =>
+    httpServer.listen({ port: 4000 }, resolve)
+  );
+  console.log(`🚀 Server ready at http://localhost:4000/`);
 };
 
 main();
-
-//exports.handler = handler;
