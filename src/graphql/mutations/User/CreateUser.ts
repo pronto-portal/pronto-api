@@ -6,7 +6,7 @@ import { CreateUserInput, UserType } from "../../types";
 export const CreateUser = extendType({
   type: "Mutation",
   definition(t) {
-    t.nonNull.field("createUser", {
+    t.nullable.field("createUser", {
       type: UserType,
       args: {
         input: nonNull(CreateUserInput),

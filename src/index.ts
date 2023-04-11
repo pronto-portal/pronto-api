@@ -34,15 +34,7 @@ const main = async () => {
     expressMiddleware(server, {
       context: async ({ req, res }) => {
         // API Gateway event and Lambda Context
-        console.log("my ctx");
 
-        console.log("URL", req.originalUrl);
-        console.log("URL", req.baseUrl);
-        console.log("URL", req.url);
-
-        const token = req.cookies["x-access-token"];
-        console.log("req cookies", req.cookies);
-        console.log("x-access-token", token);
         // decode access token then get user
         //const isJWTValid: boolean = await isJWTTokenValid(token);
         //console.log("isJWTValid", isJWTValid);

@@ -106,7 +106,7 @@ export interface NexusGenFieldTypes {
     lastName: string | null; // String
   }
   Mutation: { // field return type
-    createUser: NexusGenRootTypes['User']; // User!
+    createUser: NexusGenRootTypes['User'] | null; // User
     login: NexusGenRootTypes['User']; // User!
     updateUser: NexusGenRootTypes['User'] | null; // User
   }
