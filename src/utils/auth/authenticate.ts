@@ -21,9 +21,7 @@ export const authenticate = async (
   }
 
   const { sub } = await verifyGoogleToken(authToken);
-  console.log("VERIFIED GOOGLE SUB", sub);
 
-  console.log("User ARGS", userArgs);
   // Check if first time user else create user
   const user =
     (await prisma.user.findUnique({ where: { id: sub } })) ||
@@ -36,22 +34,15 @@ export const authenticate = async (
         })
       : null);
 
-  console.log("AUTH USER", user);
-
   if (!user) {
-    console.log("BAD USER ARGS");
     res.status(401).json({ message: "bad user args" });
     throw new Error("Invalid token");
   }
 
-  //console.log("SIGNING JWT!");
   const token = jwt.sign(user, process.env.JWT_SECRET!, {
     expiresIn: 10 * 60 * 60, // expires in 10 hours
   });
 
-  console.log("TOKEN: ", token);
-
-  console.log("FINDING REFRESH TOKEN");
   // Decrypt refresh token if exists
   const userRefreshToken = await prisma.refreshToken.findUnique({
     where: {
@@ -63,15 +54,11 @@ export const authenticate = async (
   });
 
   if (userRefreshToken && userRefreshToken.token) {
-    console.log("FOUND REFRESH TOKEN!", userRefreshToken.token);
-
     // send encrypted refresh token back
     res.cookie("x-refresh-token", userRefreshToken.token);
 
     const decryptedRefreshToken = decryptRefreshToken(userRefreshToken.token);
-    console.log("DECRYPTED REFRESH TOKEN!", decryptedRefreshToken);
-    const isValid = await isRefreshTokenValid(decryptedRefreshToken);
-    console.log("VALIDATED REFRESH TOKEN!");
+    const isValid = isRefreshTokenValid(decryptedRefreshToken);
 
     if (!isValid) {
       res.status(401).json({ message: "Invalid token" });
@@ -103,14 +90,11 @@ export const authenticate = async (
     }
   } else {
     // if no refresh token, create a new one for the user
-    console.log("NO REFRESH TOKEN AVAILABLE, ENCRYPTING NEW ONE");
     let newRefreshToken = encryptRefreshToken(
       jwt.sign(user, process.env.REFRESH_SECRET!, {
         expiresIn: 7 * 24 * 60 * 60, // expires in 7 days
       })
     );
-
-    console.log("ENCRYPTED REFRESH TOKEN!", newRefreshToken);
 
     await prisma.refreshToken.create({
       data: {
@@ -123,13 +107,9 @@ export const authenticate = async (
       },
     });
 
-    console.log("CREATED NEW REFRESH TOKEN!");
-
     // send new encrypted refresh token back
     res.cookie("x-refresh-token", newRefreshToken);
   }
-
-  console.log("authenticate token", token);
 
   res.cookie("x-access-token", token);
 

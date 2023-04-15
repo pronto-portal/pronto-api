@@ -12,11 +12,7 @@ export const Login = extendType({
         input: nonNull(CreateUserInput),
       },
       async resolve(_root, { input }, ctx: Context) {
-        // Login with google
-
-        console.log("AUTHENTICATING");
         const user = await authenticate(ctx, input);
-        console.log("AUTHENTICATED! CONGRATS!");
         return user;
       },
     });

@@ -16,7 +16,6 @@ export const GetUser = extendType({
         // const user = await ctx.prisma.user.findUnique({where: {
         //     ctx.user.
         // }})
-        console.log("CONTEXT");
         return "test";
       },
     });
