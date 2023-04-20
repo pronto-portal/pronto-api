@@ -58,12 +58,6 @@ export const authenticate = async (
     res.cookie("x-refresh-token", userRefreshToken.token);
 
     const decryptedRefreshToken = decryptRefreshToken(userRefreshToken.token);
-    const isValid = isRefreshTokenValid(decryptedRefreshToken);
-
-    if (!isValid) {
-      res.status(401).json({ message: "Invalid token" });
-      throw new Error("Invalid token");
-    }
 
     // Decode refresh token
     const decodedRefreshToken = jwt.decode(decryptedRefreshToken) as JwtPayload;
