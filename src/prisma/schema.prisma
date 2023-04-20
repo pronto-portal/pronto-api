@@ -22,6 +22,7 @@ model User {
   assignments           Assignment[]    @relation("createdAssignments")
   assignedTo            Assignment[]    @relation("taskedAssignments")
   token                 RefreshToken?
+  isProfileComplete     Boolean         @default(false)
 }
 
 model RefreshToken {
