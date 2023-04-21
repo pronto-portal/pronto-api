@@ -50,7 +50,7 @@ type Mutation {
 }
 
 type Query {
-  GetUser: String!
+  GetUser: User!
 }
 
 input UpdateUserInput {
@@ -72,6 +72,7 @@ type User {
   id: String!
   isBanned: Boolean
   isManager: Boolean
+  isProfileComplete: Boolean
   isTranslator: Boolean
   lastName: String
   phone: String

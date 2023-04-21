@@ -10,6 +10,7 @@ import http from "http";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import { Context } from "./graphql/schema/context";
 import { isJWTTokenValid } from "./utils/auth/isTokenValid";
+import { User } from "@prisma/client";
 
 const prisma = getAppDataSource();
 
@@ -38,10 +39,11 @@ const main = async () => {
         // decode access token then get user
         //const isJWTValid: boolean = await isJWTTokenValid(token);
         //console.log("isJWTValid", isJWTValid);
+        const accessToken = req.cookies["x-access-token"];
 
-        let user = null;
-        // if (isJWTValid) {
-        //   const decodedJWT = jwt.decode(token) as JwtPayload;
+        let user: User | null = null;
+
+        if (accessToken) user = jwt.decode(accessToken) as User;
 
         //   user = await prisma.user.findUnique({
         //     where: {

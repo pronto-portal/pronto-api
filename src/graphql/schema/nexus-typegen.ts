@@ -111,7 +111,7 @@ export interface NexusGenFieldTypes {
     updateUser: NexusGenRootTypes['User'] | null; // User
   }
   Query: { // field return type
-    GetUser: string; // String!
+    GetUser: NexusGenRootTypes['User']; // User!
   }
   User: { // field return type
     assignedTo: Array<NexusGenRootTypes['Assignment'] | null> | null; // [Assignment]
@@ -122,6 +122,7 @@ export interface NexusGenFieldTypes {
     id: string; // String!
     isBanned: boolean | null; // Boolean
     isManager: boolean | null; // Boolean
+    isProfileComplete: boolean | null; // Boolean
     isTranslator: boolean | null; // Boolean
     lastName: string | null; // String
     phone: string | null; // String
@@ -163,7 +164,7 @@ export interface NexusGenFieldTypeNames {
     updateUser: 'User'
   }
   Query: { // field return type name
-    GetUser: 'String'
+    GetUser: 'User'
   }
   User: { // field return type name
     assignedTo: 'Assignment'
@@ -174,6 +175,7 @@ export interface NexusGenFieldTypeNames {
     id: 'String'
     isBanned: 'Boolean'
     isManager: 'Boolean'
+    isProfileComplete: 'Boolean'
     isTranslator: 'Boolean'
     lastName: 'String'
     phone: 'String'

@@ -6,17 +6,12 @@ export const GetUser = extendType({
   type: "Query",
   definition(t) {
     t.nonNull.field("GetUser", {
-      type: "String",
+      type: "User",
       authorize: async (root, args, ctx) => await isAuthorized(ctx),
       async resolve(_root, args, ctx: Context) {
-        // const user = await ctx.prisma.user.create({
-        //   data: input,
-        // });
+        if (!ctx.user) throw new Error("No user found");
 
-        // const user = await ctx.prisma.user.findUnique({where: {
-        //     ctx.user.
-        // }})
-        return "test";
+        return ctx.user;
       },
     });
   },
