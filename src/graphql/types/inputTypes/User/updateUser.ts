@@ -10,5 +10,6 @@ export const UpdateUserInput = inputObjectType({
     t.nullable.string("profilePic", { default: "" });
     t.nullable.boolean("isManager", { default: false });
     t.nullable.boolean("isTranslator", { default: false });
+    t.nullable.boolean("isProfileComplete");
   },
 });

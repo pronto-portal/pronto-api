@@ -40,6 +40,7 @@ export interface NexusGenInputs {
     email?: string | null; // String
     firstName?: string | null; // String
     isManager?: boolean | null; // Boolean
+    isProfileComplete?: boolean | null; // Boolean
     isTranslator?: boolean | null; // Boolean
     lastName?: string | null; // String
     phone?: string | null; // String
@@ -111,7 +112,7 @@ export interface NexusGenFieldTypes {
     updateUser: NexusGenRootTypes['User'] | null; // User
   }
   Query: { // field return type
-    GetUser: NexusGenRootTypes['User']; // User!
+    getUser: NexusGenRootTypes['User']; // User!
   }
   User: { // field return type
     assignedTo: Array<NexusGenRootTypes['Assignment'] | null> | null; // [Assignment]
@@ -164,7 +165,7 @@ export interface NexusGenFieldTypeNames {
     updateUser: 'User'
   }
   Query: { // field return type name
-    GetUser: 'User'
+    getUser: 'User'
   }
   User: { // field return type name
     assignedTo: 'Assignment'
