@@ -42,6 +42,7 @@ export interface NexusGenInputs {
     isManager?: boolean | null; // Boolean
     isProfileComplete?: boolean | null; // Boolean
     isTranslator?: boolean | null; // Boolean
+    languages?: string[] | null; // [String!]
     lastName?: string | null; // String
     phone?: string | null; // String
     profilePic?: string | null; // String
@@ -117,6 +118,7 @@ export interface NexusGenFieldTypes {
   User: { // field return type
     assignedTo: Array<NexusGenRootTypes['Assignment'] | null> | null; // [Assignment]
     assignments: Array<NexusGenRootTypes['Assignment'] | null> | null; // [Assignment]
+    city: string | null; // String
     createdAt: NexusGenScalars['DateTime'] | null; // DateTime
     email: string; // String!
     firstName: string | null; // String
@@ -125,9 +127,11 @@ export interface NexusGenFieldTypes {
     isManager: boolean | null; // Boolean
     isProfileComplete: boolean | null; // Boolean
     isTranslator: boolean | null; // Boolean
+    languages: Array<string | null> | null; // [String]
     lastName: string | null; // String
     phone: string | null; // String
     profilePic: string | null; // String
+    state: string | null; // String
     updatedAt: NexusGenScalars['DateTime'] | null; // DateTime
   }
 }
@@ -170,6 +174,7 @@ export interface NexusGenFieldTypeNames {
   User: { // field return type name
     assignedTo: 'Assignment'
     assignments: 'Assignment'
+    city: 'String'
     createdAt: 'DateTime'
     email: 'String'
     firstName: 'String'
@@ -178,9 +183,11 @@ export interface NexusGenFieldTypeNames {
     isManager: 'Boolean'
     isProfileComplete: 'Boolean'
     isTranslator: 'Boolean'
+    languages: 'String'
     lastName: 'String'
     phone: 'String'
     profilePic: 'String'
+    state: 'String'
     updatedAt: 'DateTime'
   }
 }

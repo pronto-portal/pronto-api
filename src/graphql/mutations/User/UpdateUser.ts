@@ -21,6 +21,7 @@ export const UpdateUser = mutationField("updateUser", {
         isManager,
         isTranslator,
         isProfileComplete,
+        languages,
       },
     },
     { user, prisma }: Context
@@ -35,6 +36,7 @@ export const UpdateUser = mutationField("updateUser", {
         isManager: isManager || undefined,
         isTranslator: isTranslator || undefined,
         isProfileComplete: isProfileComplete || undefined,
+        languages: languages || undefined,
       },
     });
 

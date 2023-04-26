@@ -56,9 +56,10 @@ type Query {
 input UpdateUserInput {
   email: String
   firstName: String
-  isManager: Boolean = false
+  isManager: Boolean
   isProfileComplete: Boolean
-  isTranslator: Boolean = false
+  isTranslator: Boolean
+  languages: [String!]
   lastName: String
   phone: String
   profilePic: String = ""
@@ -67,6 +68,7 @@ input UpdateUserInput {
 type User {
   assignedTo: [Assignment]
   assignments: [Assignment]
+  city: String
   createdAt: DateTime
   email: String!
   firstName: String
@@ -75,8 +77,10 @@ type User {
   isManager: Boolean
   isProfileComplete: Boolean
   isTranslator: Boolean
+  languages: [String]
   lastName: String
   phone: String
   profilePic: String
+  state: String
   updatedAt: DateTime
 }

@@ -17,6 +17,9 @@ export const UserType = objectType({
     t.boolean("isTranslator");
     t.boolean("isBanned");
     t.boolean("isProfileComplete");
+    t.nullable.string("city");
+    t.nullable.string("state");
+    t.list.string("languages");
     t.field("assignments", {
       type: list(nullable(AssignmentType)),
       async resolve(root, __, { prisma }: Context) {

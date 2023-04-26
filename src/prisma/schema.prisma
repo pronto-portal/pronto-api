@@ -23,6 +23,9 @@ model User {
   assignedTo            Assignment[]    @relation("taskedAssignments")
   token                 RefreshToken?
   isProfileComplete     Boolean         @default(false)
+  city                  String?
+  state                 String?
+  languages             String[]        @default([])   
 }
 
 model RefreshToken {
