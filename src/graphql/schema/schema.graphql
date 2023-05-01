@@ -31,6 +31,15 @@ type Claimant {
   lastName: String
 }
 
+input CompleteProfileInput {
+  firstName: String!
+  isManager: Boolean!
+  isTranslator: Boolean!
+  languages: [String!]
+  lastName: String!
+  phone: String!
+}
+
 input CreateUserInput {
   email: String!
   firstName: String
@@ -44,6 +53,7 @@ A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `dat
 scalar DateTime
 
 type Mutation {
+  completeProfile(input: CompleteProfileInput!): User
   createUser(input: CreateUserInput!): User
   login(input: CreateUserInput!): User!
   updateUser(data: UpdateUserInput!): User

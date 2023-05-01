@@ -30,6 +30,14 @@ declare global {
 }
 
 export interface NexusGenInputs {
+  CompleteProfileInput: { // input type
+    firstName: string; // String!
+    isManager: boolean; // Boolean!
+    isTranslator: boolean; // Boolean!
+    languages?: string[] | null; // [String!]
+    lastName: string; // String!
+    phone: string; // String!
+  }
   CreateUserInput: { // input type
     email: string; // String!
     firstName?: string | null; // String
@@ -108,6 +116,7 @@ export interface NexusGenFieldTypes {
     lastName: string | null; // String
   }
   Mutation: { // field return type
+    completeProfile: NexusGenRootTypes['User'] | null; // User
     createUser: NexusGenRootTypes['User'] | null; // User
     login: NexusGenRootTypes['User']; // User!
     updateUser: NexusGenRootTypes['User'] | null; // User
@@ -164,6 +173,7 @@ export interface NexusGenFieldTypeNames {
     lastName: 'String'
   }
   Mutation: { // field return type name
+    completeProfile: 'User'
     createUser: 'User'
     login: 'User'
     updateUser: 'User'
@@ -194,6 +204,9 @@ export interface NexusGenFieldTypeNames {
 
 export interface NexusGenArgTypes {
   Mutation: {
+    completeProfile: { // args
+      input: NexusGenInputs['CompleteProfileInput']; // CompleteProfileInput!
+    }
     createUser: { // args
       input: NexusGenInputs['CreateUserInput']; // CreateUserInput!
     }
