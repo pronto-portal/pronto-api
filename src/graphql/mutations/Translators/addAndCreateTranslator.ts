@@ -3,12 +3,14 @@ import { authenticate } from "../../../utils/auth/authenticate";
 import { Context } from "../../schema/context";
 import { AddAndCreateTranslatorInput, UserType } from "../../types";
 import { create } from "domain";
+import { isAuthorized } from "../../../utils/auth/isAuthorized";
 
 export const AddAndCreateTranslator = extendType({
   type: "Mutation",
   definition(t) {
     t.nullable.field("addAndCreateTranslator", {
       type: UserType,
+      authorize: async (_root, _args, ctx) => await isAuthorized(ctx),
       args: {
         input: nonNull(AddAndCreateTranslatorInput),
       },

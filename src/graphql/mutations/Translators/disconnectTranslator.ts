@@ -1,11 +1,13 @@
 import { extendType, nonNull } from "nexus";
 import { DisconnectTranslatorInput, UserType } from "../../types";
+import { isAuthorized } from "../../../utils/auth/isAuthorized";
 
 export const DisconnectTranslator = extendType({
   type: "Mutation",
   definition(t) {
     t.nullable.field("disconnectTranslator", {
       type: UserType,
+      authorize: async (_root, _args, ctx) => await isAuthorized(ctx),
       args: {
         input: nonNull(DisconnectTranslatorInput),
       },

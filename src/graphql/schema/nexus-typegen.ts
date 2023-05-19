@@ -40,6 +40,9 @@ export interface NexusGenInputs {
   AddTranslatorInput: { // input type
     email: string; // String!
   }
+  ByEmailInput: { // input type
+    email: string; // String!
+  }
   CompleteProfileInput: { // input type
     firstName: string; // String!
     isManager: boolean; // Boolean!
@@ -56,6 +59,10 @@ export interface NexusGenInputs {
   }
   DisconnectTranslatorInput: { // input type
     email: string; // String!
+  }
+  Paginated: { // input type
+    countPerPage: number; // Int!
+    page: number; // Int!
   }
   UpdateUserInput: { // input type
     email?: string | null; // String
@@ -146,6 +153,8 @@ export interface NexusGenFieldTypes {
     updateUser: NexusGenRootTypes['User'] | null; // User
   }
   Query: { // field return type
+    getTranslator: NexusGenRootTypes['User']; // User!
+    getTranslators: Array<NexusGenRootTypes['User'] | null>; // [User]!
     getUser: NexusGenRootTypes['User']; // User!
   }
   Translator: { // field return type
@@ -216,6 +225,8 @@ export interface NexusGenFieldTypeNames {
     updateUser: 'User'
   }
   Query: { // field return type name
+    getTranslator: 'User'
+    getTranslators: 'User'
     getUser: 'User'
   }
   Translator: { // field return type name
@@ -271,6 +282,14 @@ export interface NexusGenArgTypes {
     }
     updateUser: { // args
       data: NexusGenInputs['UpdateUserInput']; // UpdateUserInput!
+    }
+  }
+  Query: {
+    getTranslator: { // args
+      input: NexusGenInputs['ByEmailInput']; // ByEmailInput!
+    }
+    getTranslators: { // args
+      input: NexusGenInputs['Paginated']; // Paginated!
     }
   }
 }

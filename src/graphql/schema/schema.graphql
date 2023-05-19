@@ -35,6 +35,10 @@ type Assignment {
   translatorNoShow: Boolean
 }
 
+input ByEmailInput {
+  email: String!
+}
+
 type Claimant {
   assignment: Assignment
   email: String
@@ -78,7 +82,14 @@ type Mutation {
   updateUser(data: UpdateUserInput!): User
 }
 
+input Paginated {
+  countPerPage: Int!
+  page: Int!
+}
+
 type Query {
+  getTranslator(input: ByEmailInput!): User!
+  getTranslators(input: Paginated!): [User]!
   getUser: User!
 }
 
