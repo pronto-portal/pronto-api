@@ -1,0 +1,31 @@
+import { extendType, nonNull } from "nexus";
+import { AddTranslatorInput, UserType } from "../../types";
+
+export const AddTranslator = extendType({
+  type: "Mutation",
+  definition(t) {
+    t.nullable.field("addTranslator", {
+      type: UserType,
+      args: {
+        input: nonNull(AddTranslatorInput),
+      },
+      async resolve(_, { input }, { prisma, user }) {
+        const { email } = input;
+        if (!user) throw new Error("No user found");
+
+        const addTranslator = await prisma.user.update({
+          where: {
+            email,
+          },
+          data: {
+            translatingFor: {
+              connect: [{ id: user.id }],
+            },
+          },
+        });
+
+        return addTranslator;
+      },
+    });
+  },
+});

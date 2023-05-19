@@ -8,63 +8,65 @@ datasource db {
 }
 
 model User {
-  id                    String          @id @default(uuid())
-  createdAt             DateTime        @default(now())
-  updatedAt             DateTime        @updatedAt
-  email                 String          @unique() @db.VarChar(120)
-  phone                 String?         @db.VarChar(30)
-  firstName             String?         @db.VarChar(120)
-  lastName              String?         @db.VarChar(120)
-  profilePic            String?         @default("") @db.VarChar(255)
-  isManager             Boolean         @default(false)
-  isTranslator          Boolean         @default(false)
-  isBanned              Boolean         @default(false)
-  assignments           Assignment[]    @relation("createdAssignments")
-  assignedTo            Assignment[]    @relation("taskedAssignments")
-  token                 RefreshToken?
-  isProfileComplete     Boolean         @default(false)
-  city                  String?
-  state                 String?
-  languages             String[]        @default([])   
+  id                String        @id @default(uuid())
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+  email             String        @unique() @db.VarChar(120)
+  phone             String?       @db.VarChar(30)
+  firstName         String?       @db.VarChar(120)
+  lastName          String?       @db.VarChar(120)
+  profilePic        String?       @default("") @db.VarChar(255)
+  isManager         Boolean       @default(false)
+  isTranslator      Boolean       @default(false)
+  isBanned          Boolean       @default(false)
+  assignments       Assignment[]  @relation("createdAssignments")
+  assignedTo        Assignment[]  @relation("taskedAssignments")
+  token             RefreshToken?
+  isProfileComplete Boolean       @default(false)
+  city              String?
+  state             String?
+  languages         String[]      @default([])
+  translators       User[]  @relation("UserTranslators")
+  translatingFor    User[]  @relation("UserTranslators")
 }
 
 model RefreshToken {
-  id                    String          @id @default(uuid())
-  user                  User            @relation(fields: [userId], references: [id])
-  userId                String          @unique
-  token                 String          @unique
+  id     String @id @default(uuid())
+  user   User   @relation(fields: [userId], references: [id])
+  userId String @unique
+  token  String @unique
 }
 
 model Assignment {
-  id                    String          @id @default(uuid())
-  createdAt             DateTime        @default(now())
-  assignedTo            User            @relation("taskedAssignments", fields: [assignedToUserId], references: [id])
-  assignedToUserId      String
-  createdBy             User            @relation("createdAssignments", fields: [createdByUserId], references: [id])
-  createdByUserId       String
-  claimant              Claimant?       @relation()
-  address               Address?        @relation()
-  isComplete            Boolean         @default(false)
-  claimantNoShow        Boolean         @default(false)
-  translatorNoShow      Boolean         @default(false)
+  id               String    @id @default(uuid())
+  createdAt        DateTime  @default(now())
+  assignedTo       User      @relation("taskedAssignments", fields: [assignedToUserId], references: [id])
+  assignedToUserId String
+  createdBy        User      @relation("createdAssignments", fields: [createdByUserId], references: [id])
+  createdByUserId  String
+  claimant         Claimant? @relation()
+  address          Address?  @relation()
+  isComplete       Boolean   @default(false)
+  claimantNoShow   Boolean   @default(false)
+  translatorNoShow Boolean   @default(false)
 }
 
 model Claimant {
-  id                    String          @id @default(uuid())
-  firstName             String          @db.VarChar(120)
-  lastName              String          @db.VarChar(120)  
-  email                 String          @db.VarChar(120)
-  phone                 String          @db.VarChar(30)
-  assignment            Assignment      @relation(fields: [assignmentId], references: [id])
-  assignmentId          String          @unique
+  id           String     @id @default(uuid())
+  firstName    String     @db.VarChar(120)
+  lastName     String     @db.VarChar(120)
+  email        String     @db.VarChar(120)
+  phone        String     @db.VarChar(30)
+  assignment   Assignment @relation(fields: [assignmentId], references: [id])
+  assignmentId String     @unique
 }
 
 model Address {
-  id                    String          @id @default(uuid())
-  address1              String          @db.VarChar(255)
-  address2              String          @db.VarChar(255)
-  state                 String          @db.VarChar(2)
-  zipCode               String          @db.VarChar(32)
-  assignment            Assignment      @relation(fields: [assignmentId], references: [id])
-  assignmentId          String          @unique
+  id           String     @id @default(uuid())
+  address1     String     @db.VarChar(255)
+  address2     String     @db.VarChar(255)
+  state        String     @db.VarChar(2)
+  zipCode      String     @db.VarChar(32)
+  assignment   Assignment @relation(fields: [assignmentId], references: [id])
+  assignmentId String     @unique
 }

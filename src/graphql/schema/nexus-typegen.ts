@@ -30,6 +30,16 @@ declare global {
 }
 
 export interface NexusGenInputs {
+  AddAndCreateTranslatorInput: { // input type
+    email: string; // String!
+    firstName: string; // String!
+    languages?: string[] | null; // [String!]
+    lastName?: string | null; // String
+    phone: string; // String!
+  }
+  AddTranslatorInput: { // input type
+    email: string; // String!
+  }
   CompleteProfileInput: { // input type
     firstName: string; // String!
     isManager: boolean; // Boolean!
@@ -43,6 +53,9 @@ export interface NexusGenInputs {
     firstName?: string | null; // String
     lastName?: string | null; // String
     phone?: string | null; // String
+  }
+  DisconnectTranslatorInput: { // input type
+    email: string; // String!
   }
   UpdateUserInput: { // input type
     email?: string | null; // String
@@ -75,6 +88,14 @@ export interface NexusGenObjects {
   Claimant: prisma.Claimant;
   Mutation: {};
   Query: {};
+  Translator: { // root type
+    email?: string | null; // String
+    firstName?: string | null; // String
+    id?: string | null; // String
+    languages?: string[] | null; // [String!]
+    lastName?: string | null; // String
+    phone?: string | null; // String
+  }
   User: prisma.User;
 }
 
@@ -116,13 +137,24 @@ export interface NexusGenFieldTypes {
     lastName: string | null; // String
   }
   Mutation: { // field return type
+    addAndCreateTranslator: NexusGenRootTypes['User'] | null; // User
+    addTranslator: NexusGenRootTypes['User'] | null; // User
     completeProfile: NexusGenRootTypes['User'] | null; // User
     createUser: NexusGenRootTypes['User'] | null; // User
+    disconnectTranslator: NexusGenRootTypes['User'] | null; // User
     login: NexusGenRootTypes['User']; // User!
     updateUser: NexusGenRootTypes['User'] | null; // User
   }
   Query: { // field return type
     getUser: NexusGenRootTypes['User']; // User!
+  }
+  Translator: { // field return type
+    email: string | null; // String
+    firstName: string | null; // String
+    id: string | null; // String
+    languages: string[] | null; // [String!]
+    lastName: string | null; // String
+    phone: string | null; // String
   }
   User: { // field return type
     assignedTo: Array<NexusGenRootTypes['Assignment'] | null> | null; // [Assignment]
@@ -141,6 +173,8 @@ export interface NexusGenFieldTypes {
     phone: string | null; // String
     profilePic: string | null; // String
     state: string | null; // String
+    translatingFor: Array<NexusGenRootTypes['User'] | null> | null; // [User]
+    translators: Array<NexusGenRootTypes['Translator'] | null> | null; // [Translator]
     updatedAt: NexusGenScalars['DateTime'] | null; // DateTime
   }
 }
@@ -173,13 +207,24 @@ export interface NexusGenFieldTypeNames {
     lastName: 'String'
   }
   Mutation: { // field return type name
+    addAndCreateTranslator: 'User'
+    addTranslator: 'User'
     completeProfile: 'User'
     createUser: 'User'
+    disconnectTranslator: 'User'
     login: 'User'
     updateUser: 'User'
   }
   Query: { // field return type name
     getUser: 'User'
+  }
+  Translator: { // field return type name
+    email: 'String'
+    firstName: 'String'
+    id: 'String'
+    languages: 'String'
+    lastName: 'String'
+    phone: 'String'
   }
   User: { // field return type name
     assignedTo: 'Assignment'
@@ -198,17 +243,28 @@ export interface NexusGenFieldTypeNames {
     phone: 'String'
     profilePic: 'String'
     state: 'String'
+    translatingFor: 'User'
+    translators: 'Translator'
     updatedAt: 'DateTime'
   }
 }
 
 export interface NexusGenArgTypes {
   Mutation: {
+    addAndCreateTranslator: { // args
+      input: NexusGenInputs['AddAndCreateTranslatorInput']; // AddAndCreateTranslatorInput!
+    }
+    addTranslator: { // args
+      input: NexusGenInputs['AddTranslatorInput']; // AddTranslatorInput!
+    }
     completeProfile: { // args
       input: NexusGenInputs['CompleteProfileInput']; // CompleteProfileInput!
     }
     createUser: { // args
       input: NexusGenInputs['CreateUserInput']; // CreateUserInput!
+    }
+    disconnectTranslator: { // args
+      input: NexusGenInputs['DisconnectTranslatorInput']; // DisconnectTranslatorInput!
     }
     login: { // args
       input: NexusGenInputs['CreateUserInput']; // CreateUserInput!

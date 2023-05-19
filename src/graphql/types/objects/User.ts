@@ -50,5 +50,33 @@ export const UserType = objectType({
         return assignedTo;
       },
     });
+    t.list.field("translators", {
+      type: "Translator",
+      resolve: async (root, _args, { prisma }) => {
+        // Implement your logic for fetching translators here.
+        return await prisma.user
+          .findUnique({ where: { id: root.id } })
+          .translators({
+            select: {
+              id: true,
+              firstName: true,
+              lastName: true,
+              languages: true,
+              email: true,
+              phone: true,
+            },
+          });
+      },
+    });
+
+    t.list.field("translatingFor", {
+      type: "User",
+      resolve: async (root, _args, { prisma }) => {
+        // Implement your logic for fetching translatingFor here.
+        return await prisma.user
+          .findUnique({ where: { id: root.id } })
+          .translatingFor();
+      },
+    });
   },
 });

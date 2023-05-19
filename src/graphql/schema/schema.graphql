@@ -2,6 +2,18 @@
 ### Do not make changes to this file directly
 
 
+input AddAndCreateTranslatorInput {
+  email: String!
+  firstName: String!
+  languages: [String!]
+  lastName: String
+  phone: String!
+}
+
+input AddTranslatorInput {
+  email: String!
+}
+
 type Address {
   address1: String
   address2: String
@@ -52,15 +64,31 @@ A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `dat
 """
 scalar DateTime
 
+input DisconnectTranslatorInput {
+  email: String!
+}
+
 type Mutation {
+  addAndCreateTranslator(input: AddAndCreateTranslatorInput!): User
+  addTranslator(input: AddTranslatorInput!): User
   completeProfile(input: CompleteProfileInput!): User
   createUser(input: CreateUserInput!): User
+  disconnectTranslator(input: DisconnectTranslatorInput!): User
   login(input: CreateUserInput!): User!
   updateUser(data: UpdateUserInput!): User
 }
 
 type Query {
   getUser: User!
+}
+
+type Translator {
+  email: String
+  firstName: String
+  id: String
+  languages: [String!]
+  lastName: String
+  phone: String
 }
 
 input UpdateUserInput {
@@ -92,5 +120,7 @@ type User {
   phone: String
   profilePic: String
   state: String
+  translatingFor: [User]
+  translators: [Translator]
   updatedAt: DateTime
 }
