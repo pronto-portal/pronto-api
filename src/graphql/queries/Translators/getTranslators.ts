@@ -7,7 +7,7 @@ export const GetTranslators = extendType({
     t.nonNull.field("getTranslators", {
       type: list("User"),
       authorize: async (_root, _args, ctx) => await isAuthorized(ctx),
-      args: { input: nonNull("Paginated") },
+      args: { input: nonNull("PaginatedInput") },
       async resolve(_, { input }, { prisma, user: ctxUser }) {
         const { page, countPerPage } = input;
         const { id } = ctxUser!;

@@ -82,14 +82,14 @@ type Mutation {
   updateUser(data: UpdateUserInput!): User
 }
 
-input Paginated {
+input PaginatedInput {
   countPerPage: Int!
   page: Int!
 }
 
 type Query {
   getTranslator(input: ByEmailInput!): User!
-  getTranslators(input: Paginated!): [User]!
+  getTranslators(input: PaginatedInput!): [User]!
   getUser: User!
 }
 

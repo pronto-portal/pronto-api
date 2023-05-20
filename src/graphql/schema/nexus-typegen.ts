@@ -60,7 +60,7 @@ export interface NexusGenInputs {
   DisconnectTranslatorInput: { // input type
     email: string; // String!
   }
-  Paginated: { // input type
+  PaginatedInput: { // input type
     countPerPage: number; // Int!
     page: number; // Int!
   }
@@ -289,7 +289,7 @@ export interface NexusGenArgTypes {
       input: NexusGenInputs['ByEmailInput']; // ByEmailInput!
     }
     getTranslators: { // args
-      input: NexusGenInputs['Paginated']; // Paginated!
+      input: NexusGenInputs['PaginatedInput']; // PaginatedInput!
     }
   }
 }
