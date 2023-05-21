@@ -9,6 +9,7 @@ export const AddressType = objectType({
     t.string("id");
     t.string("address1");
     t.string("address2");
+    t.string("city");
     t.string("state");
     t.string("zipCode");
     t.field("assignment", {

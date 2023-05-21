@@ -51,6 +51,13 @@ export interface NexusGenInputs {
     lastName: string; // String!
     phone: string; // String!
   }
+  CreateAddressInput: { // input type
+    address1: string; // String!
+    address2?: string | null; // String
+    city: string; // String!
+    state: string; // String!
+    zipCode: string; // String!
+  }
   CreateAssignmentInput: { // input type
     email: string; // String!
   }
@@ -131,6 +138,7 @@ export interface NexusGenFieldTypes {
     address1: string | null; // String
     address2: string | null; // String
     assignment: NexusGenRootTypes['Assignment'] | null; // Assignment
+    city: string | null; // String
     id: string | null; // String
     state: string | null; // String
     zipCode: string | null; // String
@@ -159,6 +167,7 @@ export interface NexusGenFieldTypes {
     addAndCreateTranslator: NexusGenRootTypes['User'] | null; // User
     addTranslator: NexusGenRootTypes['User'] | null; // User
     completeProfile: NexusGenRootTypes['User'] | null; // User
+    createAddress: NexusGenRootTypes['Address']; // Address!
     createClaimant: NexusGenRootTypes['Claimant']; // Claimant!
     createUser: NexusGenRootTypes['User'] | null; // User
     disconnectTranslator: NexusGenRootTypes['User'] | null; // User
@@ -206,6 +215,7 @@ export interface NexusGenFieldTypeNames {
     address1: 'String'
     address2: 'String'
     assignment: 'Assignment'
+    city: 'String'
     id: 'String'
     state: 'String'
     zipCode: 'String'
@@ -234,6 +244,7 @@ export interface NexusGenFieldTypeNames {
     addAndCreateTranslator: 'User'
     addTranslator: 'User'
     completeProfile: 'User'
+    createAddress: 'Address'
     createClaimant: 'Claimant'
     createUser: 'User'
     disconnectTranslator: 'User'
@@ -286,6 +297,9 @@ export interface NexusGenArgTypes {
     }
     completeProfile: { // args
       input: NexusGenInputs['CompleteProfileInput']; // CompleteProfileInput!
+    }
+    createAddress: { // args
+      input: NexusGenInputs['CreateAddressInput']; // CreateAddressInput!
     }
     createClaimant: { // args
       input: NexusGenInputs['CreateClaimantInput']; // CreateClaimantInput!

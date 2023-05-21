@@ -46,6 +46,7 @@ model Assignment {
   createdByUserId  String
   claimant         Claimant @relation(fields: [claimantId], references: [id])
   claimantId       String   @unique
+  dateTime         DateTime
   address          Address  @relation(fields: [addressId], references: [id])
   addressId        String   @unique
   isComplete       Boolean   @default(false)
@@ -66,7 +67,8 @@ model Claimant {
 model Address {
   id           String     @id @default(uuid())
   address1     String     @db.VarChar(255)
-  address2     String     @db.VarChar(255)
+  address2     String?     @db.VarChar(255)
+  city         String     @db.VarChar(255)
   state        String     @db.VarChar(2)
   zipCode      String     @db.VarChar(32)
   assignment   Assignment?  

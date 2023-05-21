@@ -18,6 +18,7 @@ type Address {
   address1: String
   address2: String
   assignment: Assignment
+  city: String
   id: String
   state: String
   zipCode: String
@@ -58,6 +59,14 @@ input CompleteProfileInput {
   phone: String!
 }
 
+input CreateAddressInput {
+  address1: String!
+  address2: String
+  city: String!
+  state: String!
+  zipCode: String!
+}
+
 input CreateAssignmentInput {
   email: String!
 }
@@ -90,6 +99,7 @@ type Mutation {
   addAndCreateTranslator(input: AddAndCreateTranslatorInput!): User
   addTranslator(input: AddTranslatorInput!): User
   completeProfile(input: CompleteProfileInput!): User
+  createAddress(input: CreateAddressInput!): Address!
   createClaimant(input: CreateClaimantInput!): Claimant!
   createUser(input: CreateUserInput!): User
   disconnectTranslator(input: DisconnectTranslatorInput!): User
