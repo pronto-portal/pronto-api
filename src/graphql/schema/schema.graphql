@@ -31,6 +31,7 @@ type Assignment {
   claimantNoShow: Boolean
   createdAt: DateTime
   createdBy: User
+  dateTime: DateTime
   id: String
   isComplete: Boolean
   translatorNoShow: Boolean
@@ -68,7 +69,10 @@ input CreateAddressInput {
 }
 
 input CreateAssignmentInput {
-  email: String!
+  addressId: String!
+  claimantId: String!
+  dateTime: DateTime!
+  translatorId: String!
 }
 
 input CreateClaimantInput {
@@ -100,6 +104,7 @@ type Mutation {
   addTranslator(input: AddTranslatorInput!): User
   completeProfile(input: CompleteProfileInput!): User
   createAddress(input: CreateAddressInput!): Address!
+  createAssignment(input: CreateAssignmentInput!): Assignment!
   createClaimant(input: CreateClaimantInput!): Claimant!
   createUser(input: CreateUserInput!): User
   disconnectTranslator(input: DisconnectTranslatorInput!): User

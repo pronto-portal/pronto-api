@@ -10,6 +10,9 @@ export const AssignmentType = objectType({
   definition(t) {
     t.string("id");
     t.date("createdAt");
+    t.field("dateTime", {
+      type: "DateTime",
+    });
     t.field("assignedTo", {
       type: UserType,
       async resolve(root, __, { prisma }: Context) {

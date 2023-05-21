@@ -59,7 +59,10 @@ export interface NexusGenInputs {
     zipCode: string; // String!
   }
   CreateAssignmentInput: { // input type
-    email: string; // String!
+    addressId: string; // String!
+    claimantId: string; // String!
+    dateTime: NexusGenScalars['DateTime']; // DateTime!
+    translatorId: string; // String!
   }
   CreateClaimantInput: { // input type
     email?: string | null; // String
@@ -150,6 +153,7 @@ export interface NexusGenFieldTypes {
     claimantNoShow: boolean | null; // Boolean
     createdAt: NexusGenScalars['DateTime'] | null; // DateTime
     createdBy: NexusGenRootTypes['User'] | null; // User
+    dateTime: NexusGenScalars['DateTime'] | null; // DateTime
     id: string | null; // String
     isComplete: boolean | null; // Boolean
     translatorNoShow: boolean | null; // Boolean
@@ -168,6 +172,7 @@ export interface NexusGenFieldTypes {
     addTranslator: NexusGenRootTypes['User'] | null; // User
     completeProfile: NexusGenRootTypes['User'] | null; // User
     createAddress: NexusGenRootTypes['Address']; // Address!
+    createAssignment: NexusGenRootTypes['Assignment']; // Assignment!
     createClaimant: NexusGenRootTypes['Claimant']; // Claimant!
     createUser: NexusGenRootTypes['User'] | null; // User
     disconnectTranslator: NexusGenRootTypes['User'] | null; // User
@@ -227,6 +232,7 @@ export interface NexusGenFieldTypeNames {
     claimantNoShow: 'Boolean'
     createdAt: 'DateTime'
     createdBy: 'User'
+    dateTime: 'DateTime'
     id: 'String'
     isComplete: 'Boolean'
     translatorNoShow: 'Boolean'
@@ -245,6 +251,7 @@ export interface NexusGenFieldTypeNames {
     addTranslator: 'User'
     completeProfile: 'User'
     createAddress: 'Address'
+    createAssignment: 'Assignment'
     createClaimant: 'Claimant'
     createUser: 'User'
     disconnectTranslator: 'User'
@@ -300,6 +307,9 @@ export interface NexusGenArgTypes {
     }
     createAddress: { // args
       input: NexusGenInputs['CreateAddressInput']; // CreateAddressInput!
+    }
+    createAssignment: { // args
+      input: NexusGenInputs['CreateAssignmentInput']; // CreateAssignmentInput!
     }
     createClaimant: { // args
       input: NexusGenInputs['CreateClaimantInput']; // CreateClaimantInput!
