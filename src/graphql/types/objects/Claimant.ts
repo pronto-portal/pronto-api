@@ -9,7 +9,8 @@ export const ClaimantType = objectType({
     t.string("firstName");
     t.string("lastName");
     t.string("email");
-    t.field("assignment", {
+    t.string("phone");
+    t.nullable.field("assignment", {
       type: AssignmentType,
       async resolve(root, __, { prisma }: Context) {
         const { assignment } = await prisma.claimant.findUniqueOrThrow({
@@ -22,5 +23,6 @@ export const ClaimantType = objectType({
         return assignment;
       },
     });
+    t.list.string("languages");
   },
 });

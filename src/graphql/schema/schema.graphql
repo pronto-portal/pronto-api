@@ -44,13 +44,27 @@ type Claimant {
   email: String
   firstName: String
   id: String
+  languages: [String]
   lastName: String
+  phone: String
 }
 
 input CompleteProfileInput {
   firstName: String!
   isManager: Boolean!
   isTranslator: Boolean!
+  languages: [String!]
+  lastName: String!
+  phone: String!
+}
+
+input CreateAssignmentInput {
+  email: String!
+}
+
+input CreateClaimantInput {
+  email: String
+  firstName: String!
   languages: [String!]
   lastName: String!
   phone: String!
@@ -76,6 +90,7 @@ type Mutation {
   addAndCreateTranslator(input: AddAndCreateTranslatorInput!): User
   addTranslator(input: AddTranslatorInput!): User
   completeProfile(input: CompleteProfileInput!): User
+  createClaimant(input: CreateClaimantInput!): Claimant!
   createUser(input: CreateUserInput!): User
   disconnectTranslator(input: DisconnectTranslatorInput!): User
   login(input: CreateUserInput!): User!

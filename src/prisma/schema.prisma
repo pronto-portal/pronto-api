@@ -44,8 +44,10 @@ model Assignment {
   assignedToUserId String
   createdBy        User      @relation("createdAssignments", fields: [createdByUserId], references: [id])
   createdByUserId  String
-  claimant         Claimant? @relation()
-  address          Address?  @relation()
+  claimant         Claimant @relation(fields: [claimantId], references: [id])
+  claimantId       String   @unique
+  address          Address  @relation(fields: [addressId], references: [id])
+  addressId        String   @unique
   isComplete       Boolean   @default(false)
   claimantNoShow   Boolean   @default(false)
   translatorNoShow Boolean   @default(false)
@@ -57,8 +59,8 @@ model Claimant {
   lastName     String     @db.VarChar(120)
   email        String     @db.VarChar(120)
   phone        String     @db.VarChar(30)
-  assignment   Assignment @relation(fields: [assignmentId], references: [id])
-  assignmentId String     @unique
+  assignment   Assignment?
+  languages    String[]   @default([])
 }
 
 model Address {
@@ -67,6 +69,5 @@ model Address {
   address2     String     @db.VarChar(255)
   state        String     @db.VarChar(2)
   zipCode      String     @db.VarChar(32)
-  assignment   Assignment @relation(fields: [assignmentId], references: [id])
-  assignmentId String     @unique
+  assignment   Assignment?  
 }

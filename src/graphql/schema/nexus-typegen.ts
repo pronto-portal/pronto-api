@@ -51,6 +51,16 @@ export interface NexusGenInputs {
     lastName: string; // String!
     phone: string; // String!
   }
+  CreateAssignmentInput: { // input type
+    email: string; // String!
+  }
+  CreateClaimantInput: { // input type
+    email?: string | null; // String
+    firstName: string; // String!
+    languages?: string[] | null; // [String!]
+    lastName: string; // String!
+    phone: string; // String!
+  }
   CreateUserInput: { // input type
     email: string; // String!
     firstName?: string | null; // String
@@ -141,12 +151,15 @@ export interface NexusGenFieldTypes {
     email: string | null; // String
     firstName: string | null; // String
     id: string | null; // String
+    languages: Array<string | null> | null; // [String]
     lastName: string | null; // String
+    phone: string | null; // String
   }
   Mutation: { // field return type
     addAndCreateTranslator: NexusGenRootTypes['User'] | null; // User
     addTranslator: NexusGenRootTypes['User'] | null; // User
     completeProfile: NexusGenRootTypes['User'] | null; // User
+    createClaimant: NexusGenRootTypes['Claimant']; // Claimant!
     createUser: NexusGenRootTypes['User'] | null; // User
     disconnectTranslator: NexusGenRootTypes['User'] | null; // User
     login: NexusGenRootTypes['User']; // User!
@@ -213,12 +226,15 @@ export interface NexusGenFieldTypeNames {
     email: 'String'
     firstName: 'String'
     id: 'String'
+    languages: 'String'
     lastName: 'String'
+    phone: 'String'
   }
   Mutation: { // field return type name
     addAndCreateTranslator: 'User'
     addTranslator: 'User'
     completeProfile: 'User'
+    createClaimant: 'Claimant'
     createUser: 'User'
     disconnectTranslator: 'User'
     login: 'User'
@@ -270,6 +286,9 @@ export interface NexusGenArgTypes {
     }
     completeProfile: { // args
       input: NexusGenInputs['CompleteProfileInput']; // CompleteProfileInput!
+    }
+    createClaimant: { // args
+      input: NexusGenInputs['CreateClaimantInput']; // CreateClaimantInput!
     }
     createUser: { // args
       input: NexusGenInputs['CreateUserInput']; // CreateUserInput!
