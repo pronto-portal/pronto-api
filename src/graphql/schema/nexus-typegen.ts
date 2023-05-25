@@ -84,6 +84,16 @@ export interface NexusGenInputs {
     countPerPage: number; // Int!
     page: number; // Int!
   }
+  UpdateAssignmentInput: { // input type
+    addressId?: string | null; // String
+    claimantId?: string | null; // String
+    claimantNoShow?: boolean | null; // Boolean
+    dateTime?: NexusGenScalars['DateTime'] | null; // DateTime
+    id: string; // String!
+    isComplete?: boolean | null; // Boolean
+    translatorId?: string | null; // String
+    translatorNoShow?: boolean | null; // Boolean
+  }
   UpdateUserInput: { // input type
     email?: string | null; // String
     firstName?: string | null; // String
@@ -140,7 +150,7 @@ export interface NexusGenFieldTypes {
   Address: { // field return type
     address1: string | null; // String
     address2: string | null; // String
-    assignment: NexusGenRootTypes['Assignment'] | null; // Assignment
+    assignment: Array<NexusGenRootTypes['Assignment'] | null> | null; // [Assignment]
     city: string | null; // String
     id: string | null; // String
     state: string | null; // String
@@ -177,9 +187,12 @@ export interface NexusGenFieldTypes {
     createUser: NexusGenRootTypes['User'] | null; // User
     disconnectTranslator: NexusGenRootTypes['User'] | null; // User
     login: NexusGenRootTypes['User']; // User!
+    updateAssignment: NexusGenRootTypes['Assignment']; // Assignment!
     updateUser: NexusGenRootTypes['User'] | null; // User
   }
   Query: { // field return type
+    getAddresses: Array<NexusGenRootTypes['Address'] | null>; // [Address]!
+    getAssignments: Array<NexusGenRootTypes['Assignment'] | null>; // [Assignment]!
     getTranslator: NexusGenRootTypes['User']; // User!
     getTranslators: Array<NexusGenRootTypes['User'] | null>; // [User]!
     getUser: NexusGenRootTypes['User']; // User!
@@ -256,9 +269,12 @@ export interface NexusGenFieldTypeNames {
     createUser: 'User'
     disconnectTranslator: 'User'
     login: 'User'
+    updateAssignment: 'Assignment'
     updateUser: 'User'
   }
   Query: { // field return type name
+    getAddresses: 'Address'
+    getAssignments: 'Assignment'
     getTranslator: 'User'
     getTranslators: 'User'
     getUser: 'User'
@@ -323,11 +339,20 @@ export interface NexusGenArgTypes {
     login: { // args
       input: NexusGenInputs['CreateUserInput']; // CreateUserInput!
     }
+    updateAssignment: { // args
+      input: NexusGenInputs['UpdateAssignmentInput']; // UpdateAssignmentInput!
+    }
     updateUser: { // args
       data: NexusGenInputs['UpdateUserInput']; // UpdateUserInput!
     }
   }
   Query: {
+    getAddresses: { // args
+      input: NexusGenInputs['PaginatedInput']; // PaginatedInput!
+    }
+    getAssignments: { // args
+      input: NexusGenInputs['PaginatedInput']; // PaginatedInput!
+    }
     getTranslator: { // args
       input: NexusGenInputs['ByEmailInput']; // ByEmailInput!
     }

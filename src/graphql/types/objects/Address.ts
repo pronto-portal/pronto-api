@@ -12,13 +12,17 @@ export const AddressType = objectType({
     t.string("city");
     t.string("state");
     t.string("zipCode");
-    t.field("assignment", {
+    t.list.field("assignment", {
       type: AssignmentType,
       async resolve(root: Address, __, { prisma }: Context) {
         const { assignment } = await prisma.address.findUniqueOrThrow({
           where: { id: root.id },
           include: {
-            assignment: true,
+            assignment: {
+              include: {
+                createdBy: true,
+              },
+            },
           },
         });
 

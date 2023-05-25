@@ -17,7 +17,7 @@ input AddTranslatorInput {
 type Address {
   address1: String
   address2: String
-  assignment: Assignment
+  assignment: [Assignment]
   city: String
   id: String
   state: String
@@ -109,6 +109,7 @@ type Mutation {
   createUser(input: CreateUserInput!): User
   disconnectTranslator(input: DisconnectTranslatorInput!): User
   login(input: CreateUserInput!): User!
+  updateAssignment(input: UpdateAssignmentInput!): Assignment!
   updateUser(data: UpdateUserInput!): User
 }
 
@@ -118,6 +119,8 @@ input PaginatedInput {
 }
 
 type Query {
+  getAddresses(input: PaginatedInput!): [Address]!
+  getAssignments(input: PaginatedInput!): [Assignment]!
   getTranslator(input: ByEmailInput!): User!
   getTranslators(input: PaginatedInput!): [User]!
   getUser: User!
@@ -130,6 +133,17 @@ type Translator {
   languages: [String!]
   lastName: String
   phone: String
+}
+
+input UpdateAssignmentInput {
+  addressId: String
+  claimantId: String
+  claimantNoShow: Boolean
+  dateTime: DateTime
+  id: String!
+  isComplete: Boolean
+  translatorId: String
+  translatorNoShow: Boolean
 }
 
 input UpdateUserInput {

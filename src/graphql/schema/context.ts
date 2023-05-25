@@ -8,7 +8,7 @@ export interface Context {
   userId?: string;
   req: Request;
   res: Response;
-  user: User | null;
+  user: User;
 }
 
 export function createContext(
