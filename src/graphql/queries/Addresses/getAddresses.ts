@@ -24,6 +24,8 @@ export const GetAddresses = extendType({
           include: {
             assignment: true,
           },
+          skip: (page - 1) * countPerPage,
+          take: countPerPage,
         });
 
         return addresses;
