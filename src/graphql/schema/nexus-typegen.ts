@@ -43,6 +43,9 @@ export interface NexusGenInputs {
   ByEmailInput: { // input type
     email: string; // String!
   }
+  ByIdInput: { // input type
+    id: string; // String!
+  }
   CompleteProfileInput: { // input type
     firstName: string; // String!
     isManager: boolean; // Boolean!
@@ -193,6 +196,7 @@ export interface NexusGenFieldTypes {
   Query: { // field return type
     getAddresses: Array<NexusGenRootTypes['Address'] | null>; // [Address]!
     getAssignments: Array<NexusGenRootTypes['Assignment'] | null>; // [Assignment]!
+    getClaimant: NexusGenRootTypes['Claimant']; // Claimant!
     getClaimants: Array<NexusGenRootTypes['Claimant'] | null>; // [Claimant]!
     getTranslator: NexusGenRootTypes['User']; // User!
     getTranslators: Array<NexusGenRootTypes['User'] | null>; // [User]!
@@ -276,6 +280,7 @@ export interface NexusGenFieldTypeNames {
   Query: { // field return type name
     getAddresses: 'Address'
     getAssignments: 'Assignment'
+    getClaimant: 'Claimant'
     getClaimants: 'Claimant'
     getTranslator: 'User'
     getTranslators: 'User'
@@ -354,6 +359,9 @@ export interface NexusGenArgTypes {
     }
     getAssignments: { // args
       input: NexusGenInputs['PaginatedInput']; // PaginatedInput!
+    }
+    getClaimant: { // args
+      input: NexusGenInputs['ByIdInput']; // ByIdInput!
     }
     getClaimants: { // args
       input: NexusGenInputs['PaginatedInput']; // PaginatedInput!

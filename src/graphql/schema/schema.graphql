@@ -41,6 +41,10 @@ input ByEmailInput {
   email: String!
 }
 
+input ByIdInput {
+  id: String!
+}
+
 type Claimant {
   assignment: [Assignment]
   email: String
@@ -121,6 +125,7 @@ input PaginatedInput {
 type Query {
   getAddresses(input: PaginatedInput!): [Address]!
   getAssignments(input: PaginatedInput!): [Assignment]!
+  getClaimant(input: ByIdInput!): Claimant!
   getClaimants(input: PaginatedInput!): [Claimant]!
   getTranslator(input: ByEmailInput!): User!
   getTranslators(input: PaginatedInput!): [User]!
