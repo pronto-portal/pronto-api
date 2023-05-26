@@ -169,7 +169,7 @@ export interface NexusGenFieldTypes {
     translatorNoShow: boolean | null; // Boolean
   }
   Claimant: { // field return type
-    assignment: NexusGenRootTypes['Assignment'] | null; // Assignment
+    assignment: Array<NexusGenRootTypes['Assignment'] | null> | null; // [Assignment]
     email: string | null; // String
     firstName: string | null; // String
     id: string | null; // String
@@ -193,6 +193,7 @@ export interface NexusGenFieldTypes {
   Query: { // field return type
     getAddresses: Array<NexusGenRootTypes['Address'] | null>; // [Address]!
     getAssignments: Array<NexusGenRootTypes['Assignment'] | null>; // [Assignment]!
+    getClaimants: Array<NexusGenRootTypes['Claimant'] | null>; // [Claimant]!
     getTranslator: NexusGenRootTypes['User']; // User!
     getTranslators: Array<NexusGenRootTypes['User'] | null>; // [User]!
     getUser: NexusGenRootTypes['User']; // User!
@@ -275,6 +276,7 @@ export interface NexusGenFieldTypeNames {
   Query: { // field return type name
     getAddresses: 'Address'
     getAssignments: 'Assignment'
+    getClaimants: 'Claimant'
     getTranslator: 'User'
     getTranslators: 'User'
     getUser: 'User'
@@ -351,6 +353,9 @@ export interface NexusGenArgTypes {
       input: NexusGenInputs['PaginatedInput']; // PaginatedInput!
     }
     getAssignments: { // args
+      input: NexusGenInputs['PaginatedInput']; // PaginatedInput!
+    }
+    getClaimants: { // args
       input: NexusGenInputs['PaginatedInput']; // PaginatedInput!
     }
     getTranslator: { // args
