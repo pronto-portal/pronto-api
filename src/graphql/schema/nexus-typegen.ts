@@ -194,6 +194,7 @@ export interface NexusGenFieldTypes {
     updateUser: NexusGenRootTypes['User'] | null; // User
   }
   Query: { // field return type
+    getAddress: NexusGenRootTypes['Address']; // Address!
     getAddresses: Array<NexusGenRootTypes['Address'] | null>; // [Address]!
     getAssignments: Array<NexusGenRootTypes['Assignment'] | null>; // [Assignment]!
     getClaimant: NexusGenRootTypes['Claimant']; // Claimant!
@@ -278,6 +279,7 @@ export interface NexusGenFieldTypeNames {
     updateUser: 'User'
   }
   Query: { // field return type name
+    getAddress: 'Address'
     getAddresses: 'Address'
     getAssignments: 'Assignment'
     getClaimant: 'Claimant'
@@ -354,6 +356,9 @@ export interface NexusGenArgTypes {
     }
   }
   Query: {
+    getAddress: { // args
+      input: NexusGenInputs['ByIdInput']; // ByIdInput!
+    }
     getAddresses: { // args
       input: NexusGenInputs['PaginatedInput']; // PaginatedInput!
     }

@@ -123,6 +123,7 @@ input PaginatedInput {
 }
 
 type Query {
+  getAddress(input: ByIdInput!): Address!
   getAddresses(input: PaginatedInput!): [Address]!
   getAssignments(input: PaginatedInput!): [Assignment]!
   getClaimant(input: ByIdInput!): Claimant!
