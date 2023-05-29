@@ -27,9 +27,11 @@ model User {
   city              String?
   state             String?
   languages         String[]      @default([])
-  translators       User[]  @relation("UserTranslators")
-  translatingFor    User[]  @relation("UserTranslators")
-}
+  translators       User[]        @relation("UserTranslators")
+  translatingFor    User[]        @relation("UserTranslators")
+  claimants         Claimant[]    @relation("UserClaimants")
+  addresses         Address[]     @relation("UserAddresses")
+  }
 
 model RefreshToken {
   id     String @id @default(uuid())
@@ -57,6 +59,8 @@ model Assignment {
 
 model Claimant {
   id           String     @id @default(uuid())
+  user         User       @relation("UserClaimants", fields: [userId], references: [id])
+  userId       String
   firstName    String     @db.VarChar(120)
   lastName     String     @db.VarChar(120)
   email        String     @db.VarChar(120)
@@ -67,6 +71,8 @@ model Claimant {
 
 model Address {
   id           String     @id @default(uuid())
+  user         User       @relation("UserAddresses", fields: [userId], references: [id])
+  userId       String
   address1     String     @db.VarChar(255)
   address2     String?     @db.VarChar(255)
   city         String     @db.VarChar(255)

@@ -13,7 +13,6 @@ export const CreateAddress = extendType({
       },
       async resolve(_, { input }, { prisma, user }) {
         const { address1, address2, city, state, zipCode } = input;
-        if (!user) throw new Error("No user found");
 
         const address = await prisma.address.create({
           data: {
@@ -22,6 +21,11 @@ export const CreateAddress = extendType({
             city,
             state,
             zipCode,
+            user: {
+              connect: {
+                id: user.id,
+              },
+            },
           },
         });
 

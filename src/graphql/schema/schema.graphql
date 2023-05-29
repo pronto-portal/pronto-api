@@ -21,6 +21,8 @@ type Address {
   city: String
   id: String
   state: String
+  user: User
+  userId: String
   zipCode: String
 }
 
@@ -53,6 +55,8 @@ type Claimant {
   languages: [String]
   lastName: String
   phone: String
+  user: User
+  userId: String
 }
 
 input CompleteProfileInput {
@@ -113,7 +117,9 @@ type Mutation {
   createUser(input: CreateUserInput!): User
   disconnectTranslator(input: DisconnectTranslatorInput!): User
   login(input: CreateUserInput!): User!
+  updateAddress(input: UpdateAddressInput!): Address!
   updateAssignment(input: UpdateAssignmentInput!): Assignment!
+  updateClaimant(input: UpdateClaimantInput!): Claimant!
   updateUser(data: UpdateUserInput!): User
 }
 
@@ -125,6 +131,7 @@ input PaginatedInput {
 type Query {
   getAddress(input: ByIdInput!): Address!
   getAddresses(input: PaginatedInput!): [Address]!
+  getAssignment(input: ByIdInput!): Assignment!
   getAssignments(input: PaginatedInput!): [Assignment]!
   getClaimant(input: ByIdInput!): Claimant!
   getClaimants(input: PaginatedInput!): [Claimant]!
@@ -142,6 +149,15 @@ type Translator {
   phone: String
 }
 
+input UpdateAddressInput {
+  address1: String
+  address2: String
+  city: String
+  id: String!
+  state: String
+  zipCode: String
+}
+
 input UpdateAssignmentInput {
   addressId: String
   claimantId: String
@@ -151,6 +167,15 @@ input UpdateAssignmentInput {
   isComplete: Boolean
   translatorId: String
   translatorNoShow: Boolean
+}
+
+input UpdateClaimantInput {
+  email: String
+  firstName: String
+  id: String!
+  languages: [String!]
+  lastName: String
+  phone: String
 }
 
 input UpdateUserInput {

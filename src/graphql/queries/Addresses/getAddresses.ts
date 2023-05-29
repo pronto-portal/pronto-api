@@ -15,11 +15,7 @@ export const GetAddresses = extendType({
         // also stored on the user table via relations as well
         const addresses = await prisma.address.findMany({
           where: {
-            assignment: {
-              some: {
-                createdByUserId: user.id,
-              },
-            },
+            userId: user.id,
           },
           include: {
             assignment: true,

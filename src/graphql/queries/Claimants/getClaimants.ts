@@ -15,11 +15,7 @@ export const GetClaimants = extendType({
         // also stored on the user table via relations as well
         const claimants = await prisma.claimant.findMany({
           where: {
-            assignment: {
-              some: {
-                createdByUserId: user.id,
-              },
-            },
+            userId: user.id,
           },
           include: {
             assignment: true,
