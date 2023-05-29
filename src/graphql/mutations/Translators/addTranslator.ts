@@ -13,7 +13,6 @@ export const AddTranslator = extendType({
       },
       async resolve(_, { input }, { prisma, user }) {
         const { email } = input;
-        if (!user) throw new Error("No user found");
 
         const addTranslator = await prisma.user.update({
           where: {
