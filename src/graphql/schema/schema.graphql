@@ -115,6 +115,9 @@ type Mutation {
   createAssignment(input: CreateAssignmentInput!): Assignment!
   createClaimant(input: CreateClaimantInput!): Claimant!
   createUser(input: CreateUserInput!): User
+  deleteAddress(input: ByIdInput!): Address!
+  deleteAssignment(input: ByIdInput!): Assignment!
+  deleteClaimant(input: ByIdInput!): Claimant!
   disconnectTranslator(input: DisconnectTranslatorInput!): User
   login(input: CreateUserInput!): User!
   updateAddress(input: UpdateAddressInput!): Address!

@@ -208,6 +208,9 @@ export interface NexusGenFieldTypes {
     createAssignment: NexusGenRootTypes['Assignment']; // Assignment!
     createClaimant: NexusGenRootTypes['Claimant']; // Claimant!
     createUser: NexusGenRootTypes['User'] | null; // User
+    deleteAddress: NexusGenRootTypes['Address']; // Address!
+    deleteAssignment: NexusGenRootTypes['Assignment']; // Assignment!
+    deleteClaimant: NexusGenRootTypes['Claimant']; // Claimant!
     disconnectTranslator: NexusGenRootTypes['User'] | null; // User
     login: NexusGenRootTypes['User']; // User!
     updateAddress: NexusGenRootTypes['Address']; // Address!
@@ -300,6 +303,9 @@ export interface NexusGenFieldTypeNames {
     createAssignment: 'Assignment'
     createClaimant: 'Claimant'
     createUser: 'User'
+    deleteAddress: 'Address'
+    deleteAssignment: 'Assignment'
+    deleteClaimant: 'Claimant'
     disconnectTranslator: 'User'
     login: 'User'
     updateAddress: 'Address'
@@ -371,6 +377,15 @@ export interface NexusGenArgTypes {
     }
     createUser: { // args
       input: NexusGenInputs['CreateUserInput']; // CreateUserInput!
+    }
+    deleteAddress: { // args
+      input: NexusGenInputs['ByIdInput']; // ByIdInput!
+    }
+    deleteAssignment: { // args
+      input: NexusGenInputs['ByIdInput']; // ByIdInput!
+    }
+    deleteClaimant: { // args
+      input: NexusGenInputs['ByIdInput']; // ByIdInput!
     }
     disconnectTranslator: { // args
       input: NexusGenInputs['DisconnectTranslatorInput']; // DisconnectTranslatorInput!
