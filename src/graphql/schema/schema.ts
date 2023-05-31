@@ -13,11 +13,11 @@ const schema = makeSchema({
     ],
   },
   contextType: {
-    module: require.resolve("./context.ts"),
+    module: require.resolve("./context"),
     export: "Context",
   },
   outputs: {
-    typegen: join(__dirname, "./nexus-typegen.ts"),
+    typegen: join(__dirname, "./nexus-typegen"),
     schema: join(__dirname, "./schema.graphql"),
   },
   plugins: [fieldAuthorizePlugin()],

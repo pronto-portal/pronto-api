@@ -6,66 +6,45 @@ import cors from "cors";
 import getAppDataSource from "./datasource/datasource";
 import schema from "./graphql/schema/schema";
 import cookieParser from "cookie-parser";
-import http from "http";
-import jwt, { JwtPayload } from "jsonwebtoken";
-import { Context } from "./graphql/schema/context";
-import { isJWTTokenValid } from "./utils/auth/isTokenValid";
+import jwt from "jsonwebtoken";
 import { User } from "@prisma/client";
+import serverlessExpress from "@vendia/serverless-express";
 
-const prisma = getAppDataSource();
+const server = new ApolloServer({
+  schema,
+});
 
-const main = async () => {
-  const app = express();
-  const httpServer = http.createServer(app);
+server.startInBackgroundHandlingStartupErrorsByLoggingAndFailingAllRequests();
 
-  const server = new ApolloServer({
-    schema,
-  });
+const app = express();
 
-  await server.start();
+app.use(cookieParser());
+app.use(
+  "/",
+  cors({
+    origin: ["http://localhost:3000"], // frontend domain
+    credentials: true,
+  }),
+  json(),
+  expressMiddleware(server, {
+    context: async ({ req, res }) => {
+      // API Gateway event and Lambda Context
+      const prisma = getAppDataSource();
 
-  app.use(cookieParser());
-  app.use(
-    "/",
-    cors({
-      origin: ["http://localhost:3000"], // frontend domain
-      credentials: true,
-    }),
-    json(),
-    expressMiddleware(server, {
-      context: async ({ req, res }) => {
-        // API Gateway event and Lambda Context
+      const accessToken = req.cookies["x-access-token"];
 
-        // decode access token then get user
-        //const isJWTValid: boolean = await isJWTTokenValid(token);
-        //console.log("isJWTValid", isJWTValid);
-        const accessToken = req.cookies["x-access-token"];
+      let user: User | null = null;
 
-        let user: User | null = null;
+      if (accessToken) user = jwt.decode(accessToken) as User;
 
-        if (accessToken) user = jwt.decode(accessToken) as User;
+      return {
+        req,
+        res,
+        user,
+        prisma,
+      };
+    },
+  })
+);
 
-        //   user = await prisma.user.findUnique({
-        //     where: {
-        //       id: decodedJWT.sub,
-        //     },
-        //   });
-        // }
-
-        return {
-          req,
-          res,
-          user,
-          prisma,
-        };
-      },
-    })
-  );
-
-  await new Promise<void>((resolve) =>
-    httpServer.listen({ port: 4000 }, resolve)
-  );
-  console.log(`🚀 Server ready at http://localhost:4000/`);
-};
-
-main();
+exports.handler = serverlessExpress({ app });

@@ -5,3 +5,4 @@ data
 db.yaml
 postgres
 docker-compose.yaml
+.build
