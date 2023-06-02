@@ -25,6 +25,7 @@ export const GetAssignments = extendType({
                 lastName: true,
               },
             },
+            reminder: true,
           },
         });
 

@@ -16,6 +16,9 @@ export const getAssignment = extendType({
             id,
             createdByUserId: user.id,
           },
+          include: {
+            reminder: true,
+          },
         });
 
         return assignment;

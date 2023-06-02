@@ -91,6 +91,14 @@ input CreateClaimantInput {
   phone: String!
 }
 
+input CreateReminderInput {
+  assignmentId: String!
+  claimantMessage: String
+  isEmail: Boolean
+  isSMS: Boolean
+  translatorMessage: String
+}
+
 input CreateUserInput {
   email: String!
   firstName: String
@@ -143,6 +151,16 @@ type Query {
   getUser: User!
 }
 
+type Reminder {
+  assignment: Assignment
+  assignmentId: String
+  claimantMessage: String
+  id: String
+  isEmail: Boolean
+  isSMS: Boolean
+  translatorMessage: String
+}
+
 type Translator {
   email: String
   firstName: String
@@ -179,6 +197,13 @@ input UpdateClaimantInput {
   languages: [String!]
   lastName: String
   phone: String
+}
+
+input UpdateReminderInput {
+  claimantMessage: String
+  isEmail: Boolean
+  isSMS: Boolean
+  translatorMessage: String
 }
 
 input UpdateUserInput {
