@@ -19,6 +19,7 @@ export const UpdateAssignment = extendType({
           isComplete,
           claimantNoShow,
           translatorNoShow,
+          dateTime,
         } = input;
 
         let updateData: DynamicUpdate = {
@@ -29,6 +30,7 @@ export const UpdateAssignment = extendType({
             typeof translatorNoShow === "boolean"
               ? translatorNoShow
               : undefined,
+          dateTime: dateTime || undefined,
         };
 
         if (translatorId) {
