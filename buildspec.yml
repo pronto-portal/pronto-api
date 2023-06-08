@@ -6,6 +6,7 @@ phases:
       nodejs: 18
     commands:
       - echo Installing dependencies...
+      - npm install -g serverless
       - npm install
   build:
     commands:
