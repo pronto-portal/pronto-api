@@ -7,15 +7,11 @@ phases:
     commands:
       - echo Installing dependencies...
       - npm cache clean --force
-      - npm install -g serverless@3.27.0
+      - npm install -g serverless
       - npm ci
   build:
     commands:
       - echo Building application with serverless...
-      - echo "Content of /User directory:"
-      - ls -R ./src/graphql/queries/User
-      - echo "Content of /User directory under /mutations:"
-      - ls -R ./src/graphql/mutations/User
       - serverless package
 
   post_build:
