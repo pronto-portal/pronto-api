@@ -1,34 +1,38 @@
-const path = require("path");
-const slsw = require("serverless-webpack");
-const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
-const nodeExternals = require("webpack-node-externals");
+const path = require('path');
+const slsw = require('serverless-webpack');
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
+const nodeExternals = require('webpack-node-externals');
 
 module.exports = {
-  mode: slsw.lib.webpack.isLocal ? "development" : "production",
-  devtool: slsw.lib.webpack.isLocal ? "source-map" : "cheap-source-map",
+  mode: slsw.lib.webpack.isLocal ? 'development' : 'production',
+  devtool: 'source-map',
   entry: slsw.lib.entries,
-  target: "node",
+  target: 'node',
   resolve: {
-    extensions: [".cjs", ".mjs", ".js", ".ts", ".json"],
+    extensions: ['.cjs', '.mjs', '.js', '.ts', '.json'],
   },
   output: {
-    libraryTarget: "commonjs2",
-    path: path.join(__dirname, ".webpack"),
-    filename: "[name].js",
-  },
-  externals: [nodeExternals({ allowlist: ["@apollo/server"] })],
+    libraryTarget: 'commonjs2',
+    path: path.join(__dirname, '.webpack'),
+    filename: '[name].js',
+  }, 
+  externals: [
+    nodeExternals({
+      allowlist: [/^@apollo\/server/],
+      modulesDir: 'node_modules'
+    })],
   module: {
     rules: [
       {
         test: /\.ts$/,
         exclude: /node_modules/,
-        loader: "ts-loader",
+        loader: 'ts-loader',
         exclude: [
           [
-            path.resolve(__dirname, ".webpack"),
-            path.resolve(__dirname, ".serverless"),
-            path.resolve(__dirname, ".build"),
-            path.resolve(__dirname, "dist"),
+            path.resolve(__dirname, '.webpack'),
+            path.resolve(__dirname, '.serverless'),
+            path.resolve(__dirname, '.build'),
+            path.resolve(__dirname, 'dist'),
           ],
         ],
         options: {
