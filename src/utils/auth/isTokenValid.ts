@@ -1,5 +1,4 @@
-import jwt, { JwtPayload } from "jsonwebtoken";
-import { isTokenExpired } from "./istokenExpired";
+import jwt from "jsonwebtoken";
 
 const isTokenValid = (token: string, secret: string) => {
   jwt.verify(token, secret);

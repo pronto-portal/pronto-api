@@ -35,6 +35,4 @@ plugins:
 custom:
   serverless-offline:
     httpPort: 4000
-package:
-  exclude:
-    - node_modules/**
+

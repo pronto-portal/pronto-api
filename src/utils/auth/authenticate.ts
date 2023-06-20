@@ -60,7 +60,7 @@ export const authenticate = async (
     const decryptedRefreshToken = decryptRefreshToken(userRefreshToken.token);
 
     // Decode refresh token
-    const decodedRefreshToken = jwt.decode(decryptedRefreshToken) as JwtPayload;
+    const decodedRefreshToken = jwt.decode(decryptedRefreshToken) as Record<string, any>;
 
     // check if refresh token is expired. If expired issue a new one
     if (decodedRefreshToken && isTokenExpired(decodedRefreshToken)) {
