@@ -9,6 +9,7 @@ import cookieParser from "cookie-parser";
 import jwt from "jsonwebtoken";
 import { User } from "@prisma/client";
 import serverlessExpress from "@vendia/serverless-express";
+import AWS from "aws-sdk";
 
 const server = new ApolloServer({
   schema,
@@ -30,6 +31,7 @@ app.use(
     context: async ({ req, res }) => {
       // API Gateway event and Lambda Context
       const prisma = getAppDataSource();
+      const eventBridge = new AWS.EventBridge({ apiVersion: "2015-10-07" });
 
       const accessToken = req.cookies["x-access-token"];
 
@@ -42,6 +44,7 @@ app.use(
         res,
         user,
         prisma,
+        eventBridge,
       };
     },
   })

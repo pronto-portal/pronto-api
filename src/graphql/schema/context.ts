@@ -1,7 +1,6 @@
 import { PrismaClient, User } from "@prisma/client";
 import { Request, Response } from "express";
-
-const prisma = new PrismaClient();
+import { EventBridge } from "aws-sdk";
 
 export interface Context {
   prisma: PrismaClient;
@@ -9,12 +8,5 @@ export interface Context {
   req: Request;
   res: Response;
   user: User;
-}
-
-export function createContext(
-  req: Request,
-  res: Response,
-  user: User
-): Context {
-  return { prisma, userId: "", req, res, user };
+  eventBridge: EventBridge;
 }

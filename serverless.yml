@@ -1,9 +1,12 @@
 service: apollo-lambda
 provider:
   name: aws
-  runtime: nodejs16.x
+  runtime: nodejs18.x
   httpApi:
-    cors: true
+    cors:
+      allowedOrigins:
+        - http://localhost:3000
+  region: ${opt:region, 'us-east-1'}
 functions:
   graphql:
     # Make sure your file path is correct!
@@ -12,8 +15,18 @@ functions:
     handler: src/index.handler # highlight-line
     events:
       - httpApi:
-          path: /{any+}
+          path: /graphql/{any+}
           method: any
+    role: arn:aws:iam::${aws:accountId}:role/write_eventbridge_events
+    environment:
+      reminderFunctionArn: arn:aws:lambda:${self:provider.region}:${aws:accountId}:function:${self:service}-${opt:stage, 'dev'}-reminderService
+  reminderService:
+    handler: src/services/reminder/index.handler # highlight-line
+    events:
+      - httpApi:
+          path: /reminder/{any+}
+          method: any
+    role: arn:aws:iam::${aws:accountId}:role/read_eventbridge_events
 # Omit the following lines if you aren't using TS!
 plugins:
   - serverless-plugin-typescript
@@ -22,3 +35,6 @@ plugins:
 custom:
   serverless-offline:
     httpPort: 4000
+package:
+  exclude:
+    - node_modules/**

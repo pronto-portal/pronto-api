@@ -1,6 +1,7 @@
 import { extendType, nonNull } from "nexus";
 import { isAuthorized } from "../../../utils/auth/isAuthorized";
 import { CreateReminderInput, ReminderType } from "../../types";
+import { dateToCron } from "../../../utils/helper/dateToCron";
 
 export const CreateReminder = extendType({
   type: "Mutation",
@@ -11,7 +12,7 @@ export const CreateReminder = extendType({
       args: {
         input: nonNull(CreateReminderInput),
       },
-      async resolve(_, { input }, { prisma, user }) {
+      async resolve(_, { input }, { prisma, user, eventBridge }) {
         const {
           assignmentId,
           isEmail,
@@ -43,7 +44,37 @@ export const CreateReminder = extendType({
               },
             },
           },
+          include: {
+            assignment: true,
+          },
         });
+
+        const dateTime = assignment.dateTime.toISOString();
+        const dateTimeCron = dateToCron(dateTime);
+
+        if (reminder) {
+          const rule = await eventBridge
+            .putRule({
+              Name: `${reminder.id}`,
+              ScheduleExpression: `cron(${dateTimeCron})`,
+              State: "ENABLED",
+            })
+            .promise()
+            .catch((err) => console.error(err));
+
+          const targets = await eventBridge
+            .putTargets({
+              Rule: `${reminder.id}`,
+              Targets: [
+                {
+                  Id: "",
+                  Arn: "",
+                },
+              ],
+            })
+            .promise()
+            .catch((err) => console.error(err));
+        }
 
         return reminder;
       },
