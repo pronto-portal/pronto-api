@@ -18,7 +18,7 @@ module.exports = {
   }, 
   externals: [
     nodeExternals({
-      allowlist: [/^@apollo\/server/],
+      allowlist: [/^@apollo/],
       modulesDir: 'node_modules'
     })],
   module: {
