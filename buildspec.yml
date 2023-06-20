@@ -16,7 +16,11 @@ phases:
 
   post_build:
     commands:
-      - echo Build complete...
+      - echo Updating Pronto API
+      - aws lambda update-function-code --function-name $pronto_api_function_arn --s3-bucket $artifacts_bucket --s3-key $artifacts_key
+      - echo Updating Pronto Reminder Service
+      - aws lambda update-function-code --function-name $pronto_api_reminder_function_arn --s3-bucket $artifacts_bucket --s3-key $artifacts_key
+
 artifacts:
   files:
     - "apollo-lambda.zip"
