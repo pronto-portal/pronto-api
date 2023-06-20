@@ -1,10 +1,6 @@
 version: 0.2
 
 phases:
-  pre_build:
-    commands:
-      - echo Printing file structure...
-      - ls -R 
   install:
     runtime-versions:
       nodejs: 18
