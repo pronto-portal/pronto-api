@@ -16,6 +16,7 @@ module.exports = {
     path: path.join(__dirname, '.webpack'),
     filename: '[name].js',
   }, 
+  externals: [nodeExternals({whitelist: ['@apollo/server']})],
   module: {
     rules: [
       {
