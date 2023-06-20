@@ -7,3 +7,4 @@ postgres
 docker-compose.yaml
 .build
 .serverless
+.webpack

@@ -29,10 +29,13 @@ functions:
     role: arn:aws:iam::${aws:accountId}:role/read_eventbridge_events
 # Omit the following lines if you aren't using TS!
 plugins:
-  - serverless-plugin-typescript
+  - serverless-webpack
   - serverless-offline
 
 custom:
   serverless-offline:
     httpPort: 4000
+  webpack:
+    webpackConfig: ./webpack.config.js
+
 
