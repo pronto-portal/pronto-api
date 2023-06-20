@@ -16,7 +16,6 @@ module.exports = {
     path: path.join(__dirname, '.webpack'),
     filename: '[name].js',
   }, 
-  externals: [nodeExternals()],
   module: {
     rules: [
       {
