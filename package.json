@@ -22,8 +22,7 @@
     "@types/crypto-js": "^4.1.1",
     "@types/jsonwebtoken": "^9.0.1",
     "@types/node": "^18.11.19",
-    "aws-lambda": "^1.0.7",
-    "aws-sdk": "^2.1391.0",
+    "fork-ts-checker-webpack-plugin": "^8.0.0",
     "nodemon": "^2.0.22",
     "prisma": "^4.11.0",
     "serverless": "^3.27.0",
@@ -35,19 +34,21 @@
     "ts-node": "^10.9.1",
     "typescript": "^4.9.5",
     "webpack": "^5.87.0",
-    "webpack-cli": "^5.1.4"
+    "webpack-cli": "^5.1.4",
+    "webpack-node-externals": "^3.0.0"
   },
   "dependencies": {
     "@apollo/server": "^4.3.2",
     "@as-integrations/aws-lambda": "^2.0.0",
     "@prisma/client": "^4.11.0",
     "@vendia/serverless-express": "^4.10.4",
+    "aws-lambda": "^1.0.7",
+    "aws-sdk": "^2.1391.0",
     "body-parser": "^1.20.1",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "crypto-js": "^4.1.1",
     "express": "^4.18.2",
-    "fork-ts-checker-webpack-plugin": "^8.0.0",
     "google-auth-library": "^8.7.0",
     "graphql": "^16.6.0",
     "graphql-scalars": "^1.20.1",
@@ -56,7 +57,6 @@
     "moment-timezone": "^0.5.43",
     "nexus": "^1.3.0",
     "phone": "^3.1.37",
-    "reflect-metadata": "^0.1.13",
-    "webpack-node-externals": "^3.0.0"
+    "reflect-metadata": "^0.1.13"
   }
 }

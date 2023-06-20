@@ -9,11 +9,12 @@ phases:
       - npm cache clean --force
       - npm install -g serverless
       - npm ci
+      - npm install -g prisma
+      - prisma generate
   build:
     commands:
       - echo Building application with serverless...
       - serverless package
-
   post_build:
     commands:
       - echo Updating Pronto API
