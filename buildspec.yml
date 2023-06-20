@@ -6,8 +6,9 @@ phases:
       nodejs: 18
     commands:
       - echo Installing dependencies...
+      - npm cache clean --force
       - npm install -g serverless@3.27.0
-      - npm install
+      - npm ci
   build:
     commands:
       - echo Building application with serverless...
