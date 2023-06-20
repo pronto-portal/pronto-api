@@ -10,7 +10,8 @@
     "strictPropertyInitialization": false,
     "outDir": "./dist",
     "strict": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "declaration": true
   },
   "include": ["./src/**/*"],
   "exclude": ["**/__tests__/*", "**/__mocks__/*"]

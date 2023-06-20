@@ -13,7 +13,7 @@ const schema = makeSchema({
     ],
   },
   contextType: {
-    module: require.resolve("./context"),
+    module: join(__dirname, "context"),
     export: "Context",
   },
   outputs: {

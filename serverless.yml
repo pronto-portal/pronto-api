@@ -29,12 +29,14 @@ functions:
     role: arn:aws:iam::${aws:accountId}:role/read_eventbridge_events
 # Omit the following lines if you aren't using TS!
 plugins:
-  - serverless-plugin-typescript
+  - serverless-webpack
   - serverless-offline
 
 custom:
   serverless-offline:
     httpPort: 4000
-package:
-  exclude:
-    - node_modules/**
+  webpack:
+    webpackConfig: 'webpack.config.js' # Name of webpack configuration file
+    includeModules: false # Node modules configuration for packaging
+    packager: 'npm' # Packager that will be used to package your external modules
+    excludeFiles: src/**/*.test.js # Provide a glob for files to ignore
