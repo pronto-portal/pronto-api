@@ -14,6 +14,8 @@ phases:
       - echo Building application with serverless...
       - echo "Content of /User directory:"
       - ls -R ./src/graphql/queries/User
+      - echo "Content of /User directory under /mutations:"
+      - ls -R ./src/graphql/mutations/User
       - serverless package
 
   post_build:
