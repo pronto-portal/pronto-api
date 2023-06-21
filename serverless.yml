@@ -30,6 +30,7 @@ functions:
 # Omit the following lines if you aren't using TS!
 plugins:
   - serverless-webpack
+  - serverless-webpack-prisma
   - serverless-offline
 
 custom:
@@ -37,5 +38,8 @@ custom:
     httpPort: 4000
   webpack:
     webpackConfig: ./webpack.config.js
+  prisma:
+    installDeps: false
+    prismaPath: ./src
 
 

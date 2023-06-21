@@ -17,10 +17,8 @@ module.exports = {
     filename: '[name].js',
   }, 
   externals: [
-    nodeExternals({
-      allowlist: [/^@apollo/],
-      modulesDir: 'node_modules'
-    })],
+    nodeExternals()
+  ],
   module: {
     rules: [
       {
