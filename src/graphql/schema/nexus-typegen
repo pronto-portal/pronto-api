@@ -221,6 +221,7 @@ export interface NexusGenFieldTypes {
     createAddress: NexusGenRootTypes['Address']; // Address!
     createAssignment: NexusGenRootTypes['Assignment']; // Assignment!
     createClaimant: NexusGenRootTypes['Claimant']; // Claimant!
+    createReminder: NexusGenRootTypes['Reminder']; // Reminder!
     createUser: NexusGenRootTypes['User'] | null; // User
     deleteAddress: NexusGenRootTypes['Address']; // Address!
     deleteAssignment: NexusGenRootTypes['Assignment']; // Assignment!
@@ -230,6 +231,7 @@ export interface NexusGenFieldTypes {
     updateAddress: NexusGenRootTypes['Address']; // Address!
     updateAssignment: NexusGenRootTypes['Assignment']; // Assignment!
     updateClaimant: NexusGenRootTypes['Claimant']; // Claimant!
+    updateReminder: NexusGenRootTypes['Reminder']; // Reminder!
     updateUser: NexusGenRootTypes['User'] | null; // User
   }
   Query: { // field return type
@@ -325,6 +327,7 @@ export interface NexusGenFieldTypeNames {
     createAddress: 'Address'
     createAssignment: 'Assignment'
     createClaimant: 'Claimant'
+    createReminder: 'Reminder'
     createUser: 'User'
     deleteAddress: 'Address'
     deleteAssignment: 'Assignment'
@@ -334,6 +337,7 @@ export interface NexusGenFieldTypeNames {
     updateAddress: 'Address'
     updateAssignment: 'Assignment'
     updateClaimant: 'Claimant'
+    updateReminder: 'Reminder'
     updateUser: 'User'
   }
   Query: { // field return type name
@@ -407,6 +411,9 @@ export interface NexusGenArgTypes {
     createClaimant: { // args
       input: NexusGenInputs['CreateClaimantInput']; // CreateClaimantInput!
     }
+    createReminder: { // args
+      input: NexusGenInputs['CreateReminderInput']; // CreateReminderInput!
+    }
     createUser: { // args
       input: NexusGenInputs['CreateUserInput']; // CreateUserInput!
     }
@@ -433,6 +440,9 @@ export interface NexusGenArgTypes {
     }
     updateClaimant: { // args
       input: NexusGenInputs['UpdateClaimantInput']; // UpdateClaimantInput!
+    }
+    updateReminder: { // args
+      input: NexusGenInputs['UpdateReminderInput']; // UpdateReminderInput!
     }
     updateUser: { // args
       data: NexusGenInputs['UpdateUserInput']; // UpdateUserInput!

@@ -1,26 +1,19 @@
 version: 0.2
 
 phases:
-  install:
-    runtime-versions:
-      nodejs: 18
+  pre_build:
     commands:
-      - echo Installing dependencies...
-      - npm cache clean --force
-      - npm install -g serverless
-      - npm ci
+      - echo Logging in to Amazon ECR...
+      - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
   build:
     commands:
-      - echo Building application with serverless...
-      - serverless package
+      - echo Build started on `date`
+      - echo Building the Docker image...  
+      - docker build -t $REPOSITORY_URI:latest .
+      - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG
   post_build:
     commands:
-      - echo Updating Pronto API
-      - aws lambda update-function-code --function-name $pronto_api_function_arn --s3-bucket $artifacts_bucket --s3-key $artifacts_key
-      - echo Updating Pronto Reminder Service
-      - aws lambda update-function-code --function-name $pronto_api_reminder_function_arn --s3-bucket $artifacts_bucket --s3-key $artifacts_key
-
-artifacts:
-  files:
-    - "apollo-lambda.zip"
-  base-directory: "./.serverless"
+      - echo Build completed on `date`
+      - echo Pushing the Docker image...
+      - docker push $REPOSITORY_URI:latest
+      - docker push $REPOSITORY_URI:$IMAGE_TAG

@@ -122,6 +122,7 @@ type Mutation {
   createAddress(input: CreateAddressInput!): Address!
   createAssignment(input: CreateAssignmentInput!): Assignment!
   createClaimant(input: CreateClaimantInput!): Claimant!
+  createReminder(input: CreateReminderInput!): Reminder!
   createUser(input: CreateUserInput!): User
   deleteAddress(input: ByIdInput!): Address!
   deleteAssignment(input: ByIdInput!): Assignment!
@@ -131,6 +132,7 @@ type Mutation {
   updateAddress(input: UpdateAddressInput!): Address!
   updateAssignment(input: UpdateAssignmentInput!): Assignment!
   updateClaimant(input: UpdateClaimantInput!): Claimant!
+  updateReminder(input: UpdateReminderInput!): Reminder!
   updateUser(data: UpdateUserInput!): User
 }
 
