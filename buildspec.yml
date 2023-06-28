@@ -11,6 +11,7 @@ phases:
     commands:
       - echo Build started on `date`
       - echo Building the Docker image...  
+      - echo db url $DATABASE_URL
       - docker build -t $REPOSITORY_URI:latest .
       - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$CODEBUILD_BUILD_NUMBER
   post_build:
