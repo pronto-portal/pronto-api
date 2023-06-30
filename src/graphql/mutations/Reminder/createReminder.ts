@@ -52,23 +52,42 @@ export const CreateReminder = extendType({
         const dateTime = assignment.dateTime.toISOString();
         const dateTimeCron = dateToCron(dateTime);
 
+        const ruleName = `user-${user.id}-reminder-${reminder.id}-assignment-${assignment.id}`;
+
         if (reminder) {
-          const rule = await eventBridge
+          await eventBridge
             .putRule({
-              Name: `${reminder.id}`,
+              Name: ruleName,
+              Description: `reminder: ${reminder.id} created by user: ${user.id}`,
               ScheduleExpression: `cron(${dateTimeCron})`,
               State: "ENABLED",
+              RoleArn: process.env.EVENT_RULE_ROLE_ARN,
             })
             .promise()
-            .catch((err) => console.error(err));
+            .then((data) => {
+              console.log(
+                `user ${user.id} created eventbride rule ${reminder.id} for assignment ${assignment} scheduled for ${dateTime}`
+              );
+              return data;
+            })
+            .catch((err) => {
+              console.error(err);
+              return err;
+            });
 
-          const targets = await eventBridge
+          await eventBridge
             .putTargets({
-              Rule: `${reminder.id}`,
+              Rule: ruleName,
               Targets: [
                 {
-                  Id: "",
-                  Arn: "",
+                  Id: reminder.id,
+                  Arn: process.env.REMINDER_FUNCTION_ARN!,
+                  Input: JSON.stringify({
+                    payload: {
+                      translatorMessage,
+                      claimantMessage,
+                    },
+                  }),
                 },
               ],
             })
