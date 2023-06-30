@@ -19,3 +19,6 @@ phases:
       - echo Pushing the Docker image...
       - docker push $REPOSITORY_URI:latest
       - docker push $REPOSITORY_URI:$CODEBUILD_BUILD_NUMBER
+      - echo Deploying to ecs cluster...
+      - aws ecs update-service --cluster $ECS_CLUSTER_ARN --service $ECS_SERVICE_ID --task-definition $ECS_TASK_DEFINITION_ARN
+      - echo Done
