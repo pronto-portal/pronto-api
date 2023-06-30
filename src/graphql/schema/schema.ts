@@ -20,7 +20,16 @@ const schema = makeSchema({
     typegen: join(__dirname, "./nexus-typegen"),
     schema: join(__dirname, "./schema.graphql"),
   },
-  plugins: [fieldAuthorizePlugin()],
+  plugins: [
+    fieldAuthorizePlugin({
+      formatError({ error, ctx }) {
+        ctx.res.status(403);
+
+        console.log(`field authorize error occured ${error}`);
+        return error;
+      },
+    }),
+  ],
 });
 
 export default schema;
