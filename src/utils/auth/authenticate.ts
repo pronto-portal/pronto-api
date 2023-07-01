@@ -115,10 +115,17 @@ export const authenticate = async (
     });
 
     // send new encrypted refresh token back
-    res.cookie("x-refresh-token", newRefreshToken);
+    // todo: change to secure when prod ready
+    res.cookie("x-refresh-token", newRefreshToken, {
+      httpOnly: false,
+      secure: false,
+    });
   }
 
-  res.cookie("x-access-token", token);
+  res.cookie("x-access-token", token, {
+    httpOnly: false,
+    secure: false,
+  });
 
   return user;
 };

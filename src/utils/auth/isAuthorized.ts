@@ -8,10 +8,10 @@ export const isAuthorized = async (ctx: Context) => {
   const token: string | undefined = ctx.req.cookies["x-access-token"];
   const refreshToken: string | undefined = ctx.req.cookies["x-refresh-token"];
 
+  console.log("----------------------------------------");
   console.log("Attempting authorization");
-  console.log("COOKIES");
-  console.log(ctx.req.cookies);
-  console.log("-----------------------------------");
+  console.log("COOKIES", ctx.req.cookies);
+  console.log("----------------------------------------");
 
   if (!token) return false;
 
