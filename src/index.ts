@@ -37,6 +37,7 @@ const main = async () => {
         const prisma = getAppDataSource();
         const eventBridge = new AWS.EventBridge({ apiVersion: "2015-10-07" });
 
+        console.log("REQUEST COOKiES", req.cookies);
         const accessToken = req.cookies["x-access-token"];
 
         let user: User | null = null;
