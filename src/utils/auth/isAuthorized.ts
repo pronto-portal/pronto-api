@@ -11,6 +11,7 @@ export const isAuthorized = async (ctx: Context) => {
   console.log("----------------------------------------");
   console.log("Attempting authorization");
   console.log("COOKIES", ctx.req.cookies);
+  console.log("REQ", JSON.stringify(ctx.req));
   console.log("----------------------------------------");
 
   if (!token) return false;
