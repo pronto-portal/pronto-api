@@ -118,13 +118,15 @@ export const authenticate = async (
     // todo: change to secure when prod ready
     res.cookie("x-refresh-token", newRefreshToken, {
       httpOnly: false,
-      secure: false,
+      secure: true,
+      sameSite: "none",
     });
   }
 
   res.cookie("x-access-token", token, {
     httpOnly: false,
-    secure: false,
+    secure: true,
+    sameSite: "none",
   });
 
   return user;
