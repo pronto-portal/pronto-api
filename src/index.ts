@@ -27,8 +27,19 @@ const main = async () => {
   app.use(
     "/",
     cors({
-      origin: ["http://localhost:3000"], // frontend domain
+      origin: ["http://localhost:3000", process.env.API_GATEWAY_DNS!], // frontend domain
       credentials: true,
+      methods: ["POST", "GET", "OPTIONS"],
+      exposedHeaders: ["set-cookie", "Cookie"],
+      allowedHeaders: [
+        "set-cookie",
+        "Cookie",
+        "Content-Type",
+        "Origin",
+        "Accept",
+        "X-XSS-Protection",
+        "Authorization",
+      ],
     }),
     json(),
     expressMiddleware(server, {
