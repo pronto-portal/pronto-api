@@ -63,7 +63,7 @@ export const authenticate = async (
   if (userRefreshToken && userRefreshToken.token) {
     console.log("Refresh token found");
     // send encrypted refresh token back
-    res.cookie("x-refresh-token", userRefreshToken.token);
+    //res.cookie("x-refresh-token", userRefreshToken.token);
 
     const decryptedRefreshToken = decryptRefreshToken(userRefreshToken.token);
 
@@ -92,14 +92,14 @@ export const authenticate = async (
       });
 
       // send updated encrypted refresh token back
-      res.cookie("x-refresh-token", newRefreshToken);
+      // res.cookie("x-refresh-token", newRefreshToken);
     }
   } else {
     console.log("No refresh token found, creating a new one");
     // if no refresh token, create a new one for the user
     let newRefreshToken = encryptRefreshToken(
       jwt.sign(user, process.env.REFRESH_SECRET!, {
-        expiresIn: 7 * 24 * 60 * 60, // expires in 7 days
+        expiresIn: 10 * 60, // expires in 7 days
       })
     );
 
@@ -113,19 +113,11 @@ export const authenticate = async (
         },
       },
     });
-
-    // send new encrypted refresh token back
-    // todo: change to secure when prod ready
-    res.cookie("x-refresh-token", newRefreshToken, {
-      httpOnly: false,
-      secure: true,
-      sameSite: "none",
-    });
   }
 
   res.cookie("x-access-token", token, {
     httpOnly: false,
-    secure: true,
+    secure: false,
     sameSite: "none",
   });
 

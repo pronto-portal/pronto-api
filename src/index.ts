@@ -11,6 +11,7 @@ import jwt from "jsonwebtoken";
 import { User } from "@prisma/client";
 import AWS from "aws-sdk";
 import http from "http";
+import { parseAuthHeader } from "./utils/auth/parseAuthHeader";
 
 const main = async () => {
   const app = express();
@@ -46,16 +47,11 @@ const main = async () => {
     expressMiddleware(server, {
       context: async ({ req, res }) => {
         // API Gateway event and Lambda Context
-        console.log("EXPRESS MIDDLEWARE FUNCTION");
-        console.log("REQ set-cookie", req.headers["set-cookie"]);
-        console.log("REQ SET-COOKIE", req.headers["Set-Cookie"]);
-        console.log("RES HEADERS", res.getHeaders());
-
         const prisma = getAppDataSource();
         const eventBridge = new AWS.EventBridge({ apiVersion: "2015-10-07" });
 
         console.log("HEADERS", JSON.stringify(req.headers));
-        const accessToken = req.cookies["x-access-token"];
+        const accessToken = parseAuthHeader(req.headers.authorization);
 
         let user: User | null = null;
 

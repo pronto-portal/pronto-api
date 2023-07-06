@@ -3,18 +3,20 @@ import { isJWTTokenValid, isRefreshTokenValid } from "./isTokenValid";
 import { isTokenExpired } from "./istokenExpired";
 import { Context } from "../../graphql/schema/context";
 import { decryptRefreshToken } from "./decryptRefreshToken";
+import { parseAuthHeader } from "./parseAuthHeader";
 
-export const isAuthorized = async (ctx: Context) => {
-  const token: string | undefined = ctx.req.cookies["x-access-token"];
-  const refreshToken: string | undefined = ctx.req.cookies["x-refresh-token"];
+export const isAuthorized = async ({ res, req, prisma, user }: Context) => {
+  const token: string = parseAuthHeader(req.headers.authorization);
 
-  console.log("----------------------------------------");
-  console.log("Attempting authorization");
-  console.log("cookies", ctx.req.cookies);
-  console.log("Cookies", (ctx.req as any).Cookies);
-  console.log("cookie", (ctx.req as any).cookie);
-  console.log("Cookie", (ctx.req as any).Cookie);
-  console.log("----------------------------------------");
+  console.log("TOKEN", token);
+
+  const refreshTokenRecord = await prisma.refreshToken.findUnique({
+    where: {
+      userId: user.id,
+    },
+  });
+
+  const refreshToken: string | undefined = refreshTokenRecord?.token;
 
   if (!token) return false;
 
@@ -49,6 +51,14 @@ export const isAuthorized = async (ctx: Context) => {
 
         if (!isRefreshValid) {
           console.log("Refresh token is not valid");
+
+          // deleting invalid refresh token
+          await prisma.refreshToken.delete({
+            where: {
+              id: refreshTokenRecord!.id,
+            },
+          });
+
           return false;
         }
 
@@ -58,10 +68,17 @@ export const isAuthorized = async (ctx: Context) => {
 
         if (isRefreshExpired) {
           console.log("Refresh token is expired");
+
+          // deleting expired refresh token
+          await prisma.refreshToken.delete({
+            where: {
+              id: refreshTokenRecord!.id,
+            },
+          });
           return false;
         }
 
-        const user = await ctx.prisma.user.findUnique({
+        const user = await prisma.user.findUnique({
           where: {
             id: decodedToken.id,
           },
@@ -73,7 +90,7 @@ export const isAuthorized = async (ctx: Context) => {
             expiresIn: 10 * 60 * 60, // expires in 10 hours
           });
 
-          ctx.res.cookie("x-access-token", newToken);
+          res.cookie("x-access-token", newToken);
         }
       } catch (refreshErr) {
         console.log("Invalid refresh token");
