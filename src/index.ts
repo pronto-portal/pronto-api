@@ -23,6 +23,7 @@ const main = async () => {
 
   await server.start();
 
+  console.log("API_GATEWAY_DNS", process.env.API_GATEWAY_DNS);
   app.use(cookieParser());
   app.use(
     "/",
@@ -50,6 +51,9 @@ const main = async () => {
 
         console.log("HEADERS", JSON.stringify(req.headers));
         const accessToken = req.cookies["x-access-token"];
+        console.log("REQ set-cookie", req.headers["set-cookie"]);
+        console.log("REQ SET-COOKIE", req.headers["Set-Cookie"]);
+        console.log("RES HEADERS", res.getHeaders());
 
         let user: User | null = null;
 
