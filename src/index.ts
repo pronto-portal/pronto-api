@@ -46,14 +46,16 @@ const main = async () => {
     expressMiddleware(server, {
       context: async ({ req, res }) => {
         // API Gateway event and Lambda Context
+        console.log("EXPRESS MIDDLEWARE FUNCTION");
+        console.log("REQ set-cookie", req.headers["set-cookie"]);
+        console.log("REQ SET-COOKIE", req.headers["Set-Cookie"]);
+        console.log("RES HEADERS", res.getHeaders());
+
         const prisma = getAppDataSource();
         const eventBridge = new AWS.EventBridge({ apiVersion: "2015-10-07" });
 
         console.log("HEADERS", JSON.stringify(req.headers));
         const accessToken = req.cookies["x-access-token"];
-        console.log("REQ set-cookie", req.headers["set-cookie"]);
-        console.log("REQ SET-COOKIE", req.headers["Set-Cookie"]);
-        console.log("RES HEADERS", res.getHeaders());
 
         let user: User | null = null;
 
