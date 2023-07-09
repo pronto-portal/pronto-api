@@ -1,10 +1,16 @@
-import jwt from "jsonwebtoken";
+import jwt, { VerifyOptions } from "jsonwebtoken";
 
-const isTokenValid = (token: string, secret: string) => {
-  jwt.verify(token, secret);
+const isTokenValid = (
+  token: string,
+  secret: string,
+  options?: VerifyOptions
+) => {
+  jwt.verify(token, secret, options);
   return true;
 };
-export const isJWTTokenValid = async (token: string) =>
-  await isTokenValid(token, process.env.JWT_SECRET!);
-export const isRefreshTokenValid = async (token: string) =>
-  await isTokenValid(token, process.env.REFRESH_SECRET!);
+export const isJWTTokenValid = async (token: string, options?: VerifyOptions) =>
+  await isTokenValid(token, process.env.JWT_SECRET!, options);
+export const isRefreshTokenValid = async (
+  token: string,
+  options?: VerifyOptions
+) => await isTokenValid(token, process.env.REFRESH_SECRET!, options);

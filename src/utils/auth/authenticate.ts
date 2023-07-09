@@ -7,6 +7,7 @@ import { isTokenExpired } from "./istokenExpired";
 import { isRefreshTokenValid } from "./isTokenValid";
 import { verifyGoogleToken } from "./verifyGoogleToken";
 import { NexusGenInputs } from "../../graphql/schema/nexus-typegen";
+import { refreshTokenExpireTime, tokenExpireTime } from "../constants/auth";
 
 // Returns a user if auth is successful
 export const authenticate = async (
@@ -45,7 +46,7 @@ export const authenticate = async (
   }
 
   const token = jwt.sign(user, process.env.JWT_SECRET!, {
-    expiresIn: 10 * 60 * 60, // expires in 10 hours
+    expiresIn: tokenExpireTime,
   });
 
   console.log(`Token signed`);
@@ -78,7 +79,7 @@ export const authenticate = async (
       console.log("Refresh token is expired, creating a new one");
       let newRefreshToken = encryptRefreshToken(
         jwt.sign(user, process.env.REFRESH_SECRET!, {
-          expiresIn: 7 * 24 * 60 * 60, // expires in 7 days
+          expiresIn: refreshTokenExpireTime,
         })
       );
 
@@ -99,7 +100,7 @@ export const authenticate = async (
     // if no refresh token, create a new one for the user
     let newRefreshToken = encryptRefreshToken(
       jwt.sign(user, process.env.REFRESH_SECRET!, {
-        expiresIn: 10 * 60, // expires in 7 days
+        expiresIn: refreshTokenExpireTime,
       })
     );
 
