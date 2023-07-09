@@ -8,7 +8,7 @@ import { parseAuthHeader } from "./parseAuthHeader";
 export const isAuthorized = async ({ res, req, prisma, user }: Context) => {
   const token: string = parseAuthHeader(req.headers.authorization);
 
-  console.log("TOKEN", token);
+  if (!token) return false;
 
   const refreshTokenRecord = await prisma.refreshToken.findUnique({
     where: {
@@ -17,8 +17,6 @@ export const isAuthorized = async ({ res, req, prisma, user }: Context) => {
   });
 
   const refreshToken: string | undefined = refreshTokenRecord?.token;
-
-  if (!token) return false;
 
   console.log("Token found, decoding token");
   const decodedToken = decode(token) as JwtPayload;
