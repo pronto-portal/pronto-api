@@ -14,16 +14,13 @@ export const isAuthorized = async ({ res, req, prisma, user }: Context) => {
   const decodedToken = decode(token) as JwtPayload;
 
   // check if token is expired, if it is expired check to see if the user has a valid and unexpired refresh token
+  console.log("Validating token");
+  const isTokenValid = await isJWTTokenValid(token, {
+    ignoreExpiration: false,
+  });
 
-  try {
-    console.log("Validating token");
-    const isTokenValid = await isJWTTokenValid(token, {
-      ignoreExpiration: false,
-    });
-
-    if (!isTokenValid) return false;
-  } catch (e) {
-    console.log("Invalid token", e);
+  if (!isTokenValid) {
+    console.log("Invalid token");
 
     const refreshTokenRecord = await prisma.refreshToken.findUnique({
       where: {
@@ -41,26 +38,13 @@ export const isAuthorized = async ({ res, req, prisma, user }: Context) => {
     console.log("Decrypting refresh token");
     const decryptedRefreshToken = decryptRefreshToken(refreshToken);
 
-    try {
-      console.log("Validating refresh token");
-      isRefreshTokenValid(decryptedRefreshToken, { ignoreExpiration: false });
+    console.log("Validating refresh token");
+    const isRefreshValid = isRefreshTokenValid(decryptedRefreshToken, {
+      ignoreExpiration: false,
+    });
 
-      const user = await prisma.user.findUnique({
-        where: {
-          id: decodedToken.id,
-        },
-      });
-
-      if (user) {
-        console.log("Refreshing token");
-        const newToken = sign(user, process.env.JWT_SECRET!, {
-          expiresIn: tokenExpireTime,
-        });
-
-        res.cookie("x-access-token", newToken);
-      }
-    } catch (refreshErr) {
-      console.log("Invalid refresh token", refreshErr);
+    if (!isRefreshValid) {
+      console.log("Invalid refresh token");
       await prisma.refreshToken.delete({
         where: {
           id: refreshTokenRecord!.id,
@@ -69,7 +53,21 @@ export const isAuthorized = async ({ res, req, prisma, user }: Context) => {
 
       return false;
     }
-  }
 
+    const foundUser = await prisma.user.findUnique({
+      where: {
+        id: decodedToken.id,
+      },
+    });
+
+    if (foundUser) {
+      console.log("Refreshing token");
+      const newToken = sign(foundUser, process.env.JWT_SECRET!, {
+        expiresIn: tokenExpireTime,
+      });
+
+      res.cookie("x-access-token", newToken);
+    }
+  }
   return true;
 };

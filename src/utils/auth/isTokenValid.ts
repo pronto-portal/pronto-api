@@ -5,12 +5,17 @@ const isTokenValid = (
   secret: string,
   options?: VerifyOptions
 ) => {
-  jwt.verify(token, secret, options);
+  try {
+    jwt.verify(token, secret, options);
+  } catch (e) {
+    console.log("isTokenValid Error", e);
+    return false;
+  }
+
   return true;
 };
-export const isJWTTokenValid = async (token: string, options?: VerifyOptions) =>
-  await isTokenValid(token, process.env.JWT_SECRET!, options);
-export const isRefreshTokenValid = async (
-  token: string,
-  options?: VerifyOptions
-) => await isTokenValid(token, process.env.REFRESH_SECRET!, options);
+export const isJWTTokenValid = (token: string, options?: VerifyOptions) =>
+  isTokenValid(token, process.env.JWT_SECRET!, options);
+
+export const isRefreshTokenValid = (token: string, options?: VerifyOptions) =>
+  isTokenValid(token, process.env.REFRESH_SECRET!, options);

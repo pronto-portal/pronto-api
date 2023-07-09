@@ -4,7 +4,6 @@ import { Context } from "../../graphql/schema/context";
 import { decryptRefreshToken } from "./decryptRefreshToken";
 import { encryptRefreshToken } from "./encryptRefreshToken";
 import { isTokenExpired } from "./istokenExpired";
-import { isRefreshTokenValid } from "./isTokenValid";
 import { verifyGoogleToken } from "./verifyGoogleToken";
 import { NexusGenInputs } from "../../graphql/schema/nexus-typegen";
 import { refreshTokenExpireTime, tokenExpireTime } from "../constants/auth";
