@@ -52,6 +52,9 @@ export const CreateReminder = extendType({
         const dateTime = assignment.dateTime.toISOString();
         const dateTimeCron = dateToCron(dateTime);
 
+        console.log("dateTime", dateTime);
+        console.log("dateTimeCron", dateTimeCron);
+
         const ruleName = `reminder-${reminder.id}`;
 
         if (reminder) {
@@ -64,35 +67,66 @@ export const CreateReminder = extendType({
               RoleArn: process.env.EVENT_RULE_ROLE_ARN,
             })
             .promise()
-            .then((data) => {
+            .then(async (data) => {
               console.log(
                 `user ${user.id} created eventbride rule ${reminder.id} for assignment ${assignment} scheduled for ${dateTime}`
               );
+
+              await eventBridge
+                .putTargets({
+                  Rule: ruleName,
+                  Targets: [
+                    {
+                      Id: reminder.id,
+                      Arn: process.env.REMINDER_FUNCTION_ARN!,
+                      Input: JSON.stringify({
+                        payload: {
+                          translatorMessage,
+                          claimantMessage,
+                        },
+                      }),
+                    },
+                  ],
+                })
+                .promise()
+                .catch(async (err) => {
+                  console.log("PUT TARGETS ERROR");
+                  console.log(err);
+
+                  // Delete reminder since reminder has not actually been created:
+                  await prisma.reminder.delete({
+                    where: {
+                      id: reminder.id,
+                    },
+                  });
+                });
+
               return data;
             })
-            .catch((err) => {
-              console.error(err);
+            .catch(async (err) => {
+              console.log("PUT RULE ERROR");
+              console.log(err);
+
+              await eventBridge
+                .deleteRule({
+                  Name: ruleName,
+                })
+                .promise()
+                .then(() => {
+                  console.log(`Rule ${ruleName} deleted`);
+                })
+                .catch((deleteRuleErr) => {
+                  console.log(`Error deleting rule ${ruleName}`);
+                  console.log(deleteRuleErr);
+                });
+              // Delete reminder since reminder has not actually been created:
+              await prisma.reminder.delete({
+                where: {
+                  id: reminder.id,
+                },
+              });
               return err;
             });
-
-          await eventBridge
-            .putTargets({
-              Rule: ruleName,
-              Targets: [
-                {
-                  Id: reminder.id,
-                  Arn: process.env.REMINDER_FUNCTION_ARN!,
-                  Input: JSON.stringify({
-                    payload: {
-                      translatorMessage,
-                      claimantMessage,
-                    },
-                  }),
-                },
-              ],
-            })
-            .promise()
-            .catch((err) => console.error(err));
         }
 
         return reminder;
