@@ -52,7 +52,7 @@ export const CreateReminder = extendType({
         const dateTime = assignment.dateTime.toISOString();
         const dateTimeCron = dateToCron(dateTime);
 
-        const ruleName = `user-${user.id}-reminder-${reminder.id}-assignment-${assignment.id}`;
+        const ruleName = `reminder-${reminder.id}`;
 
         if (reminder) {
           await eventBridge
