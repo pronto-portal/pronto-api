@@ -10,6 +10,15 @@ export const dateToCron = (dateString: string) => {
   const hour = dateTime.hour.toString();
   const minute = dateTime.minute.toString();
 
+  console.log("DATE TO CRON FUNCTION");
+  console.log("date string", dateString);
+  console.log("dateTime", dateTime);
+  console.log("day", day);
+  console.log("month", month);
+  console.log("year", year);
+  console.log("hour", hour);
+  console.log("minute", minute);
+
   const cron = `${minute} ${hour} ${day} ${month} ? ${year}`;
   return cron;
 };
