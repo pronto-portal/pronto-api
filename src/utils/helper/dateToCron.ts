@@ -2,13 +2,13 @@ import moment from "moment";
 
 export const dateToCron = (dateString: string) => {
   // todo: ensure all date string coming into the backend get converted into utc time
-  const dateTime = moment.utc(dateString); //.toDate();
+  const dateTime = moment.utc(dateString);
 
-  const day = dateTime.day.toString();
-  const month = dateTime.month.toString();
-  const year = dateTime.year.toString();
-  const hour = dateTime.hour.toString();
-  const minute = dateTime.minute.toString();
+  const day = dateTime.day();
+  const month = dateTime.month();
+  const year = dateTime.year();
+  const hour = dateTime.hour();
+  const minute = dateTime.minute();
 
   console.log("DATE TO CRON FUNCTION");
   console.log("date string", dateString);
