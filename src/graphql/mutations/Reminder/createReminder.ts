@@ -53,7 +53,7 @@ export const CreateReminder = extendType({
         const dateTimeCron = dateToCron(dateTime);
 
         console.log("dateTime", dateTime);
-        console.log("dateTimeCron", dateTimeCron);
+        // console.log("dateTimeCron", dateTimeCron);
 
         const ruleName = `reminder-${reminder.id}`;
 
