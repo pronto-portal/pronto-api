@@ -119,6 +119,8 @@ export const CreateReminder = extendType({
                           claimantEmail,
                           claimantSubject,
                           claimantMessage,
+                          isEmail,
+                          isSMS,
                         },
                       }),
                     },
