@@ -2,12 +2,13 @@ import { extendType, nonNull } from "nexus";
 import { isAuthorized } from "../../../utils/auth/isAuthorized";
 import { CreateReminderInput, ReminderType } from "../../types";
 import { dateToCron } from "../../../utils/helper/dateToCron";
+import { addressToString } from "../../../utils/helper/addressToString";
 
 export const CreateReminder = extendType({
   type: "Mutation",
   definition(t) {
     t.nonNull.field("createReminder", {
-      type: ReminderType,
+      type: nonNull(ReminderType),
       authorize: async (_root, _args, ctx) => await isAuthorized(ctx),
       args: {
         input: nonNull(CreateReminderInput),
@@ -17,7 +18,9 @@ export const CreateReminder = extendType({
           assignmentId,
           isEmail,
           isSMS,
+          translatorSubject,
           translatorMessage,
+          claimantSubject,
           claimantMessage,
         } = input;
 
@@ -28,7 +31,26 @@ export const CreateReminder = extendType({
               id: user.id,
             },
           },
+          include: {
+            assignedTo: true,
+            claimant: true,
+            address: true,
+          },
         });
+
+        const address = assignment?.address;
+        let defaultReminderMessage = "";
+        if (address) {
+          const addressString = addressToString({
+            address1: address.address1,
+            address2: address.address2 ?? "",
+            city: address.city,
+            state: address.state,
+            zipCode: address.zipCode,
+          });
+
+          defaultReminderMessage = `You are scheduled for ${assignment.dateTime.toDateString()} at ${addressString}`;
+        }
 
         if (!assignment) throw new Error("You do not own this assignment");
 
@@ -36,8 +58,10 @@ export const CreateReminder = extendType({
           data: {
             isEmail,
             isSMS,
-            translatorMessage,
-            claimantMessage,
+            translatorSubject,
+            translatorMessage: translatorMessage ?? defaultReminderMessage,
+            claimantSubject,
+            claimantMessage: claimantMessage ?? defaultReminderMessage,
             assignment: {
               connect: {
                 id: assignmentId,
@@ -51,9 +75,6 @@ export const CreateReminder = extendType({
 
         const dateTime = assignment.dateTime.toISOString();
         const dateTimeCron = dateToCron(dateTime);
-
-        console.log("dateTime", dateTime);
-        // console.log("dateTimeCron", dateTimeCron);
 
         const ruleName = `reminder-${reminder.id}`;
 
@@ -72,6 +93,15 @@ export const CreateReminder = extendType({
                 `user ${user.id} created eventbride rule ${reminder.id} for assignment ${assignment} scheduled for ${dateTime}`
               );
 
+              const translator = assignment.assignedTo;
+              const claimant = assignment.claimant;
+
+              const translatorPhone = translator.phone;
+              const translatorEmail = translator.email;
+
+              const claimantPhone = claimant?.phone;
+              const claimantEmail = claimant?.email;
+
               await eventBridge
                 .putTargets({
                   Rule: ruleName,
@@ -81,7 +111,13 @@ export const CreateReminder = extendType({
                       Arn: process.env.REMINDER_FUNCTION_ARN!,
                       Input: JSON.stringify({
                         payload: {
+                          translatorPhone,
+                          translatorEmail,
+                          translatorSubject,
                           translatorMessage,
+                          claimantPhone,
+                          claimantEmail,
+                          claimantSubject,
                           claimantMessage,
                         },
                       }),

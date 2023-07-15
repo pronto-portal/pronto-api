@@ -249,10 +249,12 @@ export interface NexusGenFieldTypes {
     assignment: NexusGenRootTypes['Assignment'] | null; // Assignment
     assignmentId: string | null; // String
     claimantMessage: string | null; // String
+    claimantSubject: string | null; // String
     id: string | null; // String
     isEmail: boolean | null; // Boolean
     isSMS: boolean | null; // Boolean
     translatorMessage: string | null; // String
+    translatorSubject: string | null; // String
   }
   Translator: { // field return type
     email: string | null; // String
@@ -355,10 +357,12 @@ export interface NexusGenFieldTypeNames {
     assignment: 'Assignment'
     assignmentId: 'String'
     claimantMessage: 'String'
+    claimantSubject: 'String'
     id: 'String'
     isEmail: 'Boolean'
     isSMS: 'Boolean'
     translatorMessage: 'String'
+    translatorSubject: 'String'
   }
   Translator: { // field return type name
     email: 'String'

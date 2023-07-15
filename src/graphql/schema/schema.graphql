@@ -157,10 +157,12 @@ type Reminder {
   assignment: Assignment
   assignmentId: String
   claimantMessage: String
+  claimantSubject: String
   id: String
   isEmail: Boolean
   isSMS: Boolean
   translatorMessage: String
+  translatorSubject: String
 }
 
 type Translator {

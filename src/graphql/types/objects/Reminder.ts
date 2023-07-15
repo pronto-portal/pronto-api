@@ -6,7 +6,9 @@ export const ReminderType = objectType({
     t.string("id");
     t.boolean("isEmail");
     t.boolean("isSMS");
+    t.string("claimantSubject");
     t.string("claimantMessage");
+    t.string("translatorSubject");
     t.string("translatorMessage");
     t.field("assignment", {
       type: "Assignment",

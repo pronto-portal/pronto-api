@@ -86,7 +86,9 @@ model Reminder {
   id                    String      @id @default(uuid())
   assignment            Assignment  @relation(fields: [assignmentId], references: [id])
   assignmentId          String      @unique
+  claimantSubject       String?
   claimantMessage       String
+  translatorSubject     String?
   translatorMessage     String
   isEmail               Boolean     @default(true)
   isSMS                 Boolean     @default(false)
