@@ -1,6 +1,6 @@
 import { extendType, nonNull } from "nexus";
 import { isAuthorized } from "../../../utils/auth/isAuthorized";
-import { ReminderType, UpdateRemindinput } from "../../types";
+import { ReminderType, UpdateReminderinput } from "../../types";
 
 export const UpdateReminder = extendType({
   type: "Mutation",
@@ -9,49 +9,60 @@ export const UpdateReminder = extendType({
       type: ReminderType,
       authorize: async (_root, _args, ctx) => await isAuthorized(ctx),
       args: {
-        input: nonNull(UpdateRemindinput),
+        input: nonNull(UpdateReminderinput),
       },
-      async resolve(_, { input }, { prisma, user }) {
-        const {
-          assignmentId,
-          isEmail,
-          isSMS,
-          translatorMessage,
-          claimantMessage,
-        } = input;
+      async resolve(_, { input }, { prisma, user, eventBridge }) {
+        const { id, translatorMessage, claimantMessage } = input;
 
-        const assignment = await prisma.assignment.findFirst({
-          where: {
-            id: assignmentId,
-            createdBy: {
-              id: user.id,
+        return await prisma.reminder
+          .update({
+            where: {
+              id,
+              createdBy: {
+                id: user.id,
+              },
             },
-          },
-          include: {
-            reminder: {
-              select: { id: true },
+            include: {
+              assignment: {
+                include: {
+                  claimant: true,
+                  assignedTo: true,
+                },
+              },
             },
-          },
-        });
+            data: {
+              translatorMessage: translatorMessage || undefined,
+              claimantMessage: claimantMessage || undefined,
+            },
+          })
+          .then(async (reminder) => {
+            const ruleName = `reminder-${reminder.id}`;
+            const claimantPhone = reminder.assignment.claimant?.phone;
+            const translatorPhone = reminder.assignment.assignedTo.phone;
 
-        if (!assignment) throw new Error("You do not own this assignment");
+            // todo: when updating translator/claimant phonenumber update the payload of this target
+            await eventBridge
+              .putTargets({
+                Rule: ruleName,
+                Targets: [
+                  {
+                    Id: reminder.id,
+                    Arn: process.env.REMINDER_FUNCTION_ARN!,
+                    Input: JSON.stringify({
+                      payload: {
+                        translatorPhone,
+                        translatorMessage,
+                        claimantPhone,
+                        claimantMessage,
+                      },
+                    }),
+                  },
+                ],
+              })
+              .promise();
 
-        if (!assignment.reminder)
-          throw new Error("This reminder does not exist");
-
-        const reminder = await prisma.reminder.update({
-          where: {
-            id: assignment.reminder.id,
-          },
-          data: {
-            isEmail: isEmail === null ? undefined : isEmail,
-            isSMS: isSMS === null ? undefined : isSMS,
-            translatorMessage: translatorMessage || undefined,
-            claimantMessage: claimantMessage || undefined,
-          },
-        });
-
-        return reminder;
+            return reminder;
+          });
       },
     });
   },

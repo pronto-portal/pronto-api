@@ -1,10 +1,9 @@
 import { inputObjectType } from "nexus";
 
-export const UpdateRemindinput = inputObjectType({
+export const UpdateReminderinput = inputObjectType({
   name: "UpdateReminderInput",
   definition(t) {
-    t.boolean("isEmail");
-    t.boolean("isSMS");
+    t.nonNull.string("id");
     t.string("translatorMessage");
     t.string("claimantMessage");
   },

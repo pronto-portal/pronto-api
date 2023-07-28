@@ -31,6 +31,7 @@ model User {
   translatingFor    User[]        @relation("UserTranslators")
   claimants         Claimant[]    @relation("UserClaimants")
   addresses         Address[]     @relation("UserAddresses")
+  reminders         Reminder[]
   }
 
 model RefreshToken {
@@ -86,10 +87,8 @@ model Reminder {
   id                    String      @id @default(uuid())
   assignment            Assignment  @relation(fields: [assignmentId], references: [id])
   assignmentId          String      @unique
-  claimantSubject       String?
   claimantMessage       String
-  translatorSubject     String?
   translatorMessage     String
-  isEmail               Boolean     @default(true)
-  isSMS                 Boolean     @default(false)
+  createdBy             User        @relation(fields: [createdById], references: [id])
+  createdById           String
 }

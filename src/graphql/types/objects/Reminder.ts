@@ -4,11 +4,7 @@ export const ReminderType = objectType({
   name: "Reminder",
   definition(t) {
     t.string("id");
-    t.boolean("isEmail");
-    t.boolean("isSMS");
-    t.string("claimantSubject");
     t.string("claimantMessage");
-    t.string("translatorSubject");
     t.string("translatorMessage");
     t.field("assignment", {
       type: "Assignment",
@@ -29,5 +25,18 @@ export const ReminderType = objectType({
       },
     });
     t.string("assignmentId");
+    t.field("createdBy", {
+      type: "User",
+      async resolve(root, _, { prisma, user }) {
+        const { createdBy } = await prisma.reminder.findUniqueOrThrow({
+          where: { id: root.id },
+          include: {
+            createdBy: true,
+          },
+        });
+
+        return createdBy;
+      },
+    });
   },
 });

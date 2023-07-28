@@ -94,11 +94,7 @@ input CreateClaimantInput {
 input CreateReminderInput {
   assignmentId: String!
   claimantMessage: String
-  claimantSubject: String
-  isEmail: Boolean
-  isSMS: Boolean
   translatorMessage: String
-  translatorSubject: String
 }
 
 input CreateUserInput {
@@ -129,6 +125,7 @@ type Mutation {
   deleteAddress(input: ByIdInput!): Address!
   deleteAssignment(input: ByIdInput!): Assignment!
   deleteClaimant(input: ByIdInput!): Claimant!
+  deleteReminder(input: ByIdInput!): Reminder!
   disconnectTranslator(input: DisconnectTranslatorInput!): User
   login(input: CreateUserInput!): User!
   updateAddress(input: UpdateAddressInput!): Address!
@@ -159,12 +156,9 @@ type Reminder {
   assignment: Assignment
   assignmentId: String
   claimantMessage: String
-  claimantSubject: String
+  createdBy: User
   id: String
-  isEmail: Boolean
-  isSMS: Boolean
   translatorMessage: String
-  translatorSubject: String
 }
 
 type Translator {
@@ -207,8 +201,7 @@ input UpdateClaimantInput {
 
 input UpdateReminderInput {
   claimantMessage: String
-  isEmail: Boolean
-  isSMS: Boolean
+  id: String!
   translatorMessage: String
 }
 

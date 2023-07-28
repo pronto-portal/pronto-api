@@ -14,15 +14,7 @@ export const CreateReminder = extendType({
         input: nonNull(CreateReminderInput),
       },
       async resolve(_, { input }, { prisma, user, eventBridge }) {
-        const {
-          assignmentId,
-          isEmail,
-          isSMS,
-          translatorSubject,
-          translatorMessage,
-          claimantSubject,
-          claimantMessage,
-        } = input;
+        const { assignmentId, translatorMessage, claimantMessage } = input;
 
         const assignment = await prisma.assignment.findFirst({
           where: {
@@ -56,15 +48,16 @@ export const CreateReminder = extendType({
 
         const reminder = await prisma.reminder.create({
           data: {
-            isEmail,
-            isSMS,
-            translatorSubject,
             translatorMessage: translatorMessage ?? defaultReminderMessage,
-            claimantSubject,
             claimantMessage: claimantMessage ?? defaultReminderMessage,
             assignment: {
               connect: {
                 id: assignmentId,
+              },
+            },
+            createdBy: {
+              connect: {
+                id: user.id,
               },
             },
           },
@@ -97,10 +90,8 @@ export const CreateReminder = extendType({
               const claimant = assignment.claimant;
 
               const translatorPhone = translator.phone;
-              const translatorEmail = translator.email;
 
               const claimantPhone = claimant?.phone;
-              const claimantEmail = claimant?.email;
 
               await eventBridge
                 .putTargets({
@@ -112,15 +103,9 @@ export const CreateReminder = extendType({
                       Input: JSON.stringify({
                         payload: {
                           translatorPhone,
-                          translatorEmail,
-                          translatorSubject,
                           translatorMessage,
                           claimantPhone,
-                          claimantEmail,
-                          claimantSubject,
                           claimantMessage,
-                          isEmail,
-                          isSMS,
                         },
                       }),
                     },
