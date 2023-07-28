@@ -77,9 +77,11 @@ export interface NexusGenInputs {
   CreateReminderInput: { // input type
     assignmentId: string; // String!
     claimantMessage?: string | null; // String
+    claimantSubject?: string | null; // String
     isEmail?: boolean | null; // Boolean
     isSMS?: boolean | null; // Boolean
     translatorMessage?: string | null; // String
+    translatorSubject?: string | null; // String
   }
   CreateUserInput: { // input type
     email: string; // String!

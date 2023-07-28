@@ -94,9 +94,11 @@ input CreateClaimantInput {
 input CreateReminderInput {
   assignmentId: String!
   claimantMessage: String
+  claimantSubject: String
   isEmail: Boolean
   isSMS: Boolean
   translatorMessage: String
+  translatorSubject: String
 }
 
 input CreateUserInput {

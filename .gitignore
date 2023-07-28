@@ -4,7 +4,6 @@ data
 .env
 db.yaml
 postgres
-docker-compose.yaml
 .build
 .serverless
 .webpack
