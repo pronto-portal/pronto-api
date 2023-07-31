@@ -239,6 +239,8 @@ export interface NexusGenFieldTypes {
     getAssignments: Array<NexusGenRootTypes['Assignment'] | null>; // [Assignment]!
     getClaimant: NexusGenRootTypes['Claimant']; // Claimant!
     getClaimants: Array<NexusGenRootTypes['Claimant'] | null>; // [Claimant]!
+    getReminder: NexusGenRootTypes['Reminder']; // Reminder!
+    getReminders: Array<NexusGenRootTypes['Reminder'] | null>; // [Reminder]!
     getTranslator: NexusGenRootTypes['User']; // User!
     getTranslators: Array<NexusGenRootTypes['User'] | null>; // [User]!
     getUser: NexusGenRootTypes['User']; // User!
@@ -345,6 +347,8 @@ export interface NexusGenFieldTypeNames {
     getAssignments: 'Assignment'
     getClaimant: 'Claimant'
     getClaimants: 'Claimant'
+    getReminder: 'Reminder'
+    getReminders: 'Reminder'
     getTranslator: 'User'
     getTranslators: 'User'
     getUser: 'User'
@@ -465,6 +469,12 @@ export interface NexusGenArgTypes {
       input: NexusGenInputs['ByIdInput']; // ByIdInput!
     }
     getClaimants: { // args
+      input: NexusGenInputs['PaginatedInput']; // PaginatedInput!
+    }
+    getReminder: { // args
+      input: NexusGenInputs['ByIdInput']; // ByIdInput!
+    }
+    getReminders: { // args
       input: NexusGenInputs['PaginatedInput']; // PaginatedInput!
     }
     getTranslator: { // args

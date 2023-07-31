@@ -147,6 +147,8 @@ type Query {
   getAssignments(input: PaginatedInput!): [Assignment]!
   getClaimant(input: ByIdInput!): Claimant!
   getClaimants(input: PaginatedInput!): [Claimant]!
+  getReminder(input: ByIdInput!): Reminder!
+  getReminders(input: PaginatedInput!): [Reminder]!
   getTranslator(input: ByEmailInput!): User!
   getTranslators(input: PaginatedInput!): [User]!
   getUser: User!
