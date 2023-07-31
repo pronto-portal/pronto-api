@@ -86,7 +86,9 @@ export const UpdateAssignment = extendType({
               eventBridge
                 .putRule({
                   Name: ruleName,
-                  ScheduleExpression: dateToCron(dateTime.toISOString()),
+                  ScheduleExpression: `cron(${dateToCron(
+                    dateTime.toISOString()
+                  )})`,
                 })
                 .promise()
                 .then((res) => {
