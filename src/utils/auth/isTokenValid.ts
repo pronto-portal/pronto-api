@@ -8,7 +8,6 @@ const isTokenValid = (
   try {
     jwt.verify(token, secret, options);
   } catch (e) {
-    console.log("isTokenValid Error", e);
     return false;
   }
 

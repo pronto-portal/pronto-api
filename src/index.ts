@@ -24,7 +24,6 @@ const main = async () => {
 
   await server.start();
 
-  console.log("API_GATEWAY_DNS", process.env.API_GATEWAY_DNS);
   app.use(cookieParser());
   app.use(
     "/",
@@ -50,7 +49,6 @@ const main = async () => {
         const prisma = getAppDataSource();
         const eventBridge = new AWS.EventBridge({ apiVersion: "2015-10-07" });
 
-        console.log("HEADERS", JSON.stringify(req.headers));
         const accessToken = parseAuthHeader(req.headers.authorization);
 
         let user: User | null = null;

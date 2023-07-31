@@ -10,17 +10,17 @@ export const isAuthorized = async ({ res, req, prisma, user }: Context) => {
 
   if (!token) return false;
 
-  console.log("Token found, decoding token");
+  // console.log("Token found, decoding token");
   const decodedToken = decode(token) as JwtPayload;
 
   // check if token is expired, if it is expired check to see if the user has a valid and unexpired refresh token
-  console.log("Validating token");
+  // console.log("Validating token");
   const isTokenValid = await isJWTTokenValid(token, {
     ignoreExpiration: false,
   });
 
   if (!isTokenValid) {
-    console.log("Invalid token");
+    // console.log("Invalid token");
 
     const refreshTokenRecord = await prisma.refreshToken.findUnique({
       where: {
@@ -31,20 +31,20 @@ export const isAuthorized = async ({ res, req, prisma, user }: Context) => {
     const refreshToken: string | undefined = refreshTokenRecord?.token;
     // check if refresh token is expired
     if (!refreshToken) {
-      console.log("No refresh token found, token cannot be refreshed");
+      // console.log("No refresh token found, token cannot be refreshed");
       return false;
     }
 
-    console.log("Decrypting refresh token");
+    // console.log("Decrypting refresh token");
     const decryptedRefreshToken = decryptRefreshToken(refreshToken);
 
-    console.log("Validating refresh token");
+    // console.log("Validating refresh token");
     const isRefreshValid = isRefreshTokenValid(decryptedRefreshToken, {
       ignoreExpiration: false,
     });
 
     if (!isRefreshValid) {
-      console.log("Invalid refresh token");
+      // console.log("Invalid refresh token");
       await prisma.refreshToken.delete({
         where: {
           id: refreshTokenRecord!.id,
@@ -61,7 +61,7 @@ export const isAuthorized = async ({ res, req, prisma, user }: Context) => {
     });
 
     if (foundUser) {
-      console.log("Refreshing token");
+      // console.log("Refreshing token");
       const newToken = sign(foundUser, process.env.JWT_SECRET!, {
         expiresIn: tokenExpireTime,
       });

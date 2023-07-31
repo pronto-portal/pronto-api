@@ -2,6 +2,7 @@ import { extendType, nonNull } from "nexus";
 import { isAuthorized } from "../../../utils/auth/isAuthorized";
 import { ReminderType, UpdateReminderinput } from "../../types";
 
+// todo: test updateReminder
 export const UpdateReminder = extendType({
   type: "Mutation",
   definition(t) {

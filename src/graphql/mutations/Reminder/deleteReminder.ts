@@ -4,6 +4,7 @@ import { ReminderType } from "../../types";
 import { dateToCron } from "../../../utils/helper/dateToCron";
 import { addressToString } from "../../../utils/helper/addressToString";
 
+// todo: test delete reminder
 export const DeleteReminder = extendType({
   type: "Mutation",
   definition(t) {

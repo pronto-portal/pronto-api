@@ -25,7 +25,6 @@ const schema = makeSchema({
       formatError({ error, ctx }) {
         ctx.res.status(403);
 
-        console.log(`field authorize error occured ${error}`);
         return error;
       },
     }),
