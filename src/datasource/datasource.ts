@@ -68,6 +68,7 @@ const getAppDataSource = () => {
           return await query(args).then((reminder) => {
             const ruleName = `reminder-${reminder.id}`;
 
+            console.log("Deleting rule");
             eventBridge
               .removeTargets({
                 Rule: ruleName,
@@ -75,6 +76,7 @@ const getAppDataSource = () => {
               })
               .promise()
               .then(() => {
+                console.log("removed targets from ", reminder.id!);
                 eventBridge
                   .deleteRule({
                     Name: ruleName,
@@ -89,6 +91,9 @@ const getAppDataSource = () => {
                     return err;
                   });
               });
+
+            console.log("Deleted rule?");
+            console.log(reminder);
 
             return reminder;
           });
@@ -199,14 +204,28 @@ const getAppDataSource = () => {
 
             if (reminder && args.data.dateTime) {
               const dateTime = args.data.dateTime as Date;
+              console.log(`setting datetime ${dateTime}`);
+              console.log(dateTime);
 
               const ruleName = `reminder-${reminder.id}`;
-              eventBridge.putRule({
-                Name: ruleName,
-                ScheduleExpression: `cron(${dateToCron(
-                  dateTime.toISOString()
-                )})`,
-              });
+              console.log(`ruleName: ${ruleName}`);
+
+              eventBridge
+                .putRule({
+                  Name: ruleName,
+                  ScheduleExpression: `cron(${dateToCron(
+                    dateTime.toISOString()
+                  )})`,
+                })
+                .promise()
+                .then((res) => {
+                  console.log("updated rule");
+                  console.log(res);
+                })
+                .catch((err) => {
+                  console.log("failed to update rule");
+                  console.log(err);
+                });
             }
             return assignment;
           });
