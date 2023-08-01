@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, Reminder } from "@prisma/client";
 import { eventBridge } from "../aws/eventBridge";
 import { dateToCron } from "../utils/helper/dateToCron";
 
@@ -195,18 +195,12 @@ const getAppDataSource = () => {
       assignment: {
         async update({ model, operation, args, query }) {
           return await query(args).then((assignment) => {
-            const { reminder } = assignment;
-            console.log("ASSIGNMENT");
-            console.log(assignment);
-            console.log("ARGS");
-            console.log(args);
+            const reminder = assignment.reminder as any as Reminder;
+
             if (reminder && args.data.dateTime) {
               const dateTime = args.data.dateTime as Date;
 
-              console.log("REMINDER");
-              console.log(reminder);
-
-              const ruleName = `reminder-${reminder.scalars.id}`;
+              const ruleName = `reminder-${reminder.id}`;
               eventBridge.putRule({
                 Name: ruleName,
                 ScheduleExpression: `cron(${dateToCron(
