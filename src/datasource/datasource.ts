@@ -95,7 +95,8 @@ const getAppDataSource = () => {
             console.log(dateTime);
             console.log(dateTimeCron);
 
-            await eventBridge
+            console.log("Attempting to put rule");
+            eventBridge
               .putRule({
                 Name: ruleName,
                 Description: `reminder: ${reminder.id} created by user: ${reminder.createdById}`,
@@ -107,10 +108,15 @@ const getAppDataSource = () => {
               .then(async (data) => {
                 const translator = assignment.assignedTo;
                 const claimant = assignment.claimant;
-
+                console.log("Put rule");
+                console.log(translator);
                 if (translator && claimant) {
+                  console.log("Attempting to put targets");
                   const translatorPhone = translator.phone;
                   const claimantPhone = claimant.scalars.phone;
+
+                  console.log("translatorPhone", translatorPhone);
+                  console.log("claimantPhone", claimantPhone);
 
                   await eventBridge
                     .putTargets({
@@ -163,6 +169,8 @@ const getAppDataSource = () => {
                 return err;
               });
           }
+
+          console.log("We are here");
 
           return reminder;
         },
