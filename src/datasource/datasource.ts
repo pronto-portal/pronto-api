@@ -82,7 +82,24 @@ const getAppDataSource = () => {
         async create({ model, operation, args, query }) {
           const reminder = await query(args);
 
-          const assignment = reminder.assignment;
+          const assignment = await prisma.assignment.findUnique({
+            where: {
+              id: reminder.assignmentId,
+            },
+            include: {
+              claimant: {
+                select: {
+                  phone: true,
+                },
+              },
+              assignedTo: {
+                select: {
+                  phone: true,
+                },
+              },
+            },
+          });
+
           if (assignment) {
             console.log("Assignment exists");
             const dateTime = (assignment.dateTime! as Date).toISOString();
@@ -90,10 +107,10 @@ const getAppDataSource = () => {
 
             const ruleName = `reminder-${reminder.id}`;
 
-            console.log(ruleName);
-            console.log(assignment);
-            console.log(dateTime);
-            console.log(dateTimeCron);
+            console.log("ruleName", ruleName);
+            console.log("assignment", assignment);
+            console.log("dateTime", dateTime);
+            console.log("dateTimeCron", dateTimeCron);
 
             console.log("Attempting to put rule");
             eventBridge
@@ -113,7 +130,7 @@ const getAppDataSource = () => {
                 if (translator && claimant) {
                   console.log("Attempting to put targets");
                   const translatorPhone = translator.phone;
-                  const claimantPhone = claimant.scalars.phone;
+                  const claimantPhone = claimant.phone;
 
                   console.log("translatorPhone", translatorPhone);
                   console.log("claimantPhone", claimantPhone);
