@@ -51,21 +51,29 @@ const getAppDataSource = () => {
           });
         },
         async delete({ model, operation, args, query }) {
-          return await query(args).then((reminder) => {
+          return await query(args).then(async (reminder) => {
             const ruleName = `reminder-${reminder.id}`;
 
-            eventBridge
-              .deleteRule({
-                Name: ruleName,
+            await eventBridge
+              .removeTargets({
+                Rule: ruleName,
+                Ids: [reminder.id!],
               })
               .promise()
-              .then(async (data) => {
-                console.log(`Successfully deleted rule ${ruleName}`);
-                return data;
-              })
-              .catch(async (err) => {
-                console.log(`Error deleting rule ${ruleName}`);
-                console.log(err);
+              .then(() => {
+                eventBridge
+                  .deleteRule({
+                    Name: ruleName,
+                  })
+                  .promise()
+                  .then(async (data) => {
+                    console.log(`Successfully deleted rule ${ruleName}`);
+                    return data;
+                  })
+                  .catch(async (err) => {
+                    console.log(`Error deleting rule ${ruleName}`);
+                    return err;
+                  });
               });
 
             return reminder;
@@ -76,10 +84,16 @@ const getAppDataSource = () => {
 
           const assignment = reminder.assignment;
           if (assignment) {
+            console.log("Assignment exists");
             const dateTime = (assignment.dateTime! as Date).toISOString();
             const dateTimeCron = dateToCron(dateTime);
 
             const ruleName = `reminder-${reminder.id}`;
+
+            console.log(ruleName);
+            console.log(assignment);
+            console.log(dateTime);
+            console.log(dateTimeCron);
 
             await eventBridge
               .putRule({
