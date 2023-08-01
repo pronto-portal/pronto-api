@@ -10,15 +10,29 @@ const getAppDataSource = () => {
       reminder: {
         async update({ model, operation, args, query }) {
           return await query({ ...args }).then(async (reminder) => {
-            if (
-              reminder.assignment &&
-              reminder.assignment.claimant &&
-              reminder.assignment.assignedTo
-            ) {
+            const assignment = await prisma.assignment.findUnique({
+              where: {
+                id: reminder.assignmentId,
+              },
+              include: {
+                claimant: {
+                  select: {
+                    phone: true,
+                  },
+                },
+                assignedTo: {
+                  select: {
+                    phone: true,
+                  },
+                },
+              },
+            });
+
+            if (assignment) {
               const id = reminder.id!;
               const ruleName = `reminder-${id}`;
-              const claimantPhone = reminder.assignment.claimant.scalars.phone!;
-              const translatorPhone = reminder.assignment.assignedTo.phone!;
+              const claimantPhone = assignment.claimant!.phone;
+              const translatorPhone = assignment.assignedTo.phone!;
 
               await eventBridge
                 .putTargets({
