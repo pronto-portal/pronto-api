@@ -115,18 +115,11 @@ const getAppDataSource = () => {
           });
 
           if (assignment) {
-            console.log("Assignment exists");
             const dateTime = (assignment.dateTime! as Date).toISOString();
             const dateTimeCron = dateToCron(dateTime);
 
             const ruleName = `reminder-${reminder.id}`;
 
-            console.log("ruleName", ruleName);
-            console.log("assignment", assignment);
-            console.log("dateTime", dateTime);
-            console.log("dateTimeCron", dateTimeCron);
-
-            console.log("Attempting to put rule");
             eventBridge
               .putRule({
                 Name: ruleName,
@@ -139,15 +132,10 @@ const getAppDataSource = () => {
               .then(async (data) => {
                 const translator = assignment.assignedTo;
                 const claimant = assignment.claimant;
-                console.log("Put rule");
-                console.log(translator);
+
                 if (translator && claimant) {
-                  console.log("Attempting to put targets");
                   const translatorPhone = translator.phone;
                   const claimantPhone = claimant.phone;
-
-                  console.log("translatorPhone", translatorPhone);
-                  console.log("claimantPhone", claimantPhone);
 
                   await eventBridge
                     .putTargets({
@@ -201,8 +189,6 @@ const getAppDataSource = () => {
               });
           }
 
-          console.log("We are here");
-
           return reminder;
         },
       },
@@ -210,8 +196,15 @@ const getAppDataSource = () => {
         async update({ model, operation, args, query }) {
           return await query(args).then((assignment) => {
             const { reminder } = assignment;
+            console.log("ASSIGNMENT");
+            console.log(assignment);
+            console.log("ARGS");
+            console.log(args);
             if (reminder && args.data.dateTime) {
               const dateTime = args.data.dateTime as Date;
+
+              console.log("REMINDER");
+              console.log(reminder);
 
               const ruleName = `reminder-${reminder.scalars.id}`;
               eventBridge.putRule({
