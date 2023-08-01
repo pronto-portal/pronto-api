@@ -51,10 +51,10 @@ const getAppDataSource = () => {
           });
         },
         async delete({ model, operation, args, query }) {
-          return await query(args).then(async (reminder) => {
+          return await query(args).then((reminder) => {
             const ruleName = `reminder-${reminder.id}`;
 
-            await eventBridge
+            eventBridge
               .removeTargets({
                 Rule: ruleName,
                 Ids: [reminder.id!],
