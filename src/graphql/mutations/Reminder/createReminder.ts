@@ -13,7 +13,7 @@ export const CreateReminder = extendType({
       args: {
         input: nonNull(CreateReminderInput),
       },
-      async resolve(_, { input }, { prisma, user, eventBridge }) {
+      async resolve(_, { input }, { prisma, user }) {
         const { assignmentId, translatorMessage, claimantMessage } = input;
 
         const assignment = await prisma.assignment.findFirst({
@@ -65,76 +65,6 @@ export const CreateReminder = extendType({
             assignment: true,
           },
         });
-
-        const dateTime = assignment.dateTime.toISOString();
-        const dateTimeCron = dateToCron(dateTime);
-
-        const ruleName = `reminder-${reminder.id}`;
-
-        if (reminder) {
-          await eventBridge
-            .putRule({
-              Name: ruleName,
-              Description: `reminder: ${reminder.id} created by user: ${user.id}`,
-              ScheduleExpression: `cron(${dateTimeCron})`,
-              State: "ENABLED",
-              RoleArn: process.env.EVENT_RULE_ROLE_ARN,
-            })
-            .promise()
-            .then(async (data) => {
-              const translator = assignment.assignedTo;
-              const claimant = assignment.claimant;
-
-              const translatorPhone = translator.phone;
-
-              const claimantPhone = claimant?.phone;
-
-              await eventBridge
-                .putTargets({
-                  Rule: ruleName,
-                  Targets: [
-                    {
-                      Id: reminder.id,
-                      Arn: process.env.REMINDER_FUNCTION_ARN!,
-                      Input: JSON.stringify({
-                        payload: {
-                          translatorPhone,
-                          translatorMessage,
-                          claimantPhone,
-                          claimantMessage,
-                        },
-                      }),
-                    },
-                  ],
-                })
-                .promise()
-                .catch(async () => {
-                  // Delete reminder since reminder has not actually been created:
-                  await prisma.reminder.delete({
-                    where: {
-                      id: reminder.id,
-                    },
-                  });
-                });
-
-              return data;
-            })
-            .catch(async (err) => {
-              await eventBridge
-                .deleteRule({
-                  Name: ruleName,
-                })
-                .promise();
-
-              // Delete reminder since reminder has not actually been created:
-              await prisma.reminder.delete({
-                where: {
-                  id: reminder.id,
-                },
-              });
-              return err;
-            });
-        }
 
         return reminder;
       },

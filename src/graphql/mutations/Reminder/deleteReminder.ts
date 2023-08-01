@@ -14,37 +14,17 @@ export const DeleteReminder = extendType({
       args: {
         input: nonNull("ByIdInput"),
       },
-      async resolve(_, { input }, { prisma, user, eventBridge }) {
+      async resolve(_, { input }, { prisma, user }) {
         const { id } = input;
 
-        const reminder = await prisma.reminder
-          .delete({
-            where: {
-              id,
-              createdBy: {
-                id: user.id,
-              },
+        const reminder = await prisma.reminder.delete({
+          where: {
+            id,
+            createdBy: {
+              id: user.id,
             },
-          })
-          .then((res) => {
-            const ruleName = `reminder-${res.id}`;
-
-            eventBridge
-              .deleteRule({
-                Name: ruleName,
-              })
-              .promise()
-              .then(async (data) => {
-                console.log(`Successfully deleted rule ${ruleName}`);
-                return data;
-              })
-              .catch(async (err) => {
-                console.log(`Error deleting rule ${ruleName}`);
-                console.log(err);
-              });
-
-            return res;
-          });
+          },
+        });
 
         return reminder;
       },

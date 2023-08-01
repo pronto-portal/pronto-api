@@ -9,9 +9,9 @@ import schema from "./graphql/schema/schema";
 import cookieParser from "cookie-parser";
 import jwt from "jsonwebtoken";
 import { User } from "@prisma/client";
-import AWS from "aws-sdk";
 import http from "http";
 import { parseAuthHeader } from "./utils/auth/parseAuthHeader";
+import { eventBridge } from "./aws/eventBridge";
 
 const main = async () => {
   const app = express();
@@ -47,7 +47,6 @@ const main = async () => {
       context: async ({ req, res }) => {
         // API Gateway event and Lambda Context
         const prisma = getAppDataSource();
-        const eventBridge = new AWS.EventBridge({ apiVersion: "2015-10-07" });
 
         const accessToken = parseAuthHeader(req.headers.authorization);
 

@@ -11,7 +11,7 @@ export const UpdateAssignment = extendType({
       type: "Assignment",
       authorize: async (_root, _args, ctx) => await isAuthorized(ctx),
       args: { input: nonNull(UpdateAssignmentInput) },
-      resolve: async (_, { input }, { prisma, user, eventBridge }) => {
+      resolve: async (_, { input }, { prisma, user }) => {
         const {
           id,
           translatorId,
@@ -68,41 +68,16 @@ export const UpdateAssignment = extendType({
         }
 
         // This makes it so that a user cannot modify another user's assignment
-        const assignment = await prisma.assignment
-          .update({
-            where: {
-              id,
-              createdByUserId: user.id,
-            },
-            data: updateData,
-            include: {
-              reminder: true,
-            },
-          })
-          .then((res) => {
-            const { reminder } = res;
-            if (reminder && dateTime) {
-              const ruleName = `reminder-${reminder.id}`;
-              eventBridge
-                .putRule({
-                  Name: ruleName,
-                  ScheduleExpression: `cron(${dateToCron(
-                    dateTime.toISOString()
-                  )})`,
-                })
-                .promise()
-                .then((res) => {
-                  console.log(`Successfully updates ${ruleName}`);
-                  return res;
-                })
-                .catch((err) => {
-                  console.log(`Error updating ${ruleName}`);
-                  console.log(err);
-                  return err;
-                });
-            }
-            return res;
-          });
+        const assignment = await prisma.assignment.update({
+          where: {
+            id,
+            createdByUserId: user.id,
+          },
+          data: updateData,
+          include: {
+            reminder: true,
+          },
+        });
 
         return assignment;
       },
