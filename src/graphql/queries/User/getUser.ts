@@ -8,10 +8,16 @@ export const GetUser = extendType({
     t.nonNull.field("getUser", {
       type: "User",
       authorize: async (root, args, ctx) => await isAuthorized(ctx),
-      async resolve(_root, args, { user }: Context) {
-        if (!user) throw new Error("No user found");
+      async resolve(_root, args, { user, prisma }: Context) {
+        const dbUser = await prisma.user.findUnique({
+          where: {
+            id: user.id,
+          },
+        });
 
-        return user;
+        if (!dbUser) throw new Error("User not found!");
+
+        return dbUser;
       },
     });
   },
