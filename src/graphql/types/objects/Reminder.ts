@@ -38,5 +38,6 @@ export const ReminderType = objectType({
         return createdBy;
       },
     });
+    t.string("createdById");
   },
 });

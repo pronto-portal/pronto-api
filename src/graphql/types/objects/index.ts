@@ -4,3 +4,8 @@ export * from "./Claimant";
 export * from "./Assignment";
 export * from "./Translator";
 export * from "./Reminder";
+export * from "./GetAddresses";
+export * from "./GetAssignments";
+export * from "./GetTranslators";
+export * from "./GetClaimants";
+export * from "./GetReminders";

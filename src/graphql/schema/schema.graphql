@@ -113,6 +113,26 @@ input DisconnectTranslatorInput {
   email: String!
 }
 
+type GetAddressesResponse {
+  addresses: [Address!]!
+  totalRowCount: Int!
+}
+
+type GetAssignmentsResponse {
+  assignments: [Assignment!]!
+  totalRowCount: Int!
+}
+
+type GetClaimantsResponse {
+  claimants: [Claimant!]!
+  totalRowCount: Int!
+}
+
+type GetRemindersResponse {
+  reminders: [Reminder!]!
+  totalRowCount: Int!
+}
+
 type GetTranslatorsResponse {
   totalRowCount: Int!
   translators: [User!]!
@@ -147,13 +167,13 @@ input PaginatedInput {
 
 type Query {
   getAddress(input: ByIdInput!): Address!
-  getAddresses(input: PaginatedInput!): [Address]!
+  getAddresses(input: PaginatedInput!): GetAddressesResponse!
   getAssignment(input: ByIdInput!): Assignment!
-  getAssignments(input: PaginatedInput!): [Assignment]!
+  getAssignments(input: PaginatedInput!): GetAssignmentsResponse!
   getClaimant(input: ByIdInput!): Claimant!
-  getClaimants(input: PaginatedInput!): [Claimant]!
+  getClaimants(input: PaginatedInput!): GetClaimantsResponse!
   getReminder(input: ByIdInput!): Reminder!
-  getReminders(input: PaginatedInput!): [Reminder]!
+  getReminders(input: PaginatedInput!): GetRemindersResponse!
   getTranslator(input: ByEmailInput!): User!
   getTranslators(input: PaginatedInput!): GetTranslatorsResponse!
   getUser: User!
@@ -164,6 +184,7 @@ type Reminder {
   assignmentId: String
   claimantMessage: String
   createdBy: User
+  createdById: String
   id: String
   translatorMessage: String
 }

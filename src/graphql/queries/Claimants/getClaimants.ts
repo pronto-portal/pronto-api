@@ -1,11 +1,11 @@
-import { extendType, list, nonNull } from "nexus";
+import { extendType, nonNull } from "nexus";
 import { isAuthorized } from "../../../utils/auth/isAuthorized";
 
 export const GetClaimants = extendType({
   type: "Query",
   definition(t) {
     t.nonNull.field("getClaimants", {
-      type: list("Claimant"),
+      type: nonNull("GetClaimantsResponse"),
       authorize: async (_root, _args, ctx) => await isAuthorized(ctx),
       args: { input: nonNull("PaginatedInput") },
       async resolve(_, { input }, { prisma, user }) {
@@ -24,7 +24,13 @@ export const GetClaimants = extendType({
           take: countPerPage,
         });
 
-        return claimants;
+        const totalRowCount = await prisma.claimant.count({
+          where: {
+            userId: user.id,
+          },
+        });
+
+        return { claimants, totalRowCount };
       },
     });
   },

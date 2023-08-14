@@ -6,7 +6,7 @@ export const GetReminders = extendType({
   type: "Query",
   definition(t) {
     t.nonNull.field("getReminders", {
-      type: list(ReminderType),
+      type: nonNull("GetRemindersResponse"),
       authorize: async (_root, _args, ctx) => await isAuthorized(ctx),
       args: { input: nonNull("PaginatedInput") },
       async resolve(_, { input }, { prisma, user }) {
@@ -14,7 +14,7 @@ export const GetReminders = extendType({
 
         // todo: instead of having a nested query, modify the prisma schema such that Reminders and claimants are
         // also stored on the user table via relations as well
-        const Reminders = await prisma.reminder.findMany({
+        const reminders = await prisma.reminder.findMany({
           where: {
             createdById: user.id,
           },
@@ -25,7 +25,13 @@ export const GetReminders = extendType({
           take: countPerPage,
         });
 
-        return Reminders;
+        const totalRowCount = await prisma.reminder.count({
+          where: {
+            createdById: user.id,
+          },
+        });
+
+        return { reminders, totalRowCount };
       },
     });
   },

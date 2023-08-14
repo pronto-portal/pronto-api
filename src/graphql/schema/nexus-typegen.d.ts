@@ -152,6 +152,22 @@ export interface NexusGenObjects {
   Address: prisma.Address;
   Assignment: prisma.Assignment;
   Claimant: prisma.Claimant;
+  GetAddressesResponse: { // root type
+    addresses: NexusGenRootTypes['Address'][]; // [Address!]!
+    totalRowCount: number; // Int!
+  }
+  GetAssignmentsResponse: { // root type
+    assignments: NexusGenRootTypes['Assignment'][]; // [Assignment!]!
+    totalRowCount: number; // Int!
+  }
+  GetClaimantsResponse: { // root type
+    claimants: NexusGenRootTypes['Claimant'][]; // [Claimant!]!
+    totalRowCount: number; // Int!
+  }
+  GetRemindersResponse: { // root type
+    reminders: NexusGenRootTypes['Reminder'][]; // [Reminder!]!
+    totalRowCount: number; // Int!
+  }
   GetTranslatorsResponse: { // root type
     totalRowCount: number; // Int!
     translators: NexusGenRootTypes['User'][]; // [User!]!
@@ -215,6 +231,22 @@ export interface NexusGenFieldTypes {
     user: NexusGenRootTypes['User'] | null; // User
     userId: string | null; // String
   }
+  GetAddressesResponse: { // field return type
+    addresses: NexusGenRootTypes['Address'][]; // [Address!]!
+    totalRowCount: number; // Int!
+  }
+  GetAssignmentsResponse: { // field return type
+    assignments: NexusGenRootTypes['Assignment'][]; // [Assignment!]!
+    totalRowCount: number; // Int!
+  }
+  GetClaimantsResponse: { // field return type
+    claimants: NexusGenRootTypes['Claimant'][]; // [Claimant!]!
+    totalRowCount: number; // Int!
+  }
+  GetRemindersResponse: { // field return type
+    reminders: NexusGenRootTypes['Reminder'][]; // [Reminder!]!
+    totalRowCount: number; // Int!
+  }
   GetTranslatorsResponse: { // field return type
     totalRowCount: number; // Int!
     translators: NexusGenRootTypes['User'][]; // [User!]!
@@ -242,13 +274,13 @@ export interface NexusGenFieldTypes {
   }
   Query: { // field return type
     getAddress: NexusGenRootTypes['Address']; // Address!
-    getAddresses: Array<NexusGenRootTypes['Address'] | null>; // [Address]!
+    getAddresses: NexusGenRootTypes['GetAddressesResponse']; // GetAddressesResponse!
     getAssignment: NexusGenRootTypes['Assignment']; // Assignment!
-    getAssignments: Array<NexusGenRootTypes['Assignment'] | null>; // [Assignment]!
+    getAssignments: NexusGenRootTypes['GetAssignmentsResponse']; // GetAssignmentsResponse!
     getClaimant: NexusGenRootTypes['Claimant']; // Claimant!
-    getClaimants: Array<NexusGenRootTypes['Claimant'] | null>; // [Claimant]!
+    getClaimants: NexusGenRootTypes['GetClaimantsResponse']; // GetClaimantsResponse!
     getReminder: NexusGenRootTypes['Reminder']; // Reminder!
-    getReminders: Array<NexusGenRootTypes['Reminder'] | null>; // [Reminder]!
+    getReminders: NexusGenRootTypes['GetRemindersResponse']; // GetRemindersResponse!
     getTranslator: NexusGenRootTypes['User']; // User!
     getTranslators: NexusGenRootTypes['GetTranslatorsResponse']; // GetTranslatorsResponse!
     getUser: NexusGenRootTypes['User']; // User!
@@ -258,6 +290,7 @@ export interface NexusGenFieldTypes {
     assignmentId: string | null; // String
     claimantMessage: string | null; // String
     createdBy: NexusGenRootTypes['User'] | null; // User
+    createdById: string | null; // String
     id: string | null; // String
     translatorMessage: string | null; // String
   }
@@ -327,6 +360,22 @@ export interface NexusGenFieldTypeNames {
     user: 'User'
     userId: 'String'
   }
+  GetAddressesResponse: { // field return type name
+    addresses: 'Address'
+    totalRowCount: 'Int'
+  }
+  GetAssignmentsResponse: { // field return type name
+    assignments: 'Assignment'
+    totalRowCount: 'Int'
+  }
+  GetClaimantsResponse: { // field return type name
+    claimants: 'Claimant'
+    totalRowCount: 'Int'
+  }
+  GetRemindersResponse: { // field return type name
+    reminders: 'Reminder'
+    totalRowCount: 'Int'
+  }
   GetTranslatorsResponse: { // field return type name
     totalRowCount: 'Int'
     translators: 'User'
@@ -354,13 +403,13 @@ export interface NexusGenFieldTypeNames {
   }
   Query: { // field return type name
     getAddress: 'Address'
-    getAddresses: 'Address'
+    getAddresses: 'GetAddressesResponse'
     getAssignment: 'Assignment'
-    getAssignments: 'Assignment'
+    getAssignments: 'GetAssignmentsResponse'
     getClaimant: 'Claimant'
-    getClaimants: 'Claimant'
+    getClaimants: 'GetClaimantsResponse'
     getReminder: 'Reminder'
-    getReminders: 'Reminder'
+    getReminders: 'GetRemindersResponse'
     getTranslator: 'User'
     getTranslators: 'GetTranslatorsResponse'
     getUser: 'User'
@@ -370,6 +419,7 @@ export interface NexusGenFieldTypeNames {
     assignmentId: 'String'
     claimantMessage: 'String'
     createdBy: 'User'
+    createdById: 'String'
     id: 'String'
     translatorMessage: 'String'
   }
