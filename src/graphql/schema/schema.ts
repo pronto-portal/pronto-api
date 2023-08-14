@@ -4,6 +4,7 @@ import { join } from "path";
 
 const schema = makeSchema({
   types,
+  shouldGenerateArtifacts: true,
   sourceTypes: {
     modules: [
       {
@@ -17,7 +18,7 @@ const schema = makeSchema({
     export: "Context",
   },
   outputs: {
-    typegen: join(__dirname, "./nexus-typegen"),
+    typegen: join(__dirname, "./nexus-typegen.d.ts"),
     schema: join(__dirname, "./schema.graphql"),
   },
   plugins: [

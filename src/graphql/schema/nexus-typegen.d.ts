@@ -74,6 +74,11 @@ export interface NexusGenInputs {
     lastName: string; // String!
     phone: string; // String!
   }
+  CreateReminderInput: { // input type
+    assignmentId: string; // String!
+    claimantMessage?: string | null; // String
+    translatorMessage?: string | null; // String
+  }
   CreateUserInput: { // input type
     email: string; // String!
     firstName?: string | null; // String
@@ -113,6 +118,11 @@ export interface NexusGenInputs {
     lastName?: string | null; // String
     phone?: string | null; // String
   }
+  UpdateReminderInput: { // input type
+    claimantMessage?: string | null; // String
+    id: string; // String!
+    translatorMessage?: string | null; // String
+  }
   UpdateUserInput: { // input type
     email?: string | null; // String
     firstName?: string | null; // String
@@ -142,8 +152,13 @@ export interface NexusGenObjects {
   Address: prisma.Address;
   Assignment: prisma.Assignment;
   Claimant: prisma.Claimant;
+  GetTranslatorsResponse: { // root type
+    totalRowCount: number; // Int!
+    translators: NexusGenRootTypes['User'][]; // [User!]!
+  }
   Mutation: {};
   Query: {};
+  Reminder: prisma.Reminder;
   Translator: { // root type
     email?: string | null; // String
     firstName?: string | null; // String
@@ -200,6 +215,10 @@ export interface NexusGenFieldTypes {
     user: NexusGenRootTypes['User'] | null; // User
     userId: string | null; // String
   }
+  GetTranslatorsResponse: { // field return type
+    totalRowCount: number; // Int!
+    translators: NexusGenRootTypes['User'][]; // [User!]!
+  }
   Mutation: { // field return type
     addAndCreateTranslator: NexusGenRootTypes['User'] | null; // User
     addTranslator: NexusGenRootTypes['User'] | null; // User
@@ -207,15 +226,18 @@ export interface NexusGenFieldTypes {
     createAddress: NexusGenRootTypes['Address']; // Address!
     createAssignment: NexusGenRootTypes['Assignment']; // Assignment!
     createClaimant: NexusGenRootTypes['Claimant']; // Claimant!
+    createReminder: NexusGenRootTypes['Reminder']; // Reminder!
     createUser: NexusGenRootTypes['User'] | null; // User
     deleteAddress: NexusGenRootTypes['Address']; // Address!
     deleteAssignment: NexusGenRootTypes['Assignment']; // Assignment!
     deleteClaimant: NexusGenRootTypes['Claimant']; // Claimant!
+    deleteReminder: NexusGenRootTypes['Reminder']; // Reminder!
     disconnectTranslator: NexusGenRootTypes['User'] | null; // User
     login: NexusGenRootTypes['User']; // User!
     updateAddress: NexusGenRootTypes['Address']; // Address!
     updateAssignment: NexusGenRootTypes['Assignment']; // Assignment!
     updateClaimant: NexusGenRootTypes['Claimant']; // Claimant!
+    updateReminder: NexusGenRootTypes['Reminder']; // Reminder!
     updateUser: NexusGenRootTypes['User'] | null; // User
   }
   Query: { // field return type
@@ -225,9 +247,19 @@ export interface NexusGenFieldTypes {
     getAssignments: Array<NexusGenRootTypes['Assignment'] | null>; // [Assignment]!
     getClaimant: NexusGenRootTypes['Claimant']; // Claimant!
     getClaimants: Array<NexusGenRootTypes['Claimant'] | null>; // [Claimant]!
+    getReminder: NexusGenRootTypes['Reminder']; // Reminder!
+    getReminders: Array<NexusGenRootTypes['Reminder'] | null>; // [Reminder]!
     getTranslator: NexusGenRootTypes['User']; // User!
-    getTranslators: Array<NexusGenRootTypes['User'] | null>; // [User]!
+    getTranslators: NexusGenRootTypes['GetTranslatorsResponse']; // GetTranslatorsResponse!
     getUser: NexusGenRootTypes['User']; // User!
+  }
+  Reminder: { // field return type
+    assignment: NexusGenRootTypes['Assignment'] | null; // Assignment
+    assignmentId: string | null; // String
+    claimantMessage: string | null; // String
+    createdBy: NexusGenRootTypes['User'] | null; // User
+    id: string | null; // String
+    translatorMessage: string | null; // String
   }
   Translator: { // field return type
     email: string | null; // String
@@ -295,6 +327,10 @@ export interface NexusGenFieldTypeNames {
     user: 'User'
     userId: 'String'
   }
+  GetTranslatorsResponse: { // field return type name
+    totalRowCount: 'Int'
+    translators: 'User'
+  }
   Mutation: { // field return type name
     addAndCreateTranslator: 'User'
     addTranslator: 'User'
@@ -302,15 +338,18 @@ export interface NexusGenFieldTypeNames {
     createAddress: 'Address'
     createAssignment: 'Assignment'
     createClaimant: 'Claimant'
+    createReminder: 'Reminder'
     createUser: 'User'
     deleteAddress: 'Address'
     deleteAssignment: 'Assignment'
     deleteClaimant: 'Claimant'
+    deleteReminder: 'Reminder'
     disconnectTranslator: 'User'
     login: 'User'
     updateAddress: 'Address'
     updateAssignment: 'Assignment'
     updateClaimant: 'Claimant'
+    updateReminder: 'Reminder'
     updateUser: 'User'
   }
   Query: { // field return type name
@@ -320,9 +359,19 @@ export interface NexusGenFieldTypeNames {
     getAssignments: 'Assignment'
     getClaimant: 'Claimant'
     getClaimants: 'Claimant'
+    getReminder: 'Reminder'
+    getReminders: 'Reminder'
     getTranslator: 'User'
-    getTranslators: 'User'
+    getTranslators: 'GetTranslatorsResponse'
     getUser: 'User'
+  }
+  Reminder: { // field return type name
+    assignment: 'Assignment'
+    assignmentId: 'String'
+    claimantMessage: 'String'
+    createdBy: 'User'
+    id: 'String'
+    translatorMessage: 'String'
   }
   Translator: { // field return type name
     email: 'String'
@@ -375,6 +424,9 @@ export interface NexusGenArgTypes {
     createClaimant: { // args
       input: NexusGenInputs['CreateClaimantInput']; // CreateClaimantInput!
     }
+    createReminder: { // args
+      input: NexusGenInputs['CreateReminderInput']; // CreateReminderInput!
+    }
     createUser: { // args
       input: NexusGenInputs['CreateUserInput']; // CreateUserInput!
     }
@@ -385,6 +437,9 @@ export interface NexusGenArgTypes {
       input: NexusGenInputs['ByIdInput']; // ByIdInput!
     }
     deleteClaimant: { // args
+      input: NexusGenInputs['ByIdInput']; // ByIdInput!
+    }
+    deleteReminder: { // args
       input: NexusGenInputs['ByIdInput']; // ByIdInput!
     }
     disconnectTranslator: { // args
@@ -401,6 +456,9 @@ export interface NexusGenArgTypes {
     }
     updateClaimant: { // args
       input: NexusGenInputs['UpdateClaimantInput']; // UpdateClaimantInput!
+    }
+    updateReminder: { // args
+      input: NexusGenInputs['UpdateReminderInput']; // UpdateReminderInput!
     }
     updateUser: { // args
       data: NexusGenInputs['UpdateUserInput']; // UpdateUserInput!
@@ -423,6 +481,12 @@ export interface NexusGenArgTypes {
       input: NexusGenInputs['ByIdInput']; // ByIdInput!
     }
     getClaimants: { // args
+      input: NexusGenInputs['PaginatedInput']; // PaginatedInput!
+    }
+    getReminder: { // args
+      input: NexusGenInputs['ByIdInput']; // ByIdInput!
+    }
+    getReminders: { // args
       input: NexusGenInputs['PaginatedInput']; // PaginatedInput!
     }
     getTranslator: { // args
