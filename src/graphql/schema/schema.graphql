@@ -113,6 +113,11 @@ input DisconnectTranslatorInput {
   email: String!
 }
 
+type GetTranslatorsResponse {
+  totalRowCount: Int!
+  translators: [User!]!
+}
+
 type Mutation {
   addAndCreateTranslator(input: AddAndCreateTranslatorInput!): User
   addTranslator(input: AddTranslatorInput!): User
@@ -150,7 +155,7 @@ type Query {
   getReminder(input: ByIdInput!): Reminder!
   getReminders(input: PaginatedInput!): [Reminder]!
   getTranslator(input: ByEmailInput!): User!
-  getTranslators(input: PaginatedInput!): [User]!
+  getTranslators(input: PaginatedInput!): GetTranslatorsResponse!
   getUser: User!
 }
 
