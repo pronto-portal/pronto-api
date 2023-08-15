@@ -1,9 +1,9 @@
 import { Assignment } from "@prisma/client";
 import { objectType } from "nexus";
-import { Context } from "../../schema/context";
-import { AddressType } from "./Address";
-import { ClaimantType } from "./Claimant";
-import { UserType } from "./User";
+import { Context } from "../../../schema/context";
+import { AddressType } from "../Address/Address";
+import { ClaimantType } from "../Claimants/Claimant";
+import { UserType } from "../User/User";
 
 export const AssignmentType = objectType({
   name: "Assignment",

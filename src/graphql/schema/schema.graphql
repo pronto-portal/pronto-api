@@ -26,6 +26,14 @@ type Address {
   zipCode: String
 }
 
+input AddressesFilter {
+  address1: String
+  address2: String
+  city: String
+  state: String
+  zipCode: String
+}
+
 type Assignment {
   address: Address
   assignedTo: User
@@ -37,6 +45,14 @@ type Assignment {
   id: String
   isComplete: Boolean
   translatorNoShow: Boolean
+}
+
+input AssignmentsFilter {
+  address: AddressesFilter
+  assignedTo: TranslatorsFilter
+  claimant: ClaimantsFilter
+  date: DateTime
+  dateRange: DateRange
 }
 
 input ByEmailInput {
@@ -57,6 +73,12 @@ type Claimant {
   phone: String
   user: User
   userId: String
+}
+
+input ClaimantsFilter {
+  firstName: String
+  language: String
+  lastName: String
 }
 
 input CompleteProfileInput {
@@ -102,6 +124,11 @@ input CreateUserInput {
   firstName: String
   lastName: String
   phone: String
+}
+
+input DateRange {
+  date1: DateTime!
+  date2: DateTime!
 }
 
 """
@@ -167,15 +194,15 @@ input PaginatedInput {
 
 type Query {
   getAddress(input: ByIdInput!): Address!
-  getAddresses(input: PaginatedInput!): GetAddressesResponse!
+  getAddresses(input: PaginatedInput!, where: AddressesFilter): GetAddressesResponse!
   getAssignment(input: ByIdInput!): Assignment!
-  getAssignments(input: PaginatedInput!): GetAssignmentsResponse!
+  getAssignments(input: PaginatedInput!, where: AssignmentsFilter): GetAssignmentsResponse!
   getClaimant(input: ByIdInput!): Claimant!
-  getClaimants(input: PaginatedInput!): GetClaimantsResponse!
+  getClaimants(input: PaginatedInput!, where: ClaimantsFilter): GetClaimantsResponse!
   getReminder(input: ByIdInput!): Reminder!
-  getReminders(input: PaginatedInput!): GetRemindersResponse!
+  getReminders(input: PaginatedInput!, where: RemindersFilter): GetRemindersResponse!
   getTranslator(input: ByEmailInput!): User!
-  getTranslators(input: PaginatedInput!): GetTranslatorsResponse!
+  getTranslators(input: PaginatedInput!, where: TranslatorsFilter): GetTranslatorsResponse!
   getUser: User!
 }
 
@@ -189,6 +216,11 @@ type Reminder {
   translatorMessage: String
 }
 
+input RemindersFilter {
+  date: String
+  range: DateRange
+}
+
 type Translator {
   email: String
   firstName: String
@@ -196,6 +228,14 @@ type Translator {
   languages: [String!]
   lastName: String
   phone: String
+}
+
+input TranslatorsFilter {
+  city: String
+  firstName: String
+  language: String
+  lastName: String
+  state: String
 }
 
 input UpdateAddressInput {

@@ -1,18 +1,75 @@
-import { extendType, nonNull } from "nexus";
+import { extendType, nonNull, nullable } from "nexus";
 import { isAuthorized } from "../../../utils/auth/isAuthorized";
 
+// todo: test filtering
 export const GetAssignments = extendType({
   type: "Query",
   definition(t) {
     t.nonNull.field("getAssignments", {
       type: nonNull("GetAssignmentsResponse"),
-      args: { input: nonNull("PaginatedInput") },
+      args: {
+        input: nonNull("PaginatedInput"),
+        where: nullable("AssignmentsFilter"),
+      },
       authorize: async (_, __, ctx) => await isAuthorized(ctx),
-      async resolve(_, { input }, { prisma, user }) {
+      async resolve(_, { input, where }, { prisma, user }) {
         const { page, countPerPage } = input;
 
         const assignments = await prisma.assignment.findMany({
-          where: { createdByUserId: user.id },
+          where: {
+            createdByUserId: user.id,
+            ...(where
+              ? {
+                  claimant: where.claimant
+                    ? {
+                        firstName: where.claimant.firstName || undefined,
+                        lastName: where.claimant.lastName || undefined,
+                        languages: {
+                          has: where.claimant.language,
+                        },
+                      }
+                    : undefined,
+                  address: where.address
+                    ? {
+                        address1: where.address.address1 || undefined,
+                        address2: where.address.address2 || undefined,
+                        city: where.address.city || undefined,
+                        state: where.address.state || undefined,
+                        zipCode: where.address.zipCode || undefined,
+                      }
+                    : undefined,
+                  assignedTo: where.assignedTo
+                    ? {
+                        languages: {
+                          has: where.assignedTo.language,
+                        },
+                        city: {
+                          equals: where.assignedTo.city,
+                        },
+                        state: {
+                          equals: where.assignedTo.state,
+                        },
+                        firstName: {
+                          equals: where.assignedTo.firstName,
+                        },
+                        lastName: {
+                          equals: where.assignedTo.lastName,
+                        },
+                      }
+                    : undefined,
+                  dateTime: where.date
+                    ? {
+                        equals: where.date,
+                      }
+                    : where.dateRange
+                    ? {
+                        gte: where.dateRange.date1,
+                        lte: where.dateRange.date2,
+                      }
+                    : undefined,
+                }
+              : {}),
+          },
           skip: (page - 1) * countPerPage,
           take: countPerPage,
           include: {

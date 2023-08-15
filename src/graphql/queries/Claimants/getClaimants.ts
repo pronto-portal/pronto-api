@@ -1,4 +1,4 @@
-import { extendType, nonNull } from "nexus";
+import { extendType, nonNull, nullable } from "nexus";
 import { isAuthorized } from "../../../utils/auth/isAuthorized";
 
 export const GetClaimants = extendType({
@@ -7,15 +7,30 @@ export const GetClaimants = extendType({
     t.nonNull.field("getClaimants", {
       type: nonNull("GetClaimantsResponse"),
       authorize: async (_root, _args, ctx) => await isAuthorized(ctx),
-      args: { input: nonNull("PaginatedInput") },
-      async resolve(_, { input }, { prisma, user }) {
+      args: {
+        input: nonNull("PaginatedInput"),
+        where: nullable("ClaimantsFilter"),
+      },
+      async resolve(_, { input, where }, { prisma, user }) {
         const { page, countPerPage } = input;
 
-        // todo: instead of having a nested query, modify the prisma schema such that Claimants and claimants are
-        // also stored on the user table via relations as well
+        // todo: test reminders filtering by date
         const claimants = await prisma.claimant.findMany({
           where: {
             userId: user.id,
+            ...(where
+              ? {
+                  firstName: {
+                    equals: where.firstName || undefined,
+                  },
+                  lastName: {
+                    equals: where.lastName || undefined,
+                  },
+                  languages: {
+                    has: where.language,
+                  },
+                }
+              : {}),
           },
           include: {
             assignment: true,

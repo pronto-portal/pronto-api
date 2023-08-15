@@ -1,22 +1,39 @@
-import { extendType, list, nonNull } from "nexus";
+import { extendType, nonNull, nullable } from "nexus";
 import { isAuthorized } from "../../../utils/auth/isAuthorized";
-import { ReminderType } from "../../types";
 
+// todo: test filtering
 export const GetReminders = extendType({
   type: "Query",
   definition(t) {
     t.nonNull.field("getReminders", {
       type: nonNull("GetRemindersResponse"),
       authorize: async (_root, _args, ctx) => await isAuthorized(ctx),
-      args: { input: nonNull("PaginatedInput") },
-      async resolve(_, { input }, { prisma, user }) {
+      args: {
+        input: nonNull("PaginatedInput"),
+        where: nullable("RemindersFilter"),
+      },
+      async resolve(_, { input, where }, { prisma, user }) {
         const { page, countPerPage } = input;
 
-        // todo: instead of having a nested query, modify the prisma schema such that Reminders and claimants are
-        // also stored on the user table via relations as well
         const reminders = await prisma.reminder.findMany({
           where: {
             createdById: user.id,
+            ...(where
+              ? {
+                  assignment: {
+                    dateTime: where.date
+                      ? {
+                          equals: where.date,
+                        }
+                      : where.range
+                      ? {
+                          gte: where.range.date1,
+                          lte: where.range.date2,
+                        }
+                      : undefined,
+                  },
+                }
+              : {}),
           },
           include: {
             assignment: true,

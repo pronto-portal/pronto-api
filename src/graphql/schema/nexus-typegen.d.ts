@@ -40,11 +40,30 @@ export interface NexusGenInputs {
   AddTranslatorInput: { // input type
     email: string; // String!
   }
+  AddressesFilter: { // input type
+    address1?: string | null; // String
+    address2?: string | null; // String
+    city?: string | null; // String
+    state?: string | null; // String
+    zipCode?: string | null; // String
+  }
+  AssignmentsFilter: { // input type
+    address?: NexusGenInputs['AddressesFilter'] | null; // AddressesFilter
+    assignedTo?: NexusGenInputs['TranslatorsFilter'] | null; // TranslatorsFilter
+    claimant?: NexusGenInputs['ClaimantsFilter'] | null; // ClaimantsFilter
+    date?: NexusGenScalars['DateTime'] | null; // DateTime
+    dateRange?: NexusGenInputs['DateRange'] | null; // DateRange
+  }
   ByEmailInput: { // input type
     email: string; // String!
   }
   ByIdInput: { // input type
     id: string; // String!
+  }
+  ClaimantsFilter: { // input type
+    firstName?: string | null; // String
+    language?: string | null; // String
+    lastName?: string | null; // String
   }
   CompleteProfileInput: { // input type
     firstName: string; // String!
@@ -85,12 +104,27 @@ export interface NexusGenInputs {
     lastName?: string | null; // String
     phone?: string | null; // String
   }
+  DateRange: { // input type
+    date1: NexusGenScalars['DateTime']; // DateTime!
+    date2: NexusGenScalars['DateTime']; // DateTime!
+  }
   DisconnectTranslatorInput: { // input type
     email: string; // String!
   }
   PaginatedInput: { // input type
     countPerPage: number; // Int!
     page: number; // Int!
+  }
+  RemindersFilter: { // input type
+    date?: string | null; // String
+    range?: NexusGenInputs['DateRange'] | null; // DateRange
+  }
+  TranslatorsFilter: { // input type
+    city?: string | null; // String
+    firstName?: string | null; // String
+    language?: string | null; // String
+    lastName?: string | null; // String
+    state?: string | null; // String
   }
   UpdateAddressInput: { // input type
     address1?: string | null; // String
@@ -520,30 +554,35 @@ export interface NexusGenArgTypes {
     }
     getAddresses: { // args
       input: NexusGenInputs['PaginatedInput']; // PaginatedInput!
+      where?: NexusGenInputs['AddressesFilter'] | null; // AddressesFilter
     }
     getAssignment: { // args
       input: NexusGenInputs['ByIdInput']; // ByIdInput!
     }
     getAssignments: { // args
       input: NexusGenInputs['PaginatedInput']; // PaginatedInput!
+      where?: NexusGenInputs['AssignmentsFilter'] | null; // AssignmentsFilter
     }
     getClaimant: { // args
       input: NexusGenInputs['ByIdInput']; // ByIdInput!
     }
     getClaimants: { // args
       input: NexusGenInputs['PaginatedInput']; // PaginatedInput!
+      where?: NexusGenInputs['ClaimantsFilter'] | null; // ClaimantsFilter
     }
     getReminder: { // args
       input: NexusGenInputs['ByIdInput']; // ByIdInput!
     }
     getReminders: { // args
       input: NexusGenInputs['PaginatedInput']; // PaginatedInput!
+      where?: NexusGenInputs['RemindersFilter'] | null; // RemindersFilter
     }
     getTranslator: { // args
       input: NexusGenInputs['ByEmailInput']; // ByEmailInput!
     }
     getTranslators: { // args
       input: NexusGenInputs['PaginatedInput']; // PaginatedInput!
+      where?: NexusGenInputs['TranslatorsFilter'] | null; // TranslatorsFilter
     }
   }
 }

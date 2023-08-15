@@ -1,6 +1,6 @@
 import { list, nullable, objectType } from "nexus";
-import { Context } from "../../schema/context";
-import { AssignmentType } from "./Assignment";
+import { Context } from "../../../schema/context";
+import { AssignmentType } from "../Assignments/Assignment";
 
 export const UserType = objectType({
   name: "User",

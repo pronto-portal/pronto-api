@@ -1,18 +1,17 @@
-import { Address } from "@prisma/client";
 import { objectType } from "nexus";
-import { Context } from "../../schema/context";
-import { AssignmentType } from "./Assignment";
-import { UserType } from "./User";
+import { Context } from "../../../schema/context";
+import { AssignmentType } from "../Assignments/Assignment";
+import { Assignment, Claimant } from "@prisma/client";
+import { UserType } from "../User/User";
 
-export const AddressType = objectType({
-  name: "Address",
+export const ClaimantType = objectType({
+  name: "Claimant",
   definition(t) {
     t.string("id");
-    t.string("address1");
-    t.string("address2");
-    t.string("city");
-    t.string("state");
-    t.string("zipCode");
+    t.string("firstName");
+    t.string("lastName");
+    t.string("email");
+    t.string("phone");
     t.string("userId");
     t.field("user", {
       type: UserType,
@@ -28,8 +27,8 @@ export const AddressType = objectType({
     }),
       t.list.field("assignment", {
         type: AssignmentType,
-        async resolve(root: Address, __, { prisma }: Context) {
-          const { assignment } = await prisma.address.findUniqueOrThrow({
+        async resolve(root, __, { prisma }: Context) {
+          const { assignment } = await prisma.claimant.findUniqueOrThrow({
             where: { id: root.id },
             include: {
               assignment: {
@@ -43,5 +42,6 @@ export const AddressType = objectType({
           return assignment;
         },
       });
+    t.list.string("languages");
   },
 });

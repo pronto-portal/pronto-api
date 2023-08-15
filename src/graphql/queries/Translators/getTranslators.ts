@@ -1,6 +1,6 @@
-import { extendType, nonNull } from "nexus";
+import { extendType, nonNull, nullable } from "nexus";
 import { isAuthorized } from "../../../utils/auth/isAuthorized";
-import { GetTranslatorsResponse } from "../../types/objects/GetTranslators";
+import { GetTranslatorsResponse } from "../../types/objects/Translators/GetTranslators";
 
 export const GetTranslators = extendType({
   type: "Query",
@@ -8,8 +8,11 @@ export const GetTranslators = extendType({
     t.nonNull.field("getTranslators", {
       type: nonNull(GetTranslatorsResponse),
       authorize: async (_root, _args, ctx) => await isAuthorized(ctx),
-      args: { input: nonNull("PaginatedInput") },
-      async resolve(_, { input }, { prisma, user: ctxUser }) {
+      args: {
+        input: nonNull("PaginatedInput"),
+        where: nullable("TranslatorsFilter"),
+      },
+      async resolve(_, { input, where }, { prisma, user: ctxUser }) {
         const { page, countPerPage } = input;
         const { id } = ctxUser!;
 
@@ -21,6 +24,25 @@ export const GetTranslators = extendType({
             translators: {
               skip: (page - 1) * countPerPage,
               take: countPerPage,
+              where: where
+                ? {
+                    languages: {
+                      has: where.language,
+                    },
+                    city: {
+                      equals: where.city,
+                    },
+                    state: {
+                      equals: where.state,
+                    },
+                    firstName: {
+                      equals: where.firstName,
+                    },
+                    lastName: {
+                      equals: where.lastName,
+                    },
+                  }
+                : {},
             },
           },
         });
