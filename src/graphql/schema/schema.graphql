@@ -233,7 +233,7 @@ type Translator {
 input TranslatorsFilter {
   city: String
   firstName: String
-  language: String
+  languages: [String!]
   lastName: String
   state: String
 }

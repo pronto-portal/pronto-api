@@ -41,7 +41,7 @@ export const GetAssignments = extendType({
                   assignedTo: where.assignedTo
                     ? {
                         languages: {
-                          has: where.assignedTo.language,
+                          hasSome: where.assignedTo.languages || undefined,
                         },
                         city: {
                           equals: where.assignedTo.city,
@@ -70,7 +70,7 @@ export const GetAssignments = extendType({
                 }
               : {}),
           },
-          skip: (page - 1) * countPerPage,
+          skip: page * countPerPage,
           take: countPerPage,
           include: {
             address: true,

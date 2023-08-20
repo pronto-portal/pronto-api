@@ -122,7 +122,7 @@ export interface NexusGenInputs {
   TranslatorsFilter: { // input type
     city?: string | null; // String
     firstName?: string | null; // String
-    language?: string | null; // String
+    languages?: string[] | null; // [String!]
     lastName?: string | null; // String
     state?: string | null; // String
   }

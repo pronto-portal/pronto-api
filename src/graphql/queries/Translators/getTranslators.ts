@@ -22,24 +22,28 @@ export const GetTranslators = extendType({
           },
           include: {
             translators: {
-              skip: (page - 1) * countPerPage,
+              skip: page * countPerPage,
               take: countPerPage,
               where: where
                 ? {
-                    languages: {
-                      has: where.language,
-                    },
+                    ...(where.languages
+                      ? {
+                          languages: {
+                            hasSome: where.languages,
+                          },
+                        }
+                      : {}),
                     city: {
-                      equals: where.city,
+                      equals: where.city || undefined,
                     },
                     state: {
-                      equals: where.state,
+                      equals: where.state || undefined,
                     },
                     firstName: {
-                      equals: where.firstName,
+                      equals: where.firstName || undefined,
                     },
                     lastName: {
-                      equals: where.lastName,
+                      equals: where.lastName || undefined,
                     },
                   }
                 : {},
