@@ -33,6 +33,15 @@ export const GetTranslators = extendType({
                           },
                         }
                       : {}),
+                    id: {
+                      equals: where.id || undefined,
+                    },
+                    phone: {
+                      equals: where.phone || undefined,
+                    },
+                    email: {
+                      equals: where.email || undefined,
+                    },
                     city: {
                       equals: where.city || undefined,
                     },

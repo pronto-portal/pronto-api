@@ -121,9 +121,12 @@ export interface NexusGenInputs {
   }
   TranslatorsFilter: { // input type
     city?: string | null; // String
+    email?: string | null; // String
     firstName?: string | null; // String
+    id?: string | null; // String
     languages?: string[] | null; // [String!]
     lastName?: string | null; // String
+    phone?: string | null; // String
     state?: string | null; // String
   }
   UpdateAddressInput: { // input type

@@ -232,9 +232,12 @@ type Translator {
 
 input TranslatorsFilter {
   city: String
+  email: String
   firstName: String
+  id: String
   languages: [String!]
   lastName: String
+  phone: String
   state: String
 }
 
