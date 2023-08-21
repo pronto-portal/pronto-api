@@ -40,9 +40,13 @@ export const GetAssignments = extendType({
                     : undefined,
                   assignedTo: where.assignedTo
                     ? {
-                        languages: {
-                          hasSome: where.assignedTo.languages || undefined,
-                        },
+                        ...(where.assignedTo.languages
+                          ? {
+                              languages: {
+                                hasSome: where.assignedTo.languages,
+                              },
+                            }
+                          : {}),
                         city: {
                           equals: where.assignedTo.city,
                         },
