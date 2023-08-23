@@ -31,11 +31,13 @@ declare global {
 
 export interface NexusGenInputs {
   AddAndCreateTranslatorInput: { // input type
+    city?: string | null; // String
     email: string; // String!
     firstName: string; // String!
     languages?: string[] | null; // [String!]
     lastName?: string | null; // String
     phone: string; // String!
+    state?: string | null; // String
   }
   AddTranslatorInput: { // input type
     email: string; // String!

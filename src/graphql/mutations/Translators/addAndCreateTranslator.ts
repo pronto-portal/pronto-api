@@ -15,7 +15,8 @@ export const AddAndCreateTranslator = extendType({
         input: nonNull(AddAndCreateTranslatorInput),
       },
       async resolve(_root, { input }, { prisma, user: ctxUser }: Context) {
-        const { email, phone, firstName, lastName, languages } = input;
+        const { email, phone, firstName, lastName, languages, city, state } =
+          input;
         if (!ctxUser) throw new Error("No user found");
 
         const user = await prisma.user.findFirst({
@@ -50,6 +51,8 @@ export const AddAndCreateTranslator = extendType({
             email,
             firstName,
             lastName,
+            city,
+            state,
             languages: languages ?? [],
             isTranslator: true,
             translatingFor: {

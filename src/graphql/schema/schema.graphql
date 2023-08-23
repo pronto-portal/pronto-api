@@ -3,11 +3,13 @@
 
 
 input AddAndCreateTranslatorInput {
+  city: String
   email: String!
   firstName: String!
   languages: [String!]
   lastName: String
   phone: String!
+  state: String
 }
 
 input AddTranslatorInput {

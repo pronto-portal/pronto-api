@@ -7,6 +7,8 @@ export const AddAndCreateTranslatorInput = inputObjectType({
     t.nonNull.string("phone");
     t.nonNull.string("firstName");
     t.nullable.string("lastName");
+    t.nullable.string("city");
+    t.nullable.string("state");
     t.list.nonNull.string("languages");
   },
 });
