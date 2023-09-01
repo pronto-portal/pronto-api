@@ -196,7 +196,7 @@ input PaginatedInput {
 
 type Query {
   getAddress(input: ByIdInput!): Address!
-  getAddresses(input: PaginatedInput!, where: AddressesFilter): GetAddressesResponse!
+  getAddresses(input: PaginatedInput, where: AddressesFilter): GetAddressesResponse!
   getAssignment(input: ByIdInput!): Assignment!
   getAssignments(input: PaginatedInput!, where: AssignmentsFilter): GetAssignmentsResponse!
   getClaimant(input: ByIdInput!): Claimant!

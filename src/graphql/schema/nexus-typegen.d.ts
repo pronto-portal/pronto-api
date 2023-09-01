@@ -558,7 +558,7 @@ export interface NexusGenArgTypes {
       input: NexusGenInputs['ByIdInput']; // ByIdInput!
     }
     getAddresses: { // args
-      input: NexusGenInputs['PaginatedInput']; // PaginatedInput!
+      input?: NexusGenInputs['PaginatedInput'] | null; // PaginatedInput
       where?: NexusGenInputs['AddressesFilter'] | null; // AddressesFilter
     }
     getAssignment: { // args

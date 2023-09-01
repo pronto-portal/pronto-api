@@ -8,12 +8,10 @@ export const GetAddresses = extendType({
       type: nonNull("GetAddressesResponse"),
       authorize: async (_root, _args, ctx) => await isAuthorized(ctx),
       args: {
-        input: nonNull("PaginatedInput"),
+        input: nullable("PaginatedInput"),
         where: nullable("AddressesFilter"),
       },
       async resolve(_, { input, where }, { prisma, user }) {
-        const { page, countPerPage } = input;
-
         // todo: instead of having a nested query, modify the prisma schema such that addresses and claimants are
         // also stored on the user table via relations as well
         const addresses = await prisma.address.findMany({
@@ -42,8 +40,12 @@ export const GetAddresses = extendType({
           include: {
             assignment: true,
           },
-          skip: page * countPerPage,
-          take: countPerPage,
+          ...(input
+            ? {
+                skip: input.page * input.countPerPage,
+                take: input.countPerPage,
+              }
+            : {}),
         });
 
         const totalRowCount = await prisma.address.count({
