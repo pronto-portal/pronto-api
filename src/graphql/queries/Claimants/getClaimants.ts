@@ -8,12 +8,10 @@ export const GetClaimants = extendType({
       type: nonNull("GetClaimantsResponse"),
       authorize: async (_root, _args, ctx) => await isAuthorized(ctx),
       args: {
-        input: nonNull("PaginatedInput"),
+        input: nullable("PaginatedInput"),
         where: nullable("ClaimantsFilter"),
       },
       async resolve(_, { input, where }, { prisma, user }) {
-        const { page, countPerPage } = input;
-
         // todo: test reminders filtering by date
         const claimants = await prisma.claimant.findMany({
           where: {
@@ -35,8 +33,12 @@ export const GetClaimants = extendType({
           include: {
             assignment: true,
           },
-          skip: page * countPerPage,
-          take: countPerPage,
+          ...(input
+            ? {
+                skip: input.page * input.countPerPage,
+                take: input.countPerPage,
+              }
+            : {}),
         });
 
         const totalRowCount = await prisma.claimant.count({

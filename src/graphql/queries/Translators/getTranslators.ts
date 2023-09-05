@@ -9,11 +9,10 @@ export const GetTranslators = extendType({
       type: nonNull(GetTranslatorsResponse),
       authorize: async (_root, _args, ctx) => await isAuthorized(ctx),
       args: {
-        input: nonNull("PaginatedInput"),
+        input: nullable("PaginatedInput"),
         where: nullable("TranslatorsFilter"),
       },
       async resolve(_, { input, where }, { prisma, user: ctxUser }) {
-        const { page, countPerPage } = input;
         const { id } = ctxUser!;
 
         const user = await prisma.user.findFirst({
@@ -22,8 +21,6 @@ export const GetTranslators = extendType({
           },
           include: {
             translators: {
-              skip: page * countPerPage,
-              take: countPerPage,
               where: where
                 ? {
                     ...(where.languages
@@ -56,6 +53,13 @@ export const GetTranslators = extendType({
                     },
                   }
                 : {},
+
+              ...(input
+                ? {
+                    skip: input.page * input.countPerPage,
+                    take: input.countPerPage,
+                  }
+                : {}),
             },
           },
         });

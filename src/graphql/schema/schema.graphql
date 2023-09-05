@@ -200,11 +200,11 @@ type Query {
   getAssignment(input: ByIdInput!): Assignment!
   getAssignments(input: PaginatedInput!, where: AssignmentsFilter): GetAssignmentsResponse!
   getClaimant(input: ByIdInput!): Claimant!
-  getClaimants(input: PaginatedInput!, where: ClaimantsFilter): GetClaimantsResponse!
+  getClaimants(input: PaginatedInput, where: ClaimantsFilter): GetClaimantsResponse!
   getReminder(input: ByIdInput!): Reminder!
   getReminders(input: PaginatedInput!, where: RemindersFilter): GetRemindersResponse!
   getTranslator(input: ByEmailInput!): User!
-  getTranslators(input: PaginatedInput!, where: TranslatorsFilter): GetTranslatorsResponse!
+  getTranslators(input: PaginatedInput, where: TranslatorsFilter): GetTranslatorsResponse!
   getUser: User!
 }
 

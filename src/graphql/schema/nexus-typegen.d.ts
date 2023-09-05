@@ -572,7 +572,7 @@ export interface NexusGenArgTypes {
       input: NexusGenInputs['ByIdInput']; // ByIdInput!
     }
     getClaimants: { // args
-      input: NexusGenInputs['PaginatedInput']; // PaginatedInput!
+      input?: NexusGenInputs['PaginatedInput'] | null; // PaginatedInput
       where?: NexusGenInputs['ClaimantsFilter'] | null; // ClaimantsFilter
     }
     getReminder: { // args
@@ -586,7 +586,7 @@ export interface NexusGenArgTypes {
       input: NexusGenInputs['ByEmailInput']; // ByEmailInput!
     }
     getTranslators: { // args
-      input: NexusGenInputs['PaginatedInput']; // PaginatedInput!
+      input?: NexusGenInputs['PaginatedInput'] | null; // PaginatedInput
       where?: NexusGenInputs['TranslatorsFilter'] | null; // TranslatorsFilter
     }
   }
