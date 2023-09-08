@@ -1,6 +1,6 @@
-import { extendType, list, nonNull } from "nexus";
+import { extendType, nonNull } from "nexus";
 import { isAuthorized } from "../../../utils/auth/isAuthorized";
-import { ByEmail } from "../../types";
+import { ById } from "../../types";
 
 export const getTranslator = extendType({
   type: "Query",
@@ -8,10 +8,10 @@ export const getTranslator = extendType({
     t.nonNull.field("getTranslator", {
       type: "User",
       authorize: async (_root, _args, ctx) => await isAuthorized(ctx),
-      args: { input: nonNull(ByEmail) },
+      args: { input: nonNull(ById) },
       async resolve(_, { input }, { prisma, user: ctxUser }) {
-        const { email } = input;
         const { id } = ctxUser!;
+        const { id: translatorId } = input;
 
         const user = await prisma.user.findFirst({
           where: {
@@ -20,7 +20,7 @@ export const getTranslator = extendType({
           include: {
             translators: {
               where: {
-                email,
+                id: translatorId,
               },
             },
           },

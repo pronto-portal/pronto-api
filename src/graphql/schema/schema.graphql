@@ -203,7 +203,7 @@ type Query {
   getClaimants(input: PaginatedInput, where: ClaimantsFilter): GetClaimantsResponse!
   getReminder(input: ByIdInput!): Reminder!
   getReminders(input: PaginatedInput!, where: RemindersFilter): GetRemindersResponse!
-  getTranslator(input: ByEmailInput!): User!
+  getTranslator(input: ByIdInput!): User!
   getTranslators(input: PaginatedInput, where: TranslatorsFilter): GetTranslatorsResponse!
   getUser: User!
 }

@@ -583,7 +583,7 @@ export interface NexusGenArgTypes {
       where?: NexusGenInputs['RemindersFilter'] | null; // RemindersFilter
     }
     getTranslator: { // args
-      input: NexusGenInputs['ByEmailInput']; // ByEmailInput!
+      input: NexusGenInputs['ByIdInput']; // ByIdInput!
     }
     getTranslators: { // args
       input?: NexusGenInputs['PaginatedInput'] | null; // PaginatedInput
