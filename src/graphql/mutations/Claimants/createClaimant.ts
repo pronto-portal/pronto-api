@@ -14,6 +14,8 @@ export const CreateClaimant = extendType({
       async resolve(_, { input }, { prisma, user }) {
         const { email, firstName, lastName, phone, languages } = input;
 
+        console.log("CREATING CLAIMANT", input);
+
         if (!email) throw new Error("Email required");
 
         const claimant = await prisma.claimant.create({

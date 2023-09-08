@@ -186,7 +186,7 @@ type Mutation {
   updateAssignment(input: UpdateAssignmentInput!): Assignment!
   updateClaimant(input: UpdateClaimantInput!): Claimant!
   updateReminder(input: UpdateReminderInput!): Reminder!
-  updateUser(data: UpdateUserInput!): User
+  updateUser(input: UpdateUserInput!): User
 }
 
 input PaginatedInput {

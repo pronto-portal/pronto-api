@@ -7,13 +7,13 @@ import { isAuthorized } from "../../../utils/auth/isAuthorized";
 export const UpdateUser = mutationField("updateUser", {
   type: UserType,
   args: {
-    data: nonNull(UpdateUserInput),
+    input: nonNull(UpdateUserInput),
   },
   authorize: async (root, args, ctx) => await isAuthorized(ctx),
   async resolve(
     _root,
     {
-      data: {
+      input: {
         firstName,
         lastName,
         phone,

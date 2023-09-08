@@ -550,7 +550,7 @@ export interface NexusGenArgTypes {
       input: NexusGenInputs['UpdateReminderInput']; // UpdateReminderInput!
     }
     updateUser: { // args
-      data: NexusGenInputs['UpdateUserInput']; // UpdateUserInput!
+      input: NexusGenInputs['UpdateUserInput']; // UpdateUserInput!
     }
   }
   Query: {
