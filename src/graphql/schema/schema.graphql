@@ -279,8 +279,10 @@ input UpdateReminderInput {
 }
 
 input UpdateUserInput {
+  city: String
   email: String
   firstName: String
+  id: String!
   isManager: Boolean
   isProfileComplete: Boolean
   isTranslator: Boolean
@@ -288,6 +290,7 @@ input UpdateUserInput {
   lastName: String
   phone: String
   profilePic: String = ""
+  state: String
 }
 
 type User {

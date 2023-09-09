@@ -163,8 +163,10 @@ export interface NexusGenInputs {
     translatorMessage?: string | null; // String
   }
   UpdateUserInput: { // input type
+    city?: string | null; // String
     email?: string | null; // String
     firstName?: string | null; // String
+    id: string; // String!
     isManager?: boolean | null; // Boolean
     isProfileComplete?: boolean | null; // Boolean
     isTranslator?: boolean | null; // Boolean
@@ -172,6 +174,7 @@ export interface NexusGenInputs {
     lastName?: string | null; // String
     phone?: string | null; // String
     profilePic?: string | null; // String
+    state?: string | null; // String
   }
 }
 

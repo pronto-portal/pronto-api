@@ -14,6 +14,7 @@ export const UpdateUser = mutationField("updateUser", {
     _root,
     {
       input: {
+        id,
         firstName,
         lastName,
         phone,
@@ -21,13 +22,15 @@ export const UpdateUser = mutationField("updateUser", {
         isManager,
         isTranslator,
         isProfileComplete,
+        city,
+        state,
         languages,
       },
     },
-    { user, prisma }: Context
+    { prisma }: Context
   ) {
     const updatedUser = await prisma.user.update({
-      where: { id: user!.id },
+      where: { id },
       data: {
         phone: phone || undefined,
         firstName: firstName || undefined,
@@ -37,6 +40,8 @@ export const UpdateUser = mutationField("updateUser", {
         isTranslator: isTranslator || undefined,
         isProfileComplete: isProfileComplete || undefined,
         languages: languages || undefined,
+        city: city || undefined,
+        state: state || undefined,
       },
     });
 

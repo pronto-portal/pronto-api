@@ -3,6 +3,7 @@ import { inputObjectType } from "nexus";
 export const UpdateUserInput = inputObjectType({
   name: "UpdateUserInput",
   definition(t) {
+    t.nonNull.string("id");
     t.nullable.string("email");
     t.nullable.string("phone");
     t.nullable.string("firstName");
@@ -11,6 +12,8 @@ export const UpdateUserInput = inputObjectType({
     t.nullable.boolean("isManager");
     t.nullable.boolean("isTranslator");
     t.nullable.boolean("isProfileComplete");
+    t.nullable.string("city");
+    t.nullable.string("state");
     t.list.nonNull.string("languages");
   },
 });
