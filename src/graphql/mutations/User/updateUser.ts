@@ -17,6 +17,7 @@ export const UpdateUser = mutationField("updateUser", {
         id,
         firstName,
         lastName,
+        email,
         phone,
         profilePic,
         isManager,
@@ -32,6 +33,7 @@ export const UpdateUser = mutationField("updateUser", {
     const updatedUser = await prisma.user.update({
       where: { id },
       data: {
+        email: email || undefined,
         phone: phone || undefined,
         firstName: firstName || undefined,
         lastName: lastName || undefined,
