@@ -14,6 +14,7 @@ import { parseAuthHeader } from "./utils/auth/parseAuthHeader";
 import { eventBridge } from "./aws/eventBridge";
 
 const main = async () => {
+  const prisma = getAppDataSource();
   const app = express();
   const httpServer = http.createServer(app);
 
@@ -46,8 +47,6 @@ const main = async () => {
     expressMiddleware(server, {
       context: async ({ req, res }) => {
         // API Gateway event and Lambda Context
-        const prisma = getAppDataSource();
-
         const accessToken = parseAuthHeader(req.headers.authorization);
 
         let user: User | null = null;

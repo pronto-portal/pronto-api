@@ -1,7 +1,6 @@
 import { extendType, nonNull } from "nexus";
 import { isAuthorized } from "../../../utils/auth/isAuthorized";
 import { CreateReminderInput, ReminderType } from "../../types";
-import { dateToCron } from "../../../utils/helper/dateToCron";
 import { addressToString } from "../../../utils/helper/addressToString";
 
 export const CreateReminder = extendType({
@@ -35,7 +34,7 @@ export const CreateReminder = extendType({
         if (address) {
           const addressString = addressToString({
             address1: address.address1,
-            address2: address.address2 ?? "",
+            address2: address.address2 || "",
             city: address.city,
             state: address.state,
             zipCode: address.zipCode,
@@ -48,8 +47,8 @@ export const CreateReminder = extendType({
 
         const reminder = await prisma.reminder.create({
           data: {
-            translatorMessage: translatorMessage ?? defaultReminderMessage,
-            claimantMessage: claimantMessage ?? defaultReminderMessage,
+            translatorMessage: translatorMessage || defaultReminderMessage,
+            claimantMessage: claimantMessage || defaultReminderMessage,
             assignment: {
               connect: {
                 id: assignmentId,
