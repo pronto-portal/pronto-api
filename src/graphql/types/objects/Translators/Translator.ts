@@ -31,6 +31,8 @@ export const TranslatorType = objectType({
     });
     t.string("email");
     t.string("phone");
+    t.string("city");
+    t.string("state");
     t.list.nonNull.string("languages");
   },
 });

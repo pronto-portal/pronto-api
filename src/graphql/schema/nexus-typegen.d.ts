@@ -241,6 +241,7 @@ export interface NexusGenObjects {
   Query: {};
   Reminder: prisma.Reminder;
   Translator: { // root type
+    city?: string | null; // String
     createdAt?: NexusGenScalars['DateTime'] | null; // DateTime
     email?: string | null; // String
     firstName?: string | null; // String
@@ -248,6 +249,7 @@ export interface NexusGenObjects {
     languages?: string[] | null; // [String!]
     lastName?: string | null; // String
     phone?: string | null; // String
+    state?: string | null; // String
     updatedAt?: NexusGenScalars['DateTime'] | null; // DateTime
   }
   User: prisma.User;
@@ -372,6 +374,7 @@ export interface NexusGenFieldTypes {
   }
   Translator: { // field return type
     assignedTo: Array<NexusGenRootTypes['Assignment'] | null> | null; // [Assignment]
+    city: string | null; // String
     createdAt: NexusGenScalars['DateTime'] | null; // DateTime
     email: string | null; // String
     firstName: string | null; // String
@@ -379,6 +382,7 @@ export interface NexusGenFieldTypes {
     languages: string[] | null; // [String!]
     lastName: string | null; // String
     phone: string | null; // String
+    state: string | null; // String
     updatedAt: NexusGenScalars['DateTime'] | null; // DateTime
   }
   User: { // field return type
@@ -514,6 +518,7 @@ export interface NexusGenFieldTypeNames {
   }
   Translator: { // field return type name
     assignedTo: 'Assignment'
+    city: 'String'
     createdAt: 'DateTime'
     email: 'String'
     firstName: 'String'
@@ -521,6 +526,7 @@ export interface NexusGenFieldTypeNames {
     languages: 'String'
     lastName: 'String'
     phone: 'String'
+    state: 'String'
     updatedAt: 'DateTime'
   }
   User: { // field return type name
