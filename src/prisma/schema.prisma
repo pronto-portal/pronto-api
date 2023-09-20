@@ -29,6 +29,7 @@ model User {
   languages         String[]      @default([])
   translators       User[]        @relation("UserTranslators")
   translatingFor    User[]        @relation("UserTranslators")
+  nonUserTranslators NonUserTranslator[] @relation("nonUserTranslators")
   claimants         Claimant[]    @relation("UserClaimants")
   addresses         Address[]     @relation("UserAddresses")
   reminders         Reminder[]
@@ -47,6 +48,8 @@ model NonUserTranslator {
   city              String?
   state             String?
   languages         String[]      @default([])
+  createdBy         User          @relation("nonUserTranslators", fields: [createdById], references: [id])
+  createdById       String
 }
 
 model RefreshToken {

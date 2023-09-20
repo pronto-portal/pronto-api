@@ -12,6 +12,16 @@ input AddAndCreateTranslatorInput {
   state: String
 }
 
+input AddNonUserTranslatorInput {
+  city: String
+  email: String!
+  firstName: String!
+  languages: [String!]
+  lastName: String!
+  phone: String
+  state: String
+}
+
 input AddTranslatorInput {
   email: String!
 }
@@ -157,6 +167,11 @@ type GetClaimantsResponse {
   totalRowCount: Int!
 }
 
+type GetNonUserTranslatorsResponse {
+  totalRowCount: Int!
+  translators: [Translator!]!
+}
+
 type GetRemindersResponse {
   reminders: [Reminder!]!
   totalRowCount: Int!
@@ -169,6 +184,7 @@ type GetTranslatorsResponse {
 
 type Mutation {
   addAndCreateTranslator(input: AddAndCreateTranslatorInput!): User
+  addNonUserTranslator(input: AddNonUserTranslatorInput!): Translator
   addTranslator(input: AddTranslatorInput!): User
   completeProfile(input: CompleteProfileInput!): User
   createAddress(input: CreateAddressInput!): Address!
@@ -179,12 +195,14 @@ type Mutation {
   deleteAddress(input: ByIdInput!): Address!
   deleteAssignment(input: ByIdInput!): Assignment!
   deleteClaimant(input: ByIdInput!): Claimant!
+  deleteNonUserTranslator(input: ByIdInput!): Translator
   deleteReminder(input: ByIdInput!): Reminder!
   disconnectTranslator(input: DisconnectTranslatorInput!): User
   login(input: CreateUserInput!): User!
   updateAddress(input: UpdateAddressInput!): Address!
   updateAssignment(input: UpdateAssignmentInput!): Assignment!
   updateClaimant(input: UpdateClaimantInput!): Claimant!
+  updateNonUserTranslator(input: UpdateNonUserTranslatorInput!): Translator
   updateReminder(input: UpdateReminderInput!): Reminder!
   updateUser(input: UpdateUserInput!): User
 }
@@ -201,6 +219,8 @@ type Query {
   getAssignments(input: PaginatedInput!, where: AssignmentsFilter): GetAssignmentsResponse!
   getClaimant(input: ByIdInput!): Claimant!
   getClaimants(input: PaginatedInput, where: ClaimantsFilter): GetClaimantsResponse!
+  getNonUserTranslator(input: ByIdInput!): Translator!
+  getNonUserTranslators(input: PaginatedInput, where: TranslatorsFilter): GetNonUserTranslatorsResponse!
   getReminder(input: ByIdInput!): Reminder!
   getReminders(input: PaginatedInput!, where: RemindersFilter): GetRemindersResponse!
   getTranslator(input: ByIdInput!): User!
@@ -275,6 +295,17 @@ input UpdateClaimantInput {
   phone: String
 }
 
+input UpdateNonUserTranslatorInput {
+  city: String
+  email: String
+  firstName: String
+  id: String!
+  languages: [String!]
+  lastName: String
+  phone: String
+  state: String
+}
+
 input UpdateReminderInput {
   claimantMessage: String
   id: String!
@@ -310,6 +341,7 @@ type User {
   isTranslator: Boolean
   languages: [String]
   lastName: String
+  nonUserTranslators: [Translator]
   phone: String
   profilePic: String
   state: String

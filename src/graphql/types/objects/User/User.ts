@@ -78,5 +78,29 @@ export const UserType = objectType({
           .translatingFor();
       },
     });
+
+    t.list.field("nonUserTranslators", {
+      type: "Translator",
+      resolve: async (root, _args, { prisma }) => {
+        // Implement your logic for fetching nonUserTranslators here.
+        return await prisma.nonUserTranslator.findMany({
+          where: {
+            createdById: root.id,
+          },
+          select: {
+            id: true,
+            profilePic: true,
+            createdAt: true,
+            updatedAt: true,
+            firstName: true,
+            lastName: true,
+            languages: true,
+            email: true,
+            phone: true,
+            assignedTo: true,
+          },
+        });
+      },
+    });
   },
 });

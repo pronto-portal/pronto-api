@@ -9,3 +9,4 @@ export * from "./Assignments/GetAssignments";
 export * from "./Translators/GetTranslators";
 export * from "./Claimants/GetClaimants";
 export * from "./Reminder/GetReminders";
+export * from "./Translators/GetNonUserTranslators";
