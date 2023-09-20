@@ -38,8 +38,7 @@ const getAppDataSource = () => {
               const ruleName = `reminder-${id}`;
               const claimantPhone = assignment.claimant!.phone;
 
-              const translator =
-                assignment.assignedTo || assignment.nonUserTranslator;
+              const translator = assignment.nonUserTranslator;
               const translatorPhone = translator!.phone;
 
               await eventBridge
@@ -119,7 +118,7 @@ const getAppDataSource = () => {
                   phone: true,
                 },
               },
-              assignedTo: {
+              nonUserTranslator: {
                 select: {
                   phone: true,
                 },
@@ -143,7 +142,7 @@ const getAppDataSource = () => {
               })
               .promise()
               .then(async (data) => {
-                const translator = assignment.assignedTo;
+                const translator = assignment.nonUserTranslator;
                 const claimant = assignment.claimant;
 
                 if (translator && claimant) {

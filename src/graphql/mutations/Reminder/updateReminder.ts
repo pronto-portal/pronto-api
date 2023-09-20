@@ -26,7 +26,7 @@ export const UpdateReminder = extendType({
             assignment: {
               include: {
                 claimant: true,
-                assignedTo: true,
+                nonUserTranslator: true,
               },
             },
           },

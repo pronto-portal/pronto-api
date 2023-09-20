@@ -23,7 +23,7 @@ export const CreateReminder = extendType({
             },
           },
           include: {
-            assignedTo: true,
+            nonUserTranslator: true,
             claimant: true,
             address: true,
           },
