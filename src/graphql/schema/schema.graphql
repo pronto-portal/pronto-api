@@ -224,12 +224,15 @@ input RemindersFilter {
 }
 
 type Translator {
+  assignedTo: [Assignment]
+  createdAt: DateTime
   email: String
   firstName: String
   id: String
   languages: [String!]
   lastName: String
   phone: String
+  updatedAt: DateTime
 }
 
 input TranslatorsFilter {

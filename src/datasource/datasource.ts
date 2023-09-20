@@ -25,6 +25,11 @@ const getAppDataSource = () => {
                     phone: true,
                   },
                 },
+                nonUserTranslator: {
+                  select: {
+                    phone: true,
+                  },
+                },
               },
             });
 
@@ -32,7 +37,10 @@ const getAppDataSource = () => {
               const id = reminder.id!;
               const ruleName = `reminder-${id}`;
               const claimantPhone = assignment.claimant!.phone;
-              const translatorPhone = assignment.assignedTo.phone!;
+
+              const translator =
+                assignment.assignedTo || assignment.nonUserTranslator;
+              const translatorPhone = translator!.phone;
 
               await eventBridge
                 .putTargets({
