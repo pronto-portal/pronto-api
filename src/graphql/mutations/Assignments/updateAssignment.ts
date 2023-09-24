@@ -37,7 +37,7 @@ export const UpdateAssignment = extendType({
         if (translatorId) {
           updateData = {
             ...updateData,
-            nonUserTranslator: {
+            assignedTo: {
               connect: {
                 id: translatorId,
               },

@@ -4,6 +4,7 @@ import { Context } from "../../../schema/context";
 import { AddressType } from "../Address/Address";
 import { ClaimantType } from "../Claimants/Claimant";
 import { UserType } from "../User/User";
+import { TranslatorType } from "../Translators/Translator";
 
 export const AssignmentType = objectType({
   name: "Assignment",
@@ -13,17 +14,17 @@ export const AssignmentType = objectType({
     t.field("dateTime", {
       type: "DateTime",
     });
-    t.field("assignedTo", {
+    t.field("assignedToUser", {
       type: UserType,
       async resolve(root, __, { prisma }: Context) {
-        const { assignedTo } = await prisma.assignment.findUniqueOrThrow({
+        const { assignedToUser } = await prisma.assignment.findUniqueOrThrow({
           where: { id: root.id },
           include: {
-            assignedTo: true,
+            assignedToUser: true,
           },
         });
 
-        return assignedTo;
+        return assignedToUser;
       },
     });
     t.field("createdBy", {
@@ -63,6 +64,19 @@ export const AssignmentType = objectType({
         });
 
         return address;
+      },
+    });
+    t.field("nonUserTranslator", {
+      type: TranslatorType,
+      async resolve(root, __, { prisma }: Context) {
+        const { assignedTo } = await prisma.assignment.findUniqueOrThrow({
+          where: { id: root.id },
+          include: {
+            assignedTo: true,
+          },
+        });
+
+        return assignedTo;
       },
     });
     t.boolean("isComplete");

@@ -26,7 +26,7 @@ export const CreateAssignment = extendType({
             address: {
               connect: { id: addressId },
             },
-            nonUserTranslator: {
+            assignedTo: {
               connect: { id: translatorId },
             },
             dateTime,
