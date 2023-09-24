@@ -48,7 +48,8 @@ input AddressesFilter {
 
 type Assignment {
   address: Address
-  assignedToUser: User
+  assignedTo: Translator
+  assignedToUser: Translator
   claimant: Claimant
   claimantNoShow: Boolean
   createdAt: DateTime
@@ -56,7 +57,6 @@ type Assignment {
   dateTime: DateTime
   id: String
   isComplete: Boolean
-  nonUserTranslator: Translator
   translatorNoShow: Boolean
 }
 

@@ -279,7 +279,8 @@ export interface NexusGenFieldTypes {
   }
   Assignment: { // field return type
     address: NexusGenRootTypes['Address'] | null; // Address
-    assignedToUser: NexusGenRootTypes['User'] | null; // User
+    assignedTo: NexusGenRootTypes['Translator'] | null; // Translator
+    assignedToUser: NexusGenRootTypes['Translator'] | null; // Translator
     claimant: NexusGenRootTypes['Claimant'] | null; // Claimant
     claimantNoShow: boolean | null; // Boolean
     createdAt: NexusGenScalars['DateTime'] | null; // DateTime
@@ -287,7 +288,6 @@ export interface NexusGenFieldTypes {
     dateTime: NexusGenScalars['DateTime'] | null; // DateTime
     id: string | null; // String
     isComplete: boolean | null; // Boolean
-    nonUserTranslator: NexusGenRootTypes['Translator'] | null; // Translator
     translatorNoShow: boolean | null; // Boolean
   }
   Claimant: { // field return type
@@ -424,7 +424,8 @@ export interface NexusGenFieldTypeNames {
   }
   Assignment: { // field return type name
     address: 'Address'
-    assignedToUser: 'User'
+    assignedTo: 'Translator'
+    assignedToUser: 'Translator'
     claimant: 'Claimant'
     claimantNoShow: 'Boolean'
     createdAt: 'DateTime'
@@ -432,7 +433,6 @@ export interface NexusGenFieldTypeNames {
     dateTime: 'DateTime'
     id: 'String'
     isComplete: 'Boolean'
-    nonUserTranslator: 'Translator'
     translatorNoShow: 'Boolean'
   }
   Claimant: { // field return type name

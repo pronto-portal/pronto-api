@@ -66,7 +66,7 @@ export const AssignmentType = objectType({
         return address;
       },
     });
-    t.field("nonUserTranslator", {
+    t.field("assignedTo", {
       type: TranslatorType,
       async resolve(root, __, { prisma }: Context) {
         const { assignedTo } = await prisma.assignment.findUniqueOrThrow({
@@ -77,6 +77,19 @@ export const AssignmentType = objectType({
         });
 
         return assignedTo;
+      },
+    });
+    t.field("assignedToUser", {
+      type: TranslatorType,
+      async resolve(root, __, { prisma }: Context) {
+        const { assignedToUser } = await prisma.assignment.findUniqueOrThrow({
+          where: { id: root.id },
+          include: {
+            assignedToUser: true,
+          },
+        });
+
+        return assignedToUser;
       },
     });
     t.boolean("isComplete");
