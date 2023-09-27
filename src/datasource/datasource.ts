@@ -1,9 +1,49 @@
-import { PrismaClient, Reminder } from "@prisma/client";
+import { PrismaClient, Reminder, Role } from "@prisma/client";
 import { eventBridge } from "../aws/eventBridge";
 import { dateToCron } from "../utils/helper/dateToCron";
 
 const getAppDataSource = () => {
   const prisma = new PrismaClient();
+
+  // seed roles
+  const roles: Role[] = [
+    {
+      name: "basic",
+      priceCents: 0,
+    },
+    {
+      name: "premium",
+      priceCents: 2500,
+    },
+    {
+      name: "unlimited",
+      priceCents: 5000,
+    },
+    {
+      name: "admin",
+      priceCents: 0,
+    },
+  ];
+
+  Promise.all(
+    roles.map(async (role) => {
+      return await prisma.role.upsert({
+        where: {
+          name: role.name,
+        },
+        update: {},
+        create: role,
+      });
+    })
+  )
+    .then((res) => {
+      if (res) {
+        console.log("Seeded roles");
+      }
+    })
+    .catch(() => {
+      console.error("Failed to seed roles");
+    });
 
   const xprisma = prisma.$extends({
     query: {

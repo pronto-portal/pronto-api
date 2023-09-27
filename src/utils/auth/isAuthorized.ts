@@ -4,8 +4,13 @@ import { Context } from "../../graphql/schema/context";
 import { decryptRefreshToken } from "./decryptRefreshToken";
 import { parseAuthHeader } from "./parseAuthHeader";
 import { tokenExpireTime } from "../constants/auth";
+import { enforceUserRole } from "./enforceUserRole";
+import { RoleNames } from "../../types";
 
-export const isAuthorized = async ({ res, req, prisma, user }: Context) => {
+export const isAuthorized = async (
+  { res, req, prisma, user }: Context,
+  roleName: RoleNames = "basic"
+) => {
   const token: string = parseAuthHeader(req.headers.authorization);
 
   if (!token) return false;
@@ -60,14 +65,18 @@ export const isAuthorized = async ({ res, req, prisma, user }: Context) => {
       },
     });
 
+    const userHasValidRoles = enforceUserRole(foundUser!, roleName);
+    if (!userHasValidRoles) return false;
+
     if (foundUser) {
-      // console.log("Refreshing token");
       const newToken = sign(foundUser, process.env.JWT_SECRET!, {
         expiresIn: tokenExpireTime,
       });
 
       res.cookie("x-access-token", newToken);
     }
+  } else {
+    return false;
   }
   return true;
 };

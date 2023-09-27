@@ -102,5 +102,21 @@ export const UserType = objectType({
         });
       },
     });
+
+    t.field("role", {
+      type: "Role",
+      async resolve(root, __, { prisma }: Context) {
+        const { role } = await prisma.user.findUniqueOrThrow({
+          where: {
+            id: root.id,
+          },
+          include: {
+            role: true,
+          },
+        });
+
+        return role;
+      },
+    });
   },
 });

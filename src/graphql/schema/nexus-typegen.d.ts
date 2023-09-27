@@ -109,6 +109,10 @@ export interface NexusGenInputs {
     claimantMessage?: string | null; // String
     translatorMessage?: string | null; // String
   }
+  CreateRoleInput: { // input type
+    name: string; // String!
+    priceCents: number; // Int!
+  }
   CreateUserInput: { // input type
     email: string; // String!
     firstName?: string | null; // String
@@ -118,6 +122,9 @@ export interface NexusGenInputs {
   DateRange: { // input type
     date1: NexusGenScalars['DateTime']; // DateTime!
     date2: NexusGenScalars['DateTime']; // DateTime!
+  }
+  DeleteRoleInput: { // input type
+    name: string; // String!
   }
   DisconnectTranslatorInput: { // input type
     email: string; // String!
@@ -181,6 +188,10 @@ export interface NexusGenInputs {
     id: string; // String!
     translatorMessage?: string | null; // String
   }
+  UpdateRoleInput: { // input type
+    name?: string | null; // String
+    priceCents?: number | null; // Int
+  }
   UpdateUserInput: { // input type
     city?: string | null; // String
     email?: string | null; // String
@@ -240,6 +251,7 @@ export interface NexusGenObjects {
   Mutation: {};
   Query: {};
   Reminder: prisma.Reminder;
+  Role: prisma.Role;
   Translator: { // root type
     city?: string | null; // String
     createdAt?: NexusGenScalars['DateTime'] | null; // DateTime
@@ -360,6 +372,7 @@ export interface NexusGenFieldTypes {
     getNonUserTranslators: NexusGenRootTypes['GetNonUserTranslatorsResponse']; // GetNonUserTranslatorsResponse!
     getReminder: NexusGenRootTypes['Reminder']; // Reminder!
     getReminders: NexusGenRootTypes['GetRemindersResponse']; // GetRemindersResponse!
+    getRole: NexusGenRootTypes['Role'] | null; // Role
     getTranslator: NexusGenRootTypes['User']; // User!
     getTranslators: NexusGenRootTypes['GetTranslatorsResponse']; // GetTranslatorsResponse!
     getUser: NexusGenRootTypes['User']; // User!
@@ -372,6 +385,11 @@ export interface NexusGenFieldTypes {
     createdById: string | null; // String
     id: string | null; // String
     translatorMessage: string | null; // String
+  }
+  Role: { // field return type
+    name: string | null; // String
+    priceCents: number | null; // Int
+    users: Array<NexusGenRootTypes['User'] | null> | null; // [User]
   }
   Translator: { // field return type
     assignedTo: Array<NexusGenRootTypes['Assignment'] | null> | null; // [Assignment]
@@ -403,6 +421,7 @@ export interface NexusGenFieldTypes {
     nonUserTranslators: Array<NexusGenRootTypes['Translator'] | null> | null; // [Translator]
     phone: string | null; // String
     profilePic: string | null; // String
+    role: NexusGenRootTypes['Role'] | null; // Role
     state: string | null; // String
     translatingFor: Array<NexusGenRootTypes['User'] | null> | null; // [User]
     translators: Array<NexusGenRootTypes['Translator'] | null> | null; // [Translator]
@@ -505,6 +524,7 @@ export interface NexusGenFieldTypeNames {
     getNonUserTranslators: 'GetNonUserTranslatorsResponse'
     getReminder: 'Reminder'
     getReminders: 'GetRemindersResponse'
+    getRole: 'Role'
     getTranslator: 'User'
     getTranslators: 'GetTranslatorsResponse'
     getUser: 'User'
@@ -517,6 +537,11 @@ export interface NexusGenFieldTypeNames {
     createdById: 'String'
     id: 'String'
     translatorMessage: 'String'
+  }
+  Role: { // field return type name
+    name: 'String'
+    priceCents: 'Int'
+    users: 'User'
   }
   Translator: { // field return type name
     assignedTo: 'Assignment'
@@ -548,6 +573,7 @@ export interface NexusGenFieldTypeNames {
     nonUserTranslators: 'Translator'
     phone: 'String'
     profilePic: 'String'
+    role: 'Role'
     state: 'String'
     translatingFor: 'User'
     translators: 'Translator'
@@ -659,6 +685,9 @@ export interface NexusGenArgTypes {
     getReminders: { // args
       input: NexusGenInputs['PaginatedInput']; // PaginatedInput!
       where?: NexusGenInputs['RemindersFilter'] | null; // RemindersFilter
+    }
+    getRole: { // args
+      input: NexusGenInputs['ByIdInput']; // ByIdInput!
     }
     getTranslator: { // args
       input: NexusGenInputs['ByIdInput']; // ByIdInput!

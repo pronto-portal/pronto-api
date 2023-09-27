@@ -32,6 +32,14 @@ model User {
   claimants         Claimant[]    @relation("UserClaimants")
   addresses         Address[]     @relation("UserAddresses")
   reminders         Reminder[]
+  role      Role?   @relation(fields: [roleName], references: [name])
+  roleName String?
+}
+
+model Role {
+  name       String @unique @id @db.VarChar(255)
+  priceCents Int 
+  users      User[]
 }
 
 model NonUserTranslator {
