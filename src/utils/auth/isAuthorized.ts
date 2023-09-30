@@ -24,6 +24,22 @@ export const isAuthorized = async (
     ignoreExpiration: false,
   });
 
+  // console.log("TOKEN VALID", isTokenValid);
+
+  const foundUser = await prisma.user.findUnique({
+    where: {
+      id: decodedToken.id,
+    },
+  });
+
+  // console.log("VALIDATING ROLES");
+  const userHasValidRoles = enforceUserRole(foundUser!, roleName);
+  // console.log("VALIDATED ROLES", userHasValidRoles);
+  if (!userHasValidRoles) {
+    // console.log("User does not have valid roles");
+    return false;
+  }
+
   if (!isTokenValid) {
     // console.log("Invalid token");
 
@@ -59,15 +75,6 @@ export const isAuthorized = async (
       return false;
     }
 
-    const foundUser = await prisma.user.findUnique({
-      where: {
-        id: decodedToken.id,
-      },
-    });
-
-    const userHasValidRoles = enforceUserRole(foundUser!, roleName);
-    if (!userHasValidRoles) return false;
-
     if (foundUser) {
       const newToken = sign(foundUser, process.env.JWT_SECRET!, {
         expiresIn: tokenExpireTime,
@@ -75,8 +82,7 @@ export const isAuthorized = async (
 
       res.cookie("x-access-token", newToken);
     }
-  } else {
-    return false;
   }
+
   return true;
 };

@@ -9,5 +9,6 @@ export const UpdateClaimantInput = inputObjectType({
     t.nullable.string("email");
     t.nullable.string("phone");
     t.nullable.list.nonNull.string("languages");
+    t.nullable.string("primaryLanguage");
   },
 });

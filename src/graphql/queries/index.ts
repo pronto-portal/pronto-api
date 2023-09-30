@@ -5,3 +5,4 @@ export * from "./Assignments";
 export * from "./Claimants";
 export * from "./Reminders";
 export * from "./Roles";
+export * from "./Languages";

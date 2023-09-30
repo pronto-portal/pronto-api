@@ -4,7 +4,7 @@ import { RoleNames } from "../../types";
 export const enforceUserRole = (user?: User, roleName: RoleNames = "basic") => {
   if (!user) return false;
 
-  const userRole: RoleNames = user.roleName as RoleNames;
+  const userRole: RoleNames = (user.roleName || "basic") as RoleNames;
   const userHasRole = userRole === roleName;
 
   if (userHasRole) {

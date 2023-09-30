@@ -8,5 +8,6 @@ export const CreateClaimantInput = inputObjectType({
     t.nullable.string("email");
     t.nonNull.string("phone");
     t.list.nonNull.string("languages");
+    t.nonNull.string("primaryLanguage");
   },
 });

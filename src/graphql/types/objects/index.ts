@@ -11,3 +11,4 @@ export * from "./Claimants/GetClaimants";
 export * from "./Reminder/GetReminders";
 export * from "./Translators/GetNonUserTranslators";
 export * from "./Roles/Roles";
+export * from "./Language/Language";

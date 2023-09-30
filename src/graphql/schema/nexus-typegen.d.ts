@@ -75,6 +75,7 @@ export interface NexusGenInputs {
     firstName?: string | null; // String
     language?: string | null; // String
     lastName?: string | null; // String
+    primaryLanguage?: string | null; // String
   }
   CompleteProfileInput: { // input type
     firstName: string; // String!
@@ -103,6 +104,7 @@ export interface NexusGenInputs {
     languages?: string[] | null; // [String!]
     lastName: string; // String!
     phone: string; // String!
+    primaryLanguage: string; // String!
   }
   CreateReminderInput: { // input type
     assignmentId: string; // String!
@@ -172,6 +174,7 @@ export interface NexusGenInputs {
     languages?: string[] | null; // [String!]
     lastName?: string | null; // String
     phone?: string | null; // String
+    primaryLanguage?: string | null; // String
   }
   UpdateNonUserTranslatorInput: { // input type
     city?: string | null; // String
@@ -248,6 +251,10 @@ export interface NexusGenObjects {
     totalRowCount: number; // Int!
     translators: NexusGenRootTypes['User'][]; // [User!]!
   }
+  Language: { // root type
+    code?: string | null; // String
+    name?: string | null; // String
+  }
   Mutation: {};
   Query: {};
   Reminder: prisma.Reminder;
@@ -310,6 +317,7 @@ export interface NexusGenFieldTypes {
     languages: Array<string | null> | null; // [String]
     lastName: string | null; // String
     phone: string | null; // String
+    primaryLanguage: string | null; // String
     user: NexusGenRootTypes['User'] | null; // User
     userId: string | null; // String
   }
@@ -336,6 +344,10 @@ export interface NexusGenFieldTypes {
   GetTranslatorsResponse: { // field return type
     totalRowCount: number; // Int!
     translators: NexusGenRootTypes['User'][]; // [User!]!
+  }
+  Language: { // field return type
+    code: string | null; // String
+    name: string | null; // String
   }
   Mutation: { // field return type
     addAndCreateTranslator: NexusGenRootTypes['User'] | null; // User
@@ -368,6 +380,7 @@ export interface NexusGenFieldTypes {
     getAssignments: NexusGenRootTypes['GetAssignmentsResponse']; // GetAssignmentsResponse!
     getClaimant: NexusGenRootTypes['Claimant']; // Claimant!
     getClaimants: NexusGenRootTypes['GetClaimantsResponse']; // GetClaimantsResponse!
+    getLanguages: Array<NexusGenRootTypes['Language'] | null> | null; // [Language]
     getNonUserTranslator: NexusGenRootTypes['Translator']; // Translator!
     getNonUserTranslators: NexusGenRootTypes['GetNonUserTranslatorsResponse']; // GetNonUserTranslatorsResponse!
     getReminder: NexusGenRootTypes['Reminder']; // Reminder!
@@ -462,6 +475,7 @@ export interface NexusGenFieldTypeNames {
     languages: 'String'
     lastName: 'String'
     phone: 'String'
+    primaryLanguage: 'String'
     user: 'User'
     userId: 'String'
   }
@@ -488,6 +502,10 @@ export interface NexusGenFieldTypeNames {
   GetTranslatorsResponse: { // field return type name
     totalRowCount: 'Int'
     translators: 'User'
+  }
+  Language: { // field return type name
+    code: 'String'
+    name: 'String'
   }
   Mutation: { // field return type name
     addAndCreateTranslator: 'User'
@@ -520,6 +538,7 @@ export interface NexusGenFieldTypeNames {
     getAssignments: 'GetAssignmentsResponse'
     getClaimant: 'Claimant'
     getClaimants: 'GetClaimantsResponse'
+    getLanguages: 'Language'
     getNonUserTranslator: 'Translator'
     getNonUserTranslators: 'GetNonUserTranslatorsResponse'
     getReminder: 'Reminder'

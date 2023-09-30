@@ -2,6 +2,7 @@ import { extendType, nonNull } from "nexus";
 import { isAuthorized } from "../../../utils/auth/isAuthorized";
 import { CreateReminderInput, ReminderType } from "../../types";
 import { addressToString } from "../../../utils/helper/addressToString";
+import { Translate } from "../../../utils/helper/googleTranslate";
 
 export const CreateReminder = extendType({
   type: "Mutation",
@@ -30,6 +31,8 @@ export const CreateReminder = extendType({
         });
 
         const address = assignment?.address;
+        const claimant = assignment?.claimant;
+
         let defaultReminderMessage = "";
         if (address) {
           const addressString = addressToString({
@@ -45,10 +48,21 @@ export const CreateReminder = extendType({
 
         if (!assignment) throw new Error("You do not own this assignment");
 
+        let translatedClaimantMessage =
+          claimantMessage || defaultReminderMessage;
+
+        if (claimant) {
+          const [translations] = await Translate.translate(
+            claimantMessage || defaultReminderMessage,
+            claimant.primaryLanguage || "en"
+          );
+
+          translatedClaimantMessage = translations;
+        }
         const reminder = await prisma.reminder.create({
           data: {
             translatorMessage: translatorMessage || defaultReminderMessage,
-            claimantMessage: claimantMessage || defaultReminderMessage,
+            claimantMessage: translatedClaimantMessage,
             assignment: {
               connect: {
                 id: assignmentId,

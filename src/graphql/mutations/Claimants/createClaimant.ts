@@ -12,9 +12,14 @@ export const CreateClaimant = extendType({
         input: nonNull(CreateClaimantInput),
       },
       async resolve(_, { input }, { prisma, user }) {
-        const { email, firstName, lastName, phone, languages } = input;
-
-        console.log("CREATING CLAIMANT", input);
+        const {
+          email,
+          firstName,
+          lastName,
+          phone,
+          languages,
+          primaryLanguage,
+        } = input;
 
         if (!email) throw new Error("Email required");
 
@@ -25,6 +30,7 @@ export const CreateClaimant = extendType({
             lastName,
             phone,
             languages: languages ?? [],
+            primaryLanguage,
             user: {
               connect: {
                 id: user.id,

@@ -84,6 +84,7 @@ type Claimant {
   languages: [String]
   lastName: String
   phone: String
+  primaryLanguage: String
   user: User
   userId: String
 }
@@ -92,6 +93,7 @@ input ClaimantsFilter {
   firstName: String
   language: String
   lastName: String
+  primaryLanguage: String
 }
 
 input CompleteProfileInput {
@@ -124,6 +126,7 @@ input CreateClaimantInput {
   languages: [String!]
   lastName: String!
   phone: String!
+  primaryLanguage: String!
 }
 
 input CreateReminderInput {
@@ -192,6 +195,11 @@ type GetTranslatorsResponse {
   translators: [User!]!
 }
 
+type Language {
+  code: String
+  name: String
+}
+
 type Mutation {
   addAndCreateTranslator(input: AddAndCreateTranslatorInput!): User
   addNonUserTranslator(input: AddNonUserTranslatorInput!): Translator
@@ -229,6 +237,7 @@ type Query {
   getAssignments(input: PaginatedInput!, where: AssignmentsFilter): GetAssignmentsResponse!
   getClaimant(input: ByIdInput!): Claimant!
   getClaimants(input: PaginatedInput, where: ClaimantsFilter): GetClaimantsResponse!
+  getLanguages: [Language]
   getNonUserTranslator(input: ByIdInput!): Translator!
   getNonUserTranslators(input: PaginatedInput, where: TranslatorsFilter): GetNonUserTranslatorsResponse!
   getReminder(input: ByIdInput!): Reminder!
@@ -312,6 +321,7 @@ input UpdateClaimantInput {
   languages: [String!]
   lastName: String
   phone: String
+  primaryLanguage: String
 }
 
 input UpdateNonUserTranslatorInput {

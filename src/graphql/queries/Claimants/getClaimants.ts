@@ -27,6 +27,9 @@ export const GetClaimants = extendType({
                   languages: {
                     has: where.language,
                   },
+                  primaryLanguage: {
+                    equals: where.primaryLanguage || undefined,
+                  },
                 }
               : {}),
           },

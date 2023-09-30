@@ -11,7 +11,15 @@ export const UpdateClaimant = extendType({
       },
       authorize: async (_, __, ctx) => await isAuthorized(ctx),
       async resolve(_, { input }, { prisma, user }) {
-        const { id, firstName, lastName, email, phone, languages } = input;
+        const {
+          id,
+          firstName,
+          lastName,
+          email,
+          phone,
+          languages,
+          primaryLanguage,
+        } = input;
 
         const claimant = await prisma.claimant.update({
           where: { id, userId: user.id },
@@ -20,6 +28,7 @@ export const UpdateClaimant = extendType({
             lastName: lastName || undefined,
             email: email || undefined,
             phone: phone || undefined,
+            primaryLanguage: primaryLanguage || undefined,
             languages: languages || undefined,
           },
         });

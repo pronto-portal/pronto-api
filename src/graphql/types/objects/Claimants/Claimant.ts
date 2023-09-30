@@ -1,7 +1,6 @@
 import { objectType } from "nexus";
 import { Context } from "../../../schema/context";
 import { AssignmentType } from "../Assignments/Assignment";
-import { Assignment, Claimant } from "@prisma/client";
 import { UserType } from "../User/User";
 
 export const ClaimantType = objectType({
@@ -43,5 +42,6 @@ export const ClaimantType = objectType({
         },
       });
     t.list.string("languages");
+    t.string("primaryLanguage");
   },
 });
