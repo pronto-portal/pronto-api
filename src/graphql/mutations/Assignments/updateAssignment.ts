@@ -21,6 +21,7 @@ export const UpdateAssignment = extendType({
           claimantNoShow,
           translatorNoShow,
           dateTime,
+          address,
         } = input;
 
         let updateData: DynamicUpdate = {
@@ -73,7 +74,23 @@ export const UpdateAssignment = extendType({
             id,
             createdByUserId: user.id,
           },
-          data: updateData,
+          data: {
+            ...updateData,
+            ...(address
+              ? {
+                  address: {
+                    update: {
+                      id: address.id,
+                      address1: address.address1 || undefined,
+                      address2: address.address2 || undefined,
+                      city: address.city || undefined,
+                      state: address.state || undefined,
+                      zipCode: address.zipCode || undefined,
+                    },
+                  },
+                }
+              : {}),
+          },
           include: {
             reminder: true,
           },

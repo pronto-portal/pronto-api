@@ -304,6 +304,7 @@ input UpdateAddressInput {
 }
 
 input UpdateAssignmentInput {
+  address: UpdateAddressInput
   addressId: String
   claimantId: String
   claimantNoShow: Boolean

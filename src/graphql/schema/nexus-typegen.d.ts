@@ -158,6 +158,7 @@ export interface NexusGenInputs {
     zipCode?: string | null; // String
   }
   UpdateAssignmentInput: { // input type
+    address?: NexusGenInputs['UpdateAddressInput'] | null; // UpdateAddressInput
     addressId?: string | null; // String
     claimantId?: string | null; // String
     claimantNoShow?: boolean | null; // Boolean
