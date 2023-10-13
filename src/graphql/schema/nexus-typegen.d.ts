@@ -388,7 +388,7 @@ export interface NexusGenFieldTypes {
     getReminder: NexusGenRootTypes['Reminder']; // Reminder!
     getReminders: NexusGenRootTypes['GetRemindersResponse']; // GetRemindersResponse!
     getRole: NexusGenRootTypes['Role'] | null; // Role
-    getRoles: NexusGenRootTypes['Role'] | null; // Role
+    getRoles: Array<NexusGenRootTypes['Role'] | null> | null; // [Role]
     getTranslator: NexusGenRootTypes['User']; // User!
     getTranslators: NexusGenRootTypes['GetTranslatorsResponse']; // GetTranslatorsResponse!
     getUser: NexusGenRootTypes['User']; // User!

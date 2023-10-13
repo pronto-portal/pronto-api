@@ -243,7 +243,7 @@ type Query {
   getReminder(input: ByIdInput!): Reminder!
   getReminders(input: PaginatedInput!, where: RemindersFilter): GetRemindersResponse!
   getRole(input: ByIdInput!): Role
-  getRoles: Role
+  getRoles: [Role]
   getTranslator(input: ByIdInput!): User!
   getTranslators(input: PaginatedInput, where: TranslatorsFilter): GetTranslatorsResponse!
   getUser: User!
