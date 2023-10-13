@@ -264,6 +264,7 @@ input RemindersFilter {
 }
 
 type Role {
+  description: String
   name: String
   priceCents: Int
   users: [User]
@@ -343,6 +344,7 @@ input UpdateReminderInput {
 }
 
 input UpdateRoleInput {
+  description: String
   name: String
   priceCents: Int
 }

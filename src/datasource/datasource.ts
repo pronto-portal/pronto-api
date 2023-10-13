@@ -9,18 +9,22 @@ const getAppDataSource = () => {
   const roles: Role[] = [
     {
       name: "basic",
+      description: "Basic tier",
       priceCents: 0,
     },
     {
       name: "premium",
+      description: "Premium tier",
       priceCents: 2500,
     },
     {
       name: "unlimited",
+      description: "Unlimited tier",
       priceCents: 5000,
     },
     {
       name: "admin",
+      description: "Admin tier",
       priceCents: 0,
     },
   ];

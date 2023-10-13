@@ -39,6 +39,7 @@ model User {
 model Role {
   name       String @unique @id @db.VarChar(255)
   priceCents Int 
+  description String?
   users      User[]
 }
 

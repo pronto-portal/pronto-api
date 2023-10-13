@@ -16,8 +16,9 @@ export const updateRole = extendType({
             name: input.name,
           },
           data: {
-            name: input.name,
-            priceCents: input.priceCents,
+            name: input.name || undefined,
+            priceCents: input.priceCents || undefined,
+            description: input.description || undefined,
           },
         });
 

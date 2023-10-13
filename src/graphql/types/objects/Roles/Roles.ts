@@ -5,6 +5,11 @@ export const RoleType = objectType({
   name: "Role",
   definition(t) {
     t.string("name");
+    t.string("description", {
+      resolve(root) {
+        return root.description;
+      },
+    });
     t.int("priceCents");
     t.field("users", {
       type: list("User"),

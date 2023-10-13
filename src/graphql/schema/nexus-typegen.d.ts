@@ -193,6 +193,7 @@ export interface NexusGenInputs {
     translatorMessage?: string | null; // String
   }
   UpdateRoleInput: { // input type
+    description?: string | null; // String
     name?: string | null; // String
     priceCents?: number | null; // Int
   }
@@ -401,6 +402,7 @@ export interface NexusGenFieldTypes {
     translatorMessage: string | null; // String
   }
   Role: { // field return type
+    description: string | null; // String
     name: string | null; // String
     priceCents: number | null; // Int
     users: Array<NexusGenRootTypes['User'] | null> | null; // [User]
@@ -559,6 +561,7 @@ export interface NexusGenFieldTypeNames {
     translatorMessage: 'String'
   }
   Role: { // field return type name
+    description: 'String'
     name: 'String'
     priceCents: 'Int'
     users: 'User'
