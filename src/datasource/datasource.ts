@@ -288,4 +288,5 @@ const getAppDataSource = () => {
   return xprisma;
 };
 
-export default getAppDataSource;
+const datasource = getAppDataSource();
+export default datasource;

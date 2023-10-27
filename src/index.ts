@@ -4,7 +4,7 @@ import { expressMiddleware } from "@apollo/server/express4";
 import express from "express";
 import { json } from "body-parser";
 import cors from "cors";
-import getAppDataSource from "./datasource/datasource";
+import datasource from "./datasource/datasource";
 import schema from "./graphql/schema/schema";
 import cookieParser from "cookie-parser";
 import jwt from "jsonwebtoken";
@@ -12,9 +12,11 @@ import { User } from "@prisma/client";
 import http from "http";
 import { parseAuthHeader } from "./utils/auth/parseAuthHeader";
 import { eventBridge } from "./aws/eventBridge";
+import stripeRoutes from "./routes/stripe";
+import { isAuthorizedBase } from "./utils/auth/isAuthorizedBase";
 
 const main = async () => {
-  const prisma = getAppDataSource();
+  const prisma = datasource;
   const app = express();
   const httpServer = http.createServer(app);
 
@@ -27,7 +29,7 @@ const main = async () => {
 
   app.use(cookieParser());
   app.use(
-    "/",
+    "/graphql",
     cors({
       origin: ["http://localhost:3000", process.env.API_GATEWAY_DNS!], // frontend domain
       credentials: true,
@@ -63,6 +65,8 @@ const main = async () => {
       },
     })
   );
+
+  app.use("/stripe", stripeRoutes);
 
   await new Promise<void>((resolve) =>
     httpServer.listen({ port: 4000 }, resolve)
