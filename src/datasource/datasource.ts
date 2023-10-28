@@ -5,50 +5,6 @@ import { dateToCron } from "../utils/helper/dateToCron";
 const getAppDataSource = () => {
   const prisma = new PrismaClient();
 
-  // seed roles
-  const roles: Role[] = [
-    {
-      name: "basic",
-      description: "Basic tier",
-      priceCents: 0,
-    },
-    {
-      name: "premium",
-      description: "Premium tier",
-      priceCents: 2500,
-    },
-    {
-      name: "unlimited",
-      description: "Unlimited tier",
-      priceCents: 5000,
-    },
-    {
-      name: "admin",
-      description: "Admin tier",
-      priceCents: 0,
-    },
-  ];
-
-  Promise.all(
-    roles.map(async (role) => {
-      return await prisma.role.upsert({
-        where: {
-          name: role.name,
-        },
-        update: {},
-        create: role,
-      });
-    })
-  )
-    .then((res) => {
-      if (res) {
-        console.log("Seeded roles");
-      }
-    })
-    .catch(() => {
-      console.error("Failed to seed roles");
-    });
-
   const xprisma = prisma.$extends({
     query: {
       reminder: {

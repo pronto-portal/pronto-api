@@ -12,11 +12,12 @@ export const onSubscriptionCreate = async (event: Event<Subscription>) => {
   const invoiceId = (subscription.latest_invoice || "")?.toString();
   const invoice = await stripeClient.invoices.retrieve(invoiceId);
   const email = invoice.customer_email || "";
+  console.log("subscription", subscription);
   const productId = subscription.items.data[0].price.product.toString();
   const product = await stripeClient.products.retrieve(productId);
   const name = product.name;
 
-  await Prisma.user.update({
+  const updatedUser = await Prisma.user.update({
     where: {
       email,
     },
@@ -27,5 +28,12 @@ export const onSubscriptionCreate = async (event: Event<Subscription>) => {
         },
       },
     },
+    include: {
+      role: true,
+    },
   });
+
+  console.log("updatedUser", updatedUser);
+
+  return updatedUser;
 };

@@ -4,7 +4,7 @@ import { BaseError } from "../types/errors";
 import { isAuthorizedExpress } from "../utils/auth/isAuthorizedExpress";
 import prisma from "../datasource/datasource";
 import stripe from "../datasource/stripe";
-import { onProductCreate } from "./onProductCreate";
+import { onPriceCreate } from "./onPriceCreate";
 import { onProductDelete } from "./onProductDelete";
 import { onSubscriptionCreate } from "./onSubscriptionCreate";
 import { onSubscriptionDelete } from "./onSubscriptionDelete";
@@ -92,8 +92,8 @@ router.post(
     let subscription;
     let status;
 
-    console.log("Event Type", event.type);
-    console.log("Event Data", event);
+    // console.log("Event Type", event.type);
+    // console.log("Event Data", event);
     // Handle the event
     switch (event.type) {
       case "customer.subscription.trial_will_end":
@@ -116,8 +116,8 @@ router.post(
         // Then define and call a method to handle the subscription update.
         // handleSubscriptionUpdated(subscription);
         break;
-      case "product.created":
-        onProductCreate(event);
+      case "price.created":
+        onPriceCreate(event);
         break;
       case "product.deleted":
         onProductDelete(event);
