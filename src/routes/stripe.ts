@@ -2,12 +2,11 @@
 import { Router, raw } from "express";
 import { BaseError } from "../types/errors";
 import { isAuthorizedExpress } from "../utils/auth/isAuthorizedExpress";
-import prisma from "../datasource/datasource";
 import stripe from "../datasource/stripe";
-import { onPriceCreate } from "./onPriceCreate";
 import { onProductDelete } from "./onProductDelete";
 import { onSubscriptionCreate } from "./onSubscriptionCreate";
 import { onSubscriptionDelete } from "./onSubscriptionDelete";
+import { onProductUpdated } from "./onProductUpdated";
 
 const router = Router();
 
@@ -92,7 +91,7 @@ router.post(
     let subscription;
     let status;
 
-    // console.log("Event Type", event.type);
+    console.log("Event Type", event.type);
     // console.log("Event Data", event);
     // Handle the event
     switch (event.type) {
@@ -116,8 +115,9 @@ router.post(
         // Then define and call a method to handle the subscription update.
         // handleSubscriptionUpdated(subscription);
         break;
-      case "price.created":
-        onPriceCreate(event);
+
+      case "product.updated":
+        onProductUpdated(event);
         break;
       case "product.deleted":
         onProductDelete(event);
