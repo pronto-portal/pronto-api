@@ -24,6 +24,7 @@ export const onProductUpdated = async (event: Event<Product>) => {
         description,
         priceCents,
         features,
+        stripePriceId: priceId,
       };
 
       const role = await Prisma.role.upsert({

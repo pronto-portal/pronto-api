@@ -8,57 +8,58 @@ datasource db {
 }
 
 model User {
-  id                String        @id @default(uuid())
-  createdAt         DateTime      @default(now())
-  updatedAt         DateTime      @updatedAt
-  email             String        @unique() @db.VarChar(120)
-  phone             String?       @db.VarChar(30)
-  firstName         String?       @db.VarChar(120)
-  lastName          String?       @db.VarChar(120)
-  profilePic        String?       @default("") @db.VarChar(255)
-  isManager         Boolean       @default(false)
-  isTranslator      Boolean       @default(false)
-  isBanned          Boolean       @default(false)
-  assignments       Assignment[]  @relation("createdAssignments")
-  assignedTo        Assignment[]  @relation("taskedAssignments")
-  token             RefreshToken?
-  isProfileComplete Boolean       @default(false)
-  city              String?
-  state             String?
-  languages         String[]      @default([])
-  translators       User[]        @relation("UserTranslators")
-  translatingFor    User[]        @relation("UserTranslators")
+  id                 String              @id @default(uuid())
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
+  email              String              @unique() @db.VarChar(120)
+  phone              String?             @db.VarChar(30)
+  firstName          String?             @db.VarChar(120)
+  lastName           String?             @db.VarChar(120)
+  profilePic         String?             @default("") @db.VarChar(255)
+  isManager          Boolean             @default(false)
+  isTranslator       Boolean             @default(false)
+  isBanned           Boolean             @default(false)
+  assignments        Assignment[]        @relation("createdAssignments")
+  assignedTo         Assignment[]        @relation("taskedAssignments")
+  token              RefreshToken?
+  isProfileComplete  Boolean             @default(false)
+  city               String?
+  state              String?
+  languages          String[]            @default([])
+  translators        User[]              @relation("UserTranslators")
+  translatingFor     User[]              @relation("UserTranslators")
   nonUserTranslators NonUserTranslator[] @relation("nonUserTranslators")
-  claimants         Claimant[]    @relation("UserClaimants")
-  addresses         Address[]     @relation("UserAddresses")
-  reminders         Reminder[]
-  role      Role?   @relation(fields: [roleName], references: [name], onDelete: SetNull, onUpdate: Cascade)
-  roleName String?
+  claimants          Claimant[]          @relation("UserClaimants")
+  addresses          Address[]           @relation("UserAddresses")
+  reminders          Reminder[]
+  role               Role?               @relation(fields: [roleName], references: [name], onDelete: SetNull, onUpdate: Cascade)
+  roleName           String?
 }
 
 model Role {
-  name       String @unique @id @db.VarChar(255)
-  priceCents Int 
-  description String?
-  features   String[]
-  users      User[]
+  name          String   @id @unique @db.VarChar(255)
+  priceCents    Int
+  description   String?
+  features      String[]
+  users         User[]
+  stripePriceId String?  @unique
 }
 
 model NonUserTranslator {
-  id                String        @id @default(uuid())
-  createdAt         DateTime      @default(now())
-  updatedAt         DateTime      @updatedAt
-  email             String        @unique() @db.VarChar(120)
-  phone             String?       @db.VarChar(30)
-  firstName         String?       @db.VarChar(120)
-  lastName          String?       @db.VarChar(120)
-  profilePic        String?       @default("") @db.VarChar(255)
-  assignedTo        Assignment[]  @relation("nonUserTaskedAssignments")
-  city              String?
-  state             String?
-  languages         String[]      @default([])
-  createdBy         User          @relation("nonUserTranslators", fields: [createdById], references: [id])
-  createdById       String
+  id          String       @id @default(uuid())
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  email       String       @unique() @db.VarChar(120)
+  phone       String?      @db.VarChar(30)
+  firstName   String?      @db.VarChar(120)
+  lastName    String?      @db.VarChar(120)
+  profilePic  String?      @default("") @db.VarChar(255)
+  assignedTo  Assignment[] @relation("nonUserTaskedAssignments")
+  city        String?
+  state       String?
+  languages   String[]     @default([])
+  createdBy   User         @relation("nonUserTranslators", fields: [createdById], references: [id])
+  createdById String
 }
 
 model RefreshToken {
@@ -69,56 +70,56 @@ model RefreshToken {
 }
 
 model Assignment {
-  id               String    @id @default(uuid())
-  createdAt        DateTime  @default(now())
-  assignedToUser       User?      @relation("taskedAssignments", fields: [assignedToUserId], references: [id])
+  id               String             @id @default(uuid())
+  createdAt        DateTime           @default(now())
+  assignedToUser   User?              @relation("taskedAssignments", fields: [assignedToUserId], references: [id])
   assignedToUserId String?
-  createdBy        User      @relation("createdAssignments", fields: [createdByUserId], references: [id])
+  createdBy        User               @relation("createdAssignments", fields: [createdByUserId], references: [id])
   createdByUserId  String
-  claimant         Claimant? @relation(fields: [claimantId], references: [id], onDelete: SetNull)
-  claimantId       String? 
+  claimant         Claimant?          @relation(fields: [claimantId], references: [id], onDelete: SetNull)
+  claimantId       String?
   dateTime         DateTime
-  address          Address?  @relation(fields: [addressId], references: [id], onDelete: SetNull)
+  address          Address?           @relation(fields: [addressId], references: [id], onDelete: SetNull)
   addressId        String?
-  isComplete       Boolean   @default(false)
-  claimantNoShow   Boolean   @default(false)
-  translatorNoShow Boolean   @default(false)
+  isComplete       Boolean            @default(false)
+  claimantNoShow   Boolean            @default(false)
+  translatorNoShow Boolean            @default(false)
   reminder         Reminder?
   assignedTo       NonUserTranslator? @relation("nonUserTaskedAssignments", fields: [assignedToId], references: [id])
   assignedToId     String?
 }
 
 model Claimant {
-  id                String     @id @default(uuid())
-  user              User       @relation("UserClaimants", fields: [userId], references: [id])
-  userId            String
-  firstName         String     @db.VarChar(120)
-  lastName          String     @db.VarChar(120)
-  email             String     @db.VarChar(120)
-  phone             String     @db.VarChar(30)
-  assignment        Assignment[]
-  languages         String[]   @default([])
-  primaryLanguage   String?    @db.VarChar(120)
+  id              String       @id @default(uuid())
+  user            User         @relation("UserClaimants", fields: [userId], references: [id])
+  userId          String
+  firstName       String       @db.VarChar(120)
+  lastName        String       @db.VarChar(120)
+  email           String       @db.VarChar(120)
+  phone           String       @db.VarChar(30)
+  assignment      Assignment[]
+  languages       String[]     @default([])
+  primaryLanguage String?      @db.VarChar(120)
 }
 
 model Address {
-  id           String     @id @default(uuid())
-  user         User       @relation("UserAddresses", fields: [userId], references: [id])
-  userId       String
-  address1     String     @db.VarChar(255)
-  address2     String?     @db.VarChar(255)
-  city         String     @db.VarChar(255)
-  state        String     @db.VarChar(2)
-  zipCode      String     @db.VarChar(32)
-  assignment   Assignment[]
+  id         String       @id @default(uuid())
+  user       User         @relation("UserAddresses", fields: [userId], references: [id])
+  userId     String
+  address1   String       @db.VarChar(255)
+  address2   String?      @db.VarChar(255)
+  city       String       @db.VarChar(255)
+  state      String       @db.VarChar(2)
+  zipCode    String       @db.VarChar(32)
+  assignment Assignment[]
 }
 
 model Reminder {
-  id                    String      @id @default(uuid())
-  assignment            Assignment  @relation(fields: [assignmentId], references: [id])
-  assignmentId          String      @unique
-  claimantMessage       String
-  translatorMessage     String
-  createdBy             User        @relation(fields: [createdById], references: [id])
-  createdById           String
+  id                String     @id @default(uuid())
+  assignment        Assignment @relation(fields: [assignmentId], references: [id])
+  assignmentId      String     @unique
+  claimantMessage   String
+  translatorMessage String
+  createdBy         User       @relation(fields: [createdById], references: [id])
+  createdById       String
 }

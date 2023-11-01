@@ -16,15 +16,11 @@ router.post(
   "/create-checkout-session",
   isAuthorizedExpress,
   async (req, res) => {
-    const prices = await stripe.prices.list({
-      lookup_keys: [req.body.lookup_key],
-      expand: ["data.product"],
-    });
     const session = await stripe.checkout.sessions.create({
       billing_address_collection: "auto",
       line_items: [
         {
-          price: prices.data[0].id,
+          price: req.body.priceId,
           // For metered billing, do not pass quantity
           quantity: 1,
         },
