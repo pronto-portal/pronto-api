@@ -18,7 +18,7 @@ export const onProductUpdated = async (event: Event<Product>) => {
     const description = product.description;
     const name = product.name;
 
-    if (priceCents) {
+    if (priceCents !== null) {
       const data = {
         name,
         description,
@@ -26,6 +26,8 @@ export const onProductUpdated = async (event: Event<Product>) => {
         features,
         stripePriceId: priceId,
       };
+
+      console.log("onProductUpdated data", data);
 
       const role = await Prisma.role.upsert({
         where: {

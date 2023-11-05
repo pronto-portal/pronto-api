@@ -266,8 +266,10 @@ input RemindersFilter {
 
 type Role {
   description: String
+  features: [String!]
   name: String
   priceCents: Int
+  stripePriceId: String
   users: [User]
 }
 

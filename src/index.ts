@@ -3,7 +3,7 @@ import { ApolloServerPluginDrainHttpServer } from "@apollo/server/plugin/drainHt
 import { expressMiddleware } from "@apollo/server/express4";
 import express from "express";
 import { json } from "body-parser";
-import cors from "cors";
+import corsConfig from "./utils/config/cors";
 import datasource from "./datasource/datasource";
 import schema from "./graphql/schema/schema";
 import cookieParser from "cookie-parser";
@@ -27,25 +27,11 @@ const main = async () => {
 
   await server.start();
 
+  app.use(corsConfig);
   app.use(cookieParser());
+  app.use(json());
   app.use(
     "/graphql",
-    cors({
-      origin: ["http://localhost:3000", process.env.API_GATEWAY_DNS!], // frontend domain
-      credentials: true,
-      methods: ["POST", "GET", "OPTIONS"],
-      exposedHeaders: ["set-cookie", "Cookie"],
-      allowedHeaders: [
-        "set-cookie",
-        "Cookie",
-        "Content-Type",
-        "Origin",
-        "Accept",
-        "X-XSS-Protection",
-        "Authorization",
-      ],
-    }),
-    json(),
     expressMiddleware(server, {
       context: async ({ req, res }) => {
         // API Gateway event and Lambda Context

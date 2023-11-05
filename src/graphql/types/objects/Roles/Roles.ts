@@ -25,5 +25,7 @@ export const RoleType = objectType({
         return users;
       },
     });
+    t.list.nonNull.string("features");
+    t.string("stripePriceId", { resolve: (root) => root.stripePriceId });
   },
 });

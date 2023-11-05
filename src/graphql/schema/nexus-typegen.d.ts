@@ -404,8 +404,10 @@ export interface NexusGenFieldTypes {
   }
   Role: { // field return type
     description: string | null; // String
+    features: string[] | null; // [String!]
     name: string | null; // String
     priceCents: number | null; // Int
+    stripePriceId: string | null; // String
     users: Array<NexusGenRootTypes['User'] | null> | null; // [User]
   }
   Translator: { // field return type
@@ -564,8 +566,10 @@ export interface NexusGenFieldTypeNames {
   }
   Role: { // field return type name
     description: 'String'
+    features: 'String'
     name: 'String'
     priceCents: 'Int'
+    stripePriceId: 'String'
     users: 'User'
   }
   Translator: { // field return type name

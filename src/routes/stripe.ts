@@ -12,32 +12,28 @@ const router = Router();
 
 const YOUR_DOMAIN = "http://localhost:4000";
 
-router.post(
-  "/create-checkout-session",
-  isAuthorizedExpress,
-  async (req, res) => {
-    const session = await stripe.checkout.sessions.create({
-      billing_address_collection: "auto",
-      line_items: [
-        {
-          price: req.body.priceId,
-          // For metered billing, do not pass quantity
-          quantity: 1,
-        },
-      ],
-      mode: "subscription",
-      success_url: `${YOUR_DOMAIN}/?success=true&session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${YOUR_DOMAIN}?canceled=true`,
-    });
+router.post("/create-checkout-session", async (req, res) => {
+  const session = await stripe.checkout.sessions.create({
+    ui_mode: "embedded",
+    line_items: [
+      {
+        // Provide the exact Price ID (for example, pr_1234) of the product you want to sell
+        price: `${req.body.priceId}`,
+        quantity: 1,
+      },
+    ],
+    mode: "subscription",
+    return_url: `${YOUR_DOMAIN}/return?session_id={CHECKOUT_SESSION_ID}`,
+    automatic_tax: { enabled: true },
+  });
 
-    const sessionUrl = session.url!;
-    res.redirect(303, sessionUrl);
-  }
-);
+  res.send({ clientSecret: session.client_secret });
+});
 
 router.post("/create-portal-session", isAuthorizedExpress, async (req, res) => {
   // For demonstration purposes, we're using the Checkout session to retrieve the customer ID.
   // Typically this is stored alongside the authenticated user in your database.
+  console.log("Attempting to create checkout session");
   const { session_id } = req.body;
   const checkoutSession = await stripe.checkout.sessions.retrieve(session_id);
 
@@ -45,12 +41,21 @@ router.post("/create-portal-session", isAuthorizedExpress, async (req, res) => {
   // managing their billing with the portal.
   const returnUrl = YOUR_DOMAIN;
 
-  const portalSession = await stripe.billingPortal.sessions.create({
-    customer: checkoutSession.customer!.toString(),
-    return_url: returnUrl,
-  });
+  const portalSession = await stripe.billingPortal.sessions
+    .create({
+      customer: checkoutSession.customer!.toString(),
+      return_url: returnUrl,
+    })
+    .then((portalSession) => {
+      console.log("Portal Session", portalSession);
 
-  res.redirect(303, portalSession.url);
+      res.redirect(303, portalSession.url);
+
+      return portalSession;
+    })
+    .catch((err) => {
+      console.log("Error", err);
+    });
 });
 
 router.post(
