@@ -14,7 +14,6 @@ const YOUR_DOMAIN = "http://localhost:4000";
 
 router.post("/create-checkout-session", async (req, res) => {
   const session = await stripe.checkout.sessions.create({
-    ui_mode: "embedded",
     line_items: [
       {
         // Provide the exact Price ID (for example, pr_1234) of the product you want to sell
@@ -23,11 +22,15 @@ router.post("/create-checkout-session", async (req, res) => {
       },
     ],
     mode: "subscription",
-    return_url: `${YOUR_DOMAIN}/return?session_id={CHECKOUT_SESSION_ID}`,
+    success_url: `${YOUR_DOMAIN}/success`,
+    cancel_url: `${YOUR_DOMAIN}/cancel`,
     automatic_tax: { enabled: true },
   });
 
-  res.send({ clientSecret: session.client_secret });
+  console.log("SESSION URL", session.url);
+  if (session && session.url)
+    res.status(200).json({ checkoutUrl: session.url });
+  else res.sendStatus(500);
 });
 
 router.post("/create-portal-session", isAuthorizedExpress, async (req, res) => {
