@@ -22,8 +22,8 @@ router.post("/create-checkout-session", async (req, res) => {
       },
     ],
     mode: "subscription",
-    success_url: `${YOUR_DOMAIN}/success`,
-    cancel_url: `${YOUR_DOMAIN}/cancel`,
+    success_url: `${YOUR_DOMAIN}/subscribe/success`,
+    cancel_url: `${YOUR_DOMAIN}/subscribe/cancel`,
     automatic_tax: { enabled: true },
   });
 
@@ -79,6 +79,9 @@ router.post(
       const signature = request.headers["stripe-signature"];
       try {
         console.log("endpointSecret exists!");
+
+        console.log("Request Body", request.body);
+        console.log("Signature", signature);
         event = stripe.webhooks.constructEvent(
           request.body,
           signature!,

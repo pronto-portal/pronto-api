@@ -29,6 +29,8 @@ const main = async () => {
 
   app.use(corsConfig);
   app.use(cookieParser());
+
+  app.use("/stripe", stripeRoutes);
   app.use(json());
   app.use(
     "/graphql",
@@ -51,8 +53,6 @@ const main = async () => {
       },
     })
   );
-
-  app.use("/stripe", stripeRoutes);
 
   await new Promise<void>((resolve) =>
     httpServer.listen({ port: 4000 }, resolve)
