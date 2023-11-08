@@ -24,8 +24,8 @@ router.post("/create-checkout-session", json(), async (req, res) => {
         },
       ],
       mode: "subscription",
-      success_url: `${YOUR_DOMAIN}/subscribe/success`,
-      cancel_url: `${YOUR_DOMAIN}/subscribe/cancel`,
+      success_url: `${process.env.FRONTEND_ORIGIN}/subscribe/manage`,
+      cancel_url: `${process.env.FRONTEND_ORIGIN}/subscribe/manage`,
       automatic_tax: { enabled: true },
     });
 
