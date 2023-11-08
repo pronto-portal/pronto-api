@@ -7,59 +7,75 @@ import { onProductDelete } from "./onProductDelete";
 import { onSubscriptionCreate } from "./onSubscriptionCreate";
 import { onSubscriptionDelete } from "./onSubscriptionDelete";
 import { onProductUpdated } from "./onProductUpdated";
+import { json } from "body-parser";
 
 const router = Router();
 
 const YOUR_DOMAIN = "http://localhost:4000";
 
-router.post("/create-checkout-session", async (req, res) => {
-  const session = await stripe.checkout.sessions.create({
-    line_items: [
-      {
-        // Provide the exact Price ID (for example, pr_1234) of the product you want to sell
-        price: `${req.body.priceId}`,
-        quantity: 1,
-      },
-    ],
-    mode: "subscription",
-    success_url: `${YOUR_DOMAIN}/subscribe/success`,
-    cancel_url: `${YOUR_DOMAIN}/subscribe/cancel`,
-    automatic_tax: { enabled: true },
-  });
-
-  console.log("SESSION URL", session.url);
-  if (session && session.url)
-    res.status(200).json({ checkoutUrl: session.url });
-  else res.sendStatus(500);
-});
-
-router.post("/create-portal-session", isAuthorizedExpress, async (req, res) => {
-  // For demonstration purposes, we're using the Checkout session to retrieve the customer ID.
-  // Typically this is stored alongside the authenticated user in your database.
-  console.log("Attempting to create checkout session");
-  const { session_id } = req.body;
-  const checkoutSession = await stripe.checkout.sessions.retrieve(session_id);
-
-  // This is the url to which the customer will be redirected when they are done
-  // managing their billing with the portal.
-  const returnUrl = YOUR_DOMAIN;
-
-  const portalSession = await stripe.billingPortal.sessions
-    .create({
-      customer: checkoutSession.customer!.toString(),
-      return_url: returnUrl,
-    })
-    .then((portalSession) => {
-      console.log("Portal Session", portalSession);
-
-      res.redirect(303, portalSession.url);
-
-      return portalSession;
-    })
-    .catch((err) => {
-      console.log("Error", err);
+router.post("/create-checkout-session", json(), async (req, res) => {
+  try {
+    const session = await stripe.checkout.sessions.create({
+      line_items: [
+        {
+          // Provide the exact Price ID (for example, pr_1234) of the product you want to sell
+          price: `${req.body.priceId}`,
+          quantity: 1,
+        },
+      ],
+      mode: "subscription",
+      success_url: `${YOUR_DOMAIN}/subscribe/success`,
+      cancel_url: `${YOUR_DOMAIN}/subscribe/cancel`,
+      automatic_tax: { enabled: true },
     });
+
+    console.log("SESSION URL", session.url);
+    if (session && session.url)
+      res.status(200).json({ checkoutUrl: session.url });
+    else
+      res.status(500).json({
+        message: "Error creating checkout session",
+      });
+  } catch (err) {
+    console.log("Error", err);
+    res.status(500).json({
+      message: "Error creating checkout session",
+    });
+  }
 });
+
+router.post(
+  "/create-portal-session",
+  json(),
+  isAuthorizedExpress,
+  async (req, res) => {
+    // For demonstration purposes, we're using the Checkout session to retrieve the customer ID.
+    // Typically this is stored alongside the authenticated user in your database.
+    console.log("Attempting to create checkout session");
+    const { session_id } = req.body;
+    const checkoutSession = await stripe.checkout.sessions.retrieve(session_id);
+
+    // This is the url to which the customer will be redirected when they are done
+    // managing their billing with the portal.
+    const returnUrl = YOUR_DOMAIN;
+
+    const portalSession = await stripe.billingPortal.sessions
+      .create({
+        customer: checkoutSession.customer!.toString(),
+        return_url: returnUrl,
+      })
+      .then((portalSession) => {
+        console.log("Portal Session", portalSession);
+
+        res.redirect(303, portalSession.url);
+
+        return portalSession;
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  }
+);
 
 router.post(
   "/webhook",
@@ -78,10 +94,6 @@ router.post(
       // Get the signature sent by Stripe
       const signature = request.headers["stripe-signature"];
       try {
-        console.log("endpointSecret exists!");
-
-        console.log("Request Body", request.body);
-        console.log("Signature", signature);
         event = stripe.webhooks.constructEvent(
           request.body,
           signature!,
