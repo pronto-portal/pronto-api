@@ -27,5 +27,7 @@ export const RoleType = objectType({
     });
     t.list.nonNull.string("features");
     t.string("stripePriceId", { resolve: (root) => root.stripePriceId });
+    t.int("translatorsLimit", { resolve: (root) => root.translatorsLimit });
+    t.int("remindersLimit", { resolve: (root) => root.remindersLimit });
   },
 });

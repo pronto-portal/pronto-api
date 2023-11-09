@@ -407,7 +407,9 @@ export interface NexusGenFieldTypes {
     features: string[] | null; // [String!]
     name: string | null; // String
     priceCents: number | null; // Int
+    remindersLimit: number | null; // Int
     stripePriceId: string | null; // String
+    translatorsLimit: number | null; // Int
     users: Array<NexusGenRootTypes['User'] | null> | null; // [User]
   }
   Translator: { // field return type
@@ -569,7 +571,9 @@ export interface NexusGenFieldTypeNames {
     features: 'String'
     name: 'String'
     priceCents: 'Int'
+    remindersLimit: 'Int'
     stripePriceId: 'String'
+    translatorsLimit: 'Int'
     users: 'User'
   }
   Translator: { // field return type name

@@ -9,7 +9,8 @@ export const CreateReminder = extendType({
   definition(t) {
     t.nonNull.field("createReminder", {
       type: nonNull(ReminderType),
-      authorize: async (_root, _args, ctx) => await isAuthorized(ctx),
+      authorize: async (_root, _args, ctx) =>
+        await isAuthorized(ctx, "basic", true, "reminders"),
       args: {
         input: nonNull(CreateReminderInput),
       },

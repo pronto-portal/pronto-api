@@ -269,7 +269,9 @@ type Role {
   features: [String!]
   name: String
   priceCents: Int
+  remindersLimit: Int
   stripePriceId: String
+  translatorsLimit: Int
   users: [User]
 }
 

@@ -6,7 +6,8 @@ export const AddNonUserTranslator = extendType({
   definition(t) {
     t.nullable.field("addNonUserTranslator", {
       type: "Translator",
-      authorize: async (_root, _args, ctx) => await isAuthorized(ctx),
+      authorize: async (_root, _args, ctx) =>
+        await isAuthorized(ctx, "basic", true, "translators"),
       args: {
         input: nonNull("AddNonUserTranslatorInput"),
       },

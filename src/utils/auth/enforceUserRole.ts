@@ -1,8 +1,28 @@
 import { User } from "@prisma/client";
 import { RoleNames } from "../../types";
+import prisma from "../../datasource/datasource";
 
-export const enforceUserRole = (user?: User, roleName: RoleNames = "basic") => {
+export const enforceUserRole = async (
+  user?: User,
+  roleName: RoleNames = "basic"
+) => {
   if (!user) return false;
+
+  if (!user.roleName) {
+    // if user does not have a role, give them basic access
+    await prisma.user.update({
+      where: {
+        id: user.id,
+      },
+      data: {
+        role: {
+          connect: {
+            name: "basic",
+          },
+        },
+      },
+    });
+  }
 
   const userRole: RoleNames = (
     user.roleName || "basic"

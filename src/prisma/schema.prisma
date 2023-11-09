@@ -42,6 +42,8 @@ model Role {
   description   String?
   features      String[]
   users         User[]
+  remindersLimit  Int?
+  translatorsLimit Int?
   stripePriceId String?  @unique
 }
 

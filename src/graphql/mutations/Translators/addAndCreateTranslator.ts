@@ -10,7 +10,8 @@ export const AddAndCreateTranslator = extendType({
   definition(t) {
     t.nullable.field("addAndCreateTranslator", {
       type: UserType,
-      authorize: async (_root, _args, ctx) => await isAuthorized(ctx),
+      authorize: async (_root, _args, ctx) =>
+        await isAuthorized(ctx, "basic", true, "translators"),
       args: {
         input: nonNull(AddAndCreateTranslatorInput),
       },

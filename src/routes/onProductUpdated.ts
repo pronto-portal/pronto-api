@@ -15,6 +15,7 @@ export const onProductUpdated = async (event: Event<Product>) => {
     const priceCents = priceObj.unit_amount;
 
     const features = product.features.map((feature) => feature.name);
+    const { translatorsLimit, remindersLimit } = product.metadata;
     const description = product.description;
     const name = product.name;
 
@@ -25,6 +26,8 @@ export const onProductUpdated = async (event: Event<Product>) => {
         priceCents,
         features,
         stripePriceId: priceId,
+        translatorsLimit: +translatorsLimit,
+        remindersLimit: +remindersLimit,
       };
 
       console.log("onProductUpdated data", data);
