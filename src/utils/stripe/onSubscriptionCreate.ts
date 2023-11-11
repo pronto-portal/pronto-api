@@ -1,10 +1,11 @@
 // customer.subscription.created
-import stripeClient from "../datasource/stripe";
-import Prisma from "../datasource/datasource";
-import { Subscription } from "../types/stripe/subscription";
-import { Event } from "../types/stripe/event";
+import stripeClient from "../../datasource/stripe";
+import Prisma from "../../datasource/datasource";
+import { Subscription } from "../../types/stripe/subscription";
+import { Event } from "../../types/stripe/event";
+import moment from "moment";
 
-export const onSubscriptionDelete = async (event: Event<Subscription>) => {
+export const onSubscriptionCreate = async (event: Event<Subscription>) => {
   try {
     const subscriptionResponse = event.data.object;
     const subscription = await stripeClient.subscriptions.retrieve(
@@ -17,23 +18,41 @@ export const onSubscriptionDelete = async (event: Event<Subscription>) => {
     const product = await stripeClient.products.retrieve(productId);
     const name = product.name;
 
-    const updatedUser = await Prisma.user.update({
+    const existingUser = await Prisma.user.findUnique({
       where: {
         email,
-      },
-      data: {
-        role: {
-          disconnect: {
-            name,
-          },
-        },
       },
       include: {
         role: true,
       },
     });
 
-    console.log("updatedUser", updatedUser);
+    const updatedUser = await Prisma.user.update({
+      where: {
+        email,
+      },
+      data: {
+        role: {
+          connect: {
+            name,
+          },
+        },
+        subscriptionId: subscription.id,
+        subscriptionEndDate: moment(
+          subscription.current_period_end * 1000
+        ).toDate(),
+      },
+      include: {
+        role: true,
+      },
+    });
+
+    if (existingUser) {
+      // Cancel current subscription if user already has one
+      if (existingUser.subscriptionId) {
+        stripeClient.subscriptions.cancel(existingUser.subscriptionId);
+      }
+    }
 
     return updatedUser;
   } catch (e) {

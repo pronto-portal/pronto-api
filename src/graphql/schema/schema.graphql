@@ -372,6 +372,7 @@ input UpdateUserInput {
 type User {
   assignedTo: [Assignment]
   assignments: [Assignment]
+  autoRenewSubscription: Boolean
   city: String
   createdAt: DateTime
   email: String!
@@ -386,9 +387,12 @@ type User {
   nonUserTranslators: [Translator]
   phone: String
   profilePic: String
+  remindersCount: Int
   role: Role
   state: String
+  subscriptionEndDate: DateTime
   translatingFor: [User]
   translators: [Translator]
+  translatorsCount: Int
   updatedAt: DateTime
 }

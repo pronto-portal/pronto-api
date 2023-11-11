@@ -3,46 +3,73 @@ import { Router, raw } from "express";
 import { BaseError } from "../types/errors";
 import { isAuthorizedExpress } from "../utils/auth/isAuthorizedExpress";
 import stripe from "../datasource/stripe";
-import { onProductDelete } from "./onProductDelete";
-import { onSubscriptionCreate } from "./onSubscriptionCreate";
-import { onSubscriptionDelete } from "./onSubscriptionDelete";
-import { onProductUpdated } from "./onProductUpdated";
+import prisma from "../datasource/datasource";
+import { onProductDelete } from "../utils/stripe/onProductDelete";
+import { onSubscriptionCreate } from "../utils/stripe/onSubscriptionCreate";
+import { onSubscriptionDelete } from "../utils/stripe/onSubscriptionDelete";
+import { onProductUpdated } from "../utils/stripe/onProductUpdated";
 import { json } from "body-parser";
+import getAuthPayload from "../utils/auth/getAuthPayload";
+import moment from "moment-timezone";
+import onCustomerCreate from "../utils/stripe/onCustomerCreate";
 
 const router = Router();
 
 const YOUR_DOMAIN = "http://localhost:4000";
 
-router.post("/create-checkout-session", json(), async (req, res) => {
-  try {
-    const session = await stripe.checkout.sessions.create({
-      line_items: [
-        {
-          // Provide the exact Price ID (for example, pr_1234) of the product you want to sell
-          price: `${req.body.priceId}`,
-          quantity: 1,
+router.post(
+  "/create-checkout-session",
+  json(),
+  isAuthorizedExpress,
+  async (req, res) => {
+    try {
+      const decodedToken = getAuthPayload(req.headers.authorization)!;
+      const user = await prisma.user.findUnique({
+        where: {
+          id: decodedToken.id,
         },
-      ],
-      mode: "subscription",
-      success_url: `${process.env.FRONTEND_ORIGIN}/subscribe/manage`,
-      cancel_url: `${process.env.FRONTEND_ORIGIN}/subscribe/manage`,
-      automatic_tax: { enabled: true },
-    });
+      });
 
-    console.log("SESSION URL", session.url);
-    if (session && session.url)
-      res.status(200).json({ checkoutUrl: session.url });
-    else
+      if (!user)
+        return res.status(500).json({
+          message: "Error creating checkout session",
+        });
+
+      const stripeUserIdenfitier = user.customerId
+        ? {
+            customer: user.customerId,
+          }
+        : { customer_email: user.email };
+
+      const session = await stripe.checkout.sessions.create({
+        line_items: [
+          {
+            // Provide the exact Price ID (for example, pr_1234) of the product you want to sell
+            price: `${req.body.priceId}`,
+            quantity: 1,
+          },
+        ],
+        mode: "subscription",
+        ...stripeUserIdenfitier,
+        success_url: `${process.env.FRONTEND_ORIGIN}/subscribe/manage`,
+        cancel_url: `${process.env.FRONTEND_ORIGIN}/subscribe/manage`,
+        automatic_tax: { enabled: true },
+      });
+
+      if (session && session.url)
+        res.status(200).json({ checkoutUrl: session.url });
+      else
+        res.status(500).json({
+          message: "Error creating checkout session",
+        });
+    } catch (err) {
+      console.log("Error", err);
       res.status(500).json({
         message: "Error creating checkout session",
       });
-  } catch (err) {
-    console.log("Error", err);
-    res.status(500).json({
-      message: "Error creating checkout session",
-    });
+    }
   }
-});
+);
 
 router.post(
   "/create-portal-session",
@@ -74,6 +101,51 @@ router.post(
       .catch((err) => {
         console.log("Error", err);
       });
+  }
+);
+
+router.post(
+  "/toggle-autorenewal",
+  json(),
+  isAuthorizedExpress,
+  async (req, res) => {
+    console.log("Getting user from token");
+    const decodedToken = getAuthPayload(req.headers.authorization)!;
+
+    console.log("Attempting to cancel subscription");
+    const user = await prisma.user.findUnique({
+      where: {
+        id: decodedToken.id,
+      },
+    });
+
+    if (!user) {
+      return res.status(500).json({
+        message: "Error cancelling subscription",
+      });
+    }
+
+    const subscriptionSetToCancel = await stripe.subscriptions
+      .update(user.subscriptionId!, { cancel_at_period_end: true })
+      .then((sub) => {
+        console.log("Subscription set to cancel success");
+        return sub;
+      })
+      .catch((err) => {
+        console.log("Subscription cancel error", err);
+        return null;
+      });
+
+    if (subscriptionSetToCancel) {
+      const date = moment(subscriptionSetToCancel.current_period_end * 1000);
+      return res.status(200).json({
+        message: `Subscription set to cancel at the end of the current billing period: ${date.toLocaleString()})}`,
+      });
+    }
+
+    return res.status(500).json({
+      message: "Error cancelling subscription",
+    });
   }
 );
 
@@ -114,13 +186,6 @@ router.post(
     // console.log("Event Data", event);
     // Handle the event
     switch (event.type) {
-      case "customer.subscription.trial_will_end":
-        subscription = event.data.object;
-        status = subscription.status;
-        console.log(`Subscription status is ${status}.`);
-        // Then define and call a method to handle the subscription trial ending.
-        // handleSubscriptionTrialEnding(subscription);
-        break;
       case "customer.subscription.deleted":
         onSubscriptionDelete(event);
         break;
@@ -134,7 +199,9 @@ router.post(
         // Then define and call a method to handle the subscription update.
         // handleSubscriptionUpdated(subscription);
         break;
-
+      case "customer.created":
+        onCustomerCreate(event);
+        break;
       case "product.updated":
         onProductUpdated(event);
         break;

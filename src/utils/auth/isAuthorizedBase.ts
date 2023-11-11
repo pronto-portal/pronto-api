@@ -22,16 +22,16 @@ export const isAuthorizedBase = async (
 
   if (!token) return false;
 
-  // console.log("Token found, decoding token");
+  //console.log("Token found, decoding token");
   const decodedToken = decode(token) as User;
 
   // check if token is expired, if it is expired check to see if the user has a valid and unexpired refresh token
-  // console.log("Validating token");
+  //console.log("Validating token");
   const isTokenValid = await isJWTTokenValid(token, {
     ignoreExpiration: false,
   });
 
-  // console.log("TOKEN VALID", isTokenValid);
+  //console.log("TOKEN VALID", isTokenValid);
 
   const foundUser = await prisma.user.findUnique({
     where: {
@@ -39,16 +39,16 @@ export const isAuthorizedBase = async (
     },
   });
 
-  // console.log("VALIDATING ROLES");
-  const userHasValidRoles = enforceUserRole(foundUser!, roleName);
-  // console.log("VALIDATED ROLES", userHasValidRoles);
+  //console.log("VALIDATING ROLES");
+  const userHasValidRoles = await enforceUserRole(foundUser!, roleName);
+  //console.log("VALIDATED ROLES", userHasValidRoles);
   if (!userHasValidRoles) {
-    // console.log("User does not have valid roles");
+    //console.log("User does not have valid roles");
     return false;
   }
 
   if (!isTokenValid) {
-    // console.log("Invalid token");
+    //console.log("Invalid token");
 
     const refreshTokenRecord = await prisma.refreshToken.findUnique({
       where: {
@@ -59,20 +59,20 @@ export const isAuthorizedBase = async (
     const refreshToken: string | undefined = refreshTokenRecord?.token;
     // check if refresh token is expired
     if (!refreshToken) {
-      // console.log("No refresh token found, token cannot be refreshed");
+      //console.log("No refresh token found, token cannot be refreshed");
       return false;
     }
 
-    // console.log("Decrypting refresh token");
+    //console.log("Decrypting refresh token");
     const decryptedRefreshToken = decryptRefreshToken(refreshToken);
 
-    // console.log("Validating refresh token");
+    //console.log("Validating refresh token");
     const isRefreshValid = isRefreshTokenValid(decryptedRefreshToken, {
       ignoreExpiration: false,
     });
 
     if (!isRefreshValid) {
-      // console.log("Invalid refresh token");
+      //console.log("Invalid refresh token");
       await prisma.refreshToken.delete({
         where: {
           id: refreshTokenRecord!.id,
@@ -91,5 +91,6 @@ export const isAuthorizedBase = async (
     }
   }
 
+  //console.log("Token is valid");
   return true;
 };

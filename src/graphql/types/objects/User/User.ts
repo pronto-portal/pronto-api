@@ -118,5 +118,58 @@ export const UserType = objectType({
         return role;
       },
     });
+
+    t.boolean("autoRenewSubscription");
+    t.date("subscriptionEndDate", {
+      resolve: async (root, __, { prisma }: Context) => {
+        const { subscriptionEndDate } = await prisma.user.findUniqueOrThrow({
+          where: {
+            id: root.id,
+          },
+        });
+
+        return subscriptionEndDate;
+      },
+    });
+
+    t.int("translatorsCount", {
+      resolve: async (root, __, { prisma }: Context) => {
+        const u = await prisma.user.findUnique({
+          where: {
+            id: root.id,
+          },
+          select: {
+            _count: {
+              select: {
+                translators: true,
+              },
+            },
+          },
+        });
+
+        const count = u?._count?.translators || 0;
+        return count;
+      },
+    });
+
+    t.int("remindersCount", {
+      resolve: async (root, __, { prisma }: Context) => {
+        const u = await prisma.user.findUnique({
+          where: {
+            id: root.id,
+          },
+          select: {
+            _count: {
+              select: {
+                reminders: true,
+              },
+            },
+          },
+        });
+
+        const count = u?._count?.reminders || 0;
+        return count;
+      },
+    });
   },
 });

@@ -428,6 +428,7 @@ export interface NexusGenFieldTypes {
   User: { // field return type
     assignedTo: Array<NexusGenRootTypes['Assignment'] | null> | null; // [Assignment]
     assignments: Array<NexusGenRootTypes['Assignment'] | null> | null; // [Assignment]
+    autoRenewSubscription: boolean | null; // Boolean
     city: string | null; // String
     createdAt: NexusGenScalars['DateTime'] | null; // DateTime
     email: string; // String!
@@ -442,10 +443,13 @@ export interface NexusGenFieldTypes {
     nonUserTranslators: Array<NexusGenRootTypes['Translator'] | null> | null; // [Translator]
     phone: string | null; // String
     profilePic: string | null; // String
+    remindersCount: number | null; // Int
     role: NexusGenRootTypes['Role'] | null; // Role
     state: string | null; // String
+    subscriptionEndDate: NexusGenScalars['DateTime'] | null; // DateTime
     translatingFor: Array<NexusGenRootTypes['User'] | null> | null; // [User]
     translators: Array<NexusGenRootTypes['Translator'] | null> | null; // [Translator]
+    translatorsCount: number | null; // Int
     updatedAt: NexusGenScalars['DateTime'] | null; // DateTime
   }
 }
@@ -592,6 +596,7 @@ export interface NexusGenFieldTypeNames {
   User: { // field return type name
     assignedTo: 'Assignment'
     assignments: 'Assignment'
+    autoRenewSubscription: 'Boolean'
     city: 'String'
     createdAt: 'DateTime'
     email: 'String'
@@ -606,10 +611,13 @@ export interface NexusGenFieldTypeNames {
     nonUserTranslators: 'Translator'
     phone: 'String'
     profilePic: 'String'
+    remindersCount: 'Int'
     role: 'Role'
     state: 'String'
+    subscriptionEndDate: 'DateTime'
     translatingFor: 'User'
     translators: 'Translator'
+    translatorsCount: 'Int'
     updatedAt: 'DateTime'
   }
 }

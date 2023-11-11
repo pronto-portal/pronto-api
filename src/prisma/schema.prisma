@@ -34,6 +34,10 @@ model User {
   reminders          Reminder[]
   role               Role?               @relation(fields: [roleName], references: [name], onDelete: SetNull, onUpdate: Cascade)
   roleName           String?
+  subscriptionId     String?
+  customerId         String? @unique
+  autoRenewSubscription Boolean @default(true)
+  subscriptionEndDate DateTime?        
 }
 
 model Role {

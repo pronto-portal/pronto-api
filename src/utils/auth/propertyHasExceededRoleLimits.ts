@@ -29,7 +29,7 @@ const propertyHasExceededRoleLimits = async (user: User, property: string) => {
       data: {
         role: {
           connect: {
-            name: "basic",
+            name: "Basic",
           },
         },
       },

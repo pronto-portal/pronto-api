@@ -1,8 +1,8 @@
 // product.created
-import stripeClient from "../datasource/stripe";
-import Prisma from "../datasource/datasource";
-import { Product } from "../types/stripe/product";
-import { Event } from "../types/stripe/event";
+import stripeClient from "../../datasource/stripe";
+import Prisma from "../../datasource/datasource";
+import { Product } from "../../types/stripe/product";
+import { Event } from "../../types/stripe/event";
 
 export const onProductDelete = async (event: Event<Product>) => {
   try {

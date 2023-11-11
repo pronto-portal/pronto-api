@@ -10,18 +10,21 @@ export const enforceUserRole = async (
 
   if (!user.roleName) {
     // if user does not have a role, give them basic access
-    await prisma.user.update({
-      where: {
-        id: user.id,
-      },
-      data: {
-        role: {
-          connect: {
-            name: "basic",
+    await prisma.user
+      .update({
+        where: {
+          id: user.id,
+        },
+        data: {
+          role: {
+            connect: {
+              name: "Basic",
+            },
           },
         },
-      },
-    });
+      })
+      .then(() => console.log("Updated user role to basic"))
+      .catch((err) => console.error(err));
   }
 
   const userRole: RoleNames = (
