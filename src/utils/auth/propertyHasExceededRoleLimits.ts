@@ -1,7 +1,11 @@
 import { Role, User } from "@prisma/client";
 import prisma from "../../datasource/datasource";
+import EnforceLimitOnProperties from "../../types/enforceLimitOnProperties";
 
-const propertyHasExceededRoleLimits = async (user: User, property: string) => {
+const propertyHasExceededRoleLimits = async (
+  user: User,
+  property: EnforceLimitOnProperties
+) => {
   let dbUser = await prisma.user.findUnique({
     where: {
       id: user.id,
@@ -46,7 +50,10 @@ const propertyHasExceededRoleLimits = async (user: User, property: string) => {
     });
   }
 
-  const propertyCount = dbUser._count[property] || 0;
+  const propertyCount =
+    property === "reminders"
+      ? dbUser.remindersCreatedThisMonth
+      : dbUser._count[property] || 0;
   const rolePropertyKey = `${property}Limit` as keyof Role;
   const rolePropertyLimit = dbUser.role![rolePropertyKey] as number;
 

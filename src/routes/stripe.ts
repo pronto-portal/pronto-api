@@ -221,6 +221,9 @@ router.post(
       case "product.deleted":
         onProductDelete(event);
         break;
+      case "invoice.payment_succeeded":
+        console.log("Invoice payment succeeded");
+        break;
       default:
         // Unexpected event type
         console.log(`Unhandled event type ${event.type}.`);

@@ -80,6 +80,19 @@ export const CreateReminder = extendType({
           },
         });
 
+        if (reminder) {
+          await prisma.user.update({
+            where: {
+              id: user.id,
+            },
+            data: {
+              remindersCreatedThisMonth: {
+                increment: 1,
+              },
+            },
+          });
+        }
+
         return reminder;
       },
     });

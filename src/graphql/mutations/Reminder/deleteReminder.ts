@@ -26,6 +26,19 @@ export const DeleteReminder = extendType({
           },
         });
 
+        if (reminder) {
+          await prisma.user.update({
+            where: {
+              id: user.id,
+            },
+            data: {
+              remindersCreatedThisMonth: {
+                decrement: 1,
+              },
+            },
+          });
+        }
+
         return reminder;
       },
     });

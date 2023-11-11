@@ -1,5 +1,6 @@
 import { Context } from "../../graphql/schema/context";
 import { RoleNames } from "../../types";
+import EnforceLimitOnProperties from "../../types/enforceLimitOnProperties";
 import { isAuthorizedBase } from "./isAuthorizedBase";
 import propertyHasExceededRoleLimits from "./propertyHasExceededRoleLimits";
 
@@ -11,7 +12,10 @@ export const isAuthorized = async (
 ) => {
   const userIsWithinRoleLimits =
     enforceRoleLimits && roleLimitsProperty
-      ? !(await propertyHasExceededRoleLimits(user, roleLimitsProperty))
+      ? !(await propertyHasExceededRoleLimits(
+          user,
+          roleLimitsProperty as EnforceLimitOnProperties
+        ))
       : true;
 
   return isAuthorizedBase({ res, req }, roleName).then((isAuth) => {

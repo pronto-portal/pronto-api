@@ -62,7 +62,7 @@ export const GetTranslators = extendType({
                 : {}),
             },
           },
-        });
+        })!;
 
         const { translators } = user!;
 
@@ -74,6 +74,11 @@ export const GetTranslators = extendType({
               },
             },
           },
+          ...(user!.roleName === "Unlimited"
+            ? {}
+            : {
+                take: user!.roleName === "Basic" ? 10 : 50,
+              }),
         });
 
         return { translators, totalRowCount };
