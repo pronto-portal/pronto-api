@@ -121,30 +121,43 @@ router.post(
 
     if (!user) {
       return res.status(500).json({
-        message: "Error cancelling subscription",
+        message: "Error toggling subscription auto renewal",
       });
     }
 
-    const subscriptionSetToCancel = await stripe.subscriptions
-      .update(user.subscriptionId!, { cancel_at_period_end: true })
+    const subscriptionToUpdate = await stripe.subscriptions
+      .update(user.subscriptionId!, {
+        cancel_at_period_end: !user.autoRenewSubscription,
+      })
       .then((sub) => {
-        console.log("Subscription set to cancel success");
+        console.log(
+          "Subscription cancel_at_period_end set to ",
+          !user.autoRenewSubscription
+        );
         return sub;
       })
       .catch((err) => {
-        console.log("Subscription cancel error", err);
+        console.log("Error toggling subscription auto renewal", err);
         return null;
       });
 
-    if (subscriptionSetToCancel) {
-      const date = moment(subscriptionSetToCancel.current_period_end * 1000);
+    if (subscriptionToUpdate) {
+      await prisma.user.update({
+        where: {
+          id: user.id,
+        },
+        data: {
+          autoRenewSubscription: !user.autoRenewSubscription,
+        },
+      });
+
       return res.status(200).json({
-        message: `Subscription set to cancel at the end of the current billing period: ${date.toLocaleString()})}`,
+        message: `Subscription auto renewal set to ${!user.autoRenewSubscription}.`,
       });
     }
 
     return res.status(500).json({
-      message: "Error cancelling subscription",
+      message: "Error toggling subscription auto renewal",
     });
   }
 );
