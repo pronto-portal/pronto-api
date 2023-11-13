@@ -6,19 +6,20 @@ const propertyHasExceededRoleLimits = async (
   user: User,
   property: EnforceLimitOnProperties
 ) => {
+  console.log("propertyHasExceededRoleLimits", user, property);
   let dbUser = await prisma.user.findUnique({
     where: {
       id: user.id,
     },
     select: {
+      remindersCreatedThisMonth: true,
+      role: true,
+      roleName: true,
       _count: {
         select: {
           [property]: true,
         },
       },
-    },
-    include: {
-      role: true,
     },
   });
 
@@ -38,14 +39,14 @@ const propertyHasExceededRoleLimits = async (
         },
       },
       select: {
+        remindersCreatedThisMonth: true,
+        role: true,
+        roleName: true,
         _count: {
           select: {
             [property]: true,
           },
         },
-      },
-      include: {
-        role: true,
       },
     });
   }
