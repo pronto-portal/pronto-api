@@ -703,7 +703,7 @@ export interface NexusGenArgTypes {
       input: NexusGenInputs['ByIdInput']; // ByIdInput!
     }
     getAssignments: { // args
-      input: NexusGenInputs['PaginatedInput']; // PaginatedInput!
+      input?: NexusGenInputs['PaginatedInput'] | null; // PaginatedInput
       where?: NexusGenInputs['AssignmentsFilter'] | null; // AssignmentsFilter
     }
     getClaimant: { // args

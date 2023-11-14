@@ -8,12 +8,18 @@ export const GetAssignments = extendType({
     t.nonNull.field("getAssignments", {
       type: nonNull("GetAssignmentsResponse"),
       args: {
-        input: nonNull("PaginatedInput"),
+        input: nullable("PaginatedInput"),
         where: nullable("AssignmentsFilter"),
       },
       authorize: async (_, __, ctx) => await isAuthorized(ctx),
       async resolve(_, { input, where }, { prisma, user }) {
-        const { page, countPerPage } = input;
+        const page = input?.page || undefined;
+        const countPerPage = input?.countPerPage || undefined;
+
+        const paginationObject =
+          page && countPerPage
+            ? { skip: page * countPerPage, take: countPerPage }
+            : undefined;
 
         const assignments = await prisma.assignment.findMany({
           where: {
@@ -74,8 +80,7 @@ export const GetAssignments = extendType({
                 }
               : {}),
           },
-          skip: page * countPerPage,
-          take: countPerPage,
+          ...(paginationObject ? paginationObject : {}),
           include: {
             address: true,
             assignedTo: true,

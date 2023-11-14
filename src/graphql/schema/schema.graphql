@@ -234,7 +234,7 @@ type Query {
   getAddress(input: ByIdInput!): Address!
   getAddresses(input: PaginatedInput, where: AddressesFilter): GetAddressesResponse!
   getAssignment(input: ByIdInput!): Assignment!
-  getAssignments(input: PaginatedInput!, where: AssignmentsFilter): GetAssignmentsResponse!
+  getAssignments(input: PaginatedInput, where: AssignmentsFilter): GetAssignmentsResponse!
   getClaimant(input: ByIdInput!): Claimant!
   getClaimants(input: PaginatedInput, where: ClaimantsFilter): GetClaimantsResponse!
   getLanguages: [Language]
