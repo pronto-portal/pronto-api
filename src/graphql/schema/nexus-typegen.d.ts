@@ -78,12 +78,14 @@ export interface NexusGenInputs {
     primaryLanguage?: string | null; // String
   }
   CompleteProfileInput: { // input type
+    city: string; // String!
     firstName: string; // String!
     isManager: boolean; // Boolean!
     isTranslator: boolean; // Boolean!
     languages?: string[] | null; // [String!]
     lastName: string; // String!
     phone: string; // String!
+    state: string; // String!
   }
   CreateAddressInput: { // input type
     address1: string; // String!
@@ -367,7 +369,6 @@ export interface NexusGenFieldTypes {
     deleteNonUserTranslator: NexusGenRootTypes['Translator'] | null; // Translator
     deleteReminder: NexusGenRootTypes['Reminder']; // Reminder!
     disconnectTranslator: NexusGenRootTypes['User'] | null; // User
-    login: NexusGenRootTypes['User']; // User!
     updateAddress: NexusGenRootTypes['Address']; // Address!
     updateAssignment: NexusGenRootTypes['Assignment']; // Assignment!
     updateClaimant: NexusGenRootTypes['Claimant']; // Claimant!
@@ -535,7 +536,6 @@ export interface NexusGenFieldTypeNames {
     deleteNonUserTranslator: 'Translator'
     deleteReminder: 'Reminder'
     disconnectTranslator: 'User'
-    login: 'User'
     updateAddress: 'Address'
     updateAssignment: 'Assignment'
     updateClaimant: 'Claimant'
@@ -668,9 +668,6 @@ export interface NexusGenArgTypes {
     }
     disconnectTranslator: { // args
       input: NexusGenInputs['DisconnectTranslatorInput']; // DisconnectTranslatorInput!
-    }
-    login: { // args
-      input: NexusGenInputs['CreateUserInput']; // CreateUserInput!
     }
     updateAddress: { // args
       input: NexusGenInputs['UpdateAddressInput']; // UpdateAddressInput!

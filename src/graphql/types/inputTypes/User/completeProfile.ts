@@ -6,6 +6,8 @@ export const CompleteProfileInput = inputObjectType({
     t.nonNull.string("phone");
     t.nonNull.string("firstName");
     t.nonNull.string("lastName");
+    t.nonNull.string("city");
+    t.nonNull.string("state");
     t.nonNull.boolean("isManager");
     t.nonNull.boolean("isTranslator");
     t.list.nonNull.string("languages");

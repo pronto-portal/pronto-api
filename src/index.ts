@@ -14,6 +14,7 @@ import { parseAuthHeader } from "./utils/auth/parseAuthHeader";
 import { eventBridge } from "./aws/eventBridge";
 import stripeRoutes from "./routes/stripe";
 import { isAuthorizedBase } from "./utils/auth/isAuthorizedBase";
+import authRouter from "./routes/auth";
 
 const main = async () => {
   const prisma = datasource;
@@ -32,6 +33,8 @@ const main = async () => {
 
   app.use("/stripe", stripeRoutes);
   app.use(json());
+  app.use("/", authRouter);
+
   app.use(
     "/graphql",
     expressMiddleware(server, {

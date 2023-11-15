@@ -97,12 +97,14 @@ input ClaimantsFilter {
 }
 
 input CompleteProfileInput {
+  city: String!
   firstName: String!
   isManager: Boolean!
   isTranslator: Boolean!
   languages: [String!]
   lastName: String!
   phone: String!
+  state: String!
 }
 
 input CreateAddressInput {
@@ -216,7 +218,6 @@ type Mutation {
   deleteNonUserTranslator(input: ByIdInput!): Translator
   deleteReminder(input: ByIdInput!): Reminder!
   disconnectTranslator(input: DisconnectTranslatorInput!): User
-  login(input: CreateUserInput!): User!
   updateAddress(input: UpdateAddressInput!): Address!
   updateAssignment(input: UpdateAssignmentInput!): Assignment!
   updateClaimant(input: UpdateClaimantInput!): Claimant!

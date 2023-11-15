@@ -13,7 +13,16 @@ export const CompleteProfile = mutationField("completeProfile", {
   async resolve(
     _root,
     {
-      input: { firstName, lastName, phone, isManager, isTranslator, languages },
+      input: {
+        firstName,
+        lastName,
+        phone,
+        isManager,
+        isTranslator,
+        languages,
+        city,
+        state,
+      },
     },
     { user, prisma }: Context
   ) {
@@ -29,6 +38,8 @@ export const CompleteProfile = mutationField("completeProfile", {
         isTranslator: isTranslator || undefined,
         isProfileComplete: isComplete || undefined,
         languages: languages || undefined,
+        city: city || undefined,
+        state: state || undefined,
       },
     });
 

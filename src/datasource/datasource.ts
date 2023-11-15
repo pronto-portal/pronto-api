@@ -244,5 +244,5 @@ const getAppDataSource = () => {
   return xprisma;
 };
 
-const datasource = getAppDataSource();
+const datasource = getAppDataSource() as PrismaClient;
 export default datasource;

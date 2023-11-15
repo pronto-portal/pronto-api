@@ -10,14 +10,14 @@ import { refreshTokenExpireTime, tokenExpireTime } from "../constants/auth";
 
 // Returns a user if auth is successful
 export const authenticate = async (
-  { res, req, prisma }: Context,
+  { res, req, prisma }: Pick<Context, "res" | "req" | "prisma">,
   userArgs?: NexusGenInputs["CreateUserInput"]
 ): Promise<User> => {
   const authToken = req.headers.authorization?.replace("Bearer ", "");
 
   if (!authToken) {
+    console.log("Invalid token");
     res.status(401).json({ message: "Invalid token" });
-    // console.log("Invalid token");
     throw new Error("Invalid token");
   }
 
