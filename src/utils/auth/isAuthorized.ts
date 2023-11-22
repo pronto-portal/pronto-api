@@ -10,15 +10,22 @@ export const isAuthorized = async (
   enforceRoleLimits = false,
   roleLimitsProperty = ""
 ) => {
-  const userIsWithinRoleLimits =
-    enforceRoleLimits && roleLimitsProperty
-      ? !(await propertyHasExceededRoleLimits(
-          user,
-          roleLimitsProperty as EnforceLimitOnProperties
-        ))
-      : true;
+  try {
+    const userIsWithinRoleLimits =
+      enforceRoleLimits && roleLimitsProperty
+        ? !(await propertyHasExceededRoleLimits(
+            user,
+            roleLimitsProperty as EnforceLimitOnProperties
+          ))
+        : true;
 
-  return isAuthorizedBase({ res, req }, roleName).then((isAuth) => {
-    return isAuth && userIsWithinRoleLimits;
-  });
+    const authorized = isAuthorizedBase({ res, req }, roleName).then(
+      (isAuth) => {
+        return isAuth && userIsWithinRoleLimits;
+      }
+    );
+    return authorized;
+  } catch (e) {
+    return false;
+  }
 };

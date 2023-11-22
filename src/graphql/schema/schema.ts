@@ -24,7 +24,10 @@ const schema = makeSchema({
   plugins: [
     fieldAuthorizePlugin({
       formatError({ error, ctx }) {
-        ctx.res.status(403);
+        ctx.res.status(401);
+        error.message = "unauthorized";
+        error.stack = "";
+        error.name = "UnauthorizedError";
 
         return error;
       },

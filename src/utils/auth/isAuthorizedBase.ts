@@ -87,6 +87,7 @@ export const isAuthorizedBase = async (
         expiresIn: tokenExpireTime,
       });
 
+      console.log("New token generated");
       res.cookie("x-access-token", newToken);
     }
   }

@@ -389,6 +389,7 @@ type User {
   phone: String
   profilePic: String
   remindersCount: Int
+  remindersCreatedThisMonth: Int
   role: Role
   state: String
   subscriptionEndDate: DateTime

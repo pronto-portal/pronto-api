@@ -171,5 +171,7 @@ export const UserType = objectType({
         return count;
       },
     });
+
+    t.int("remindersCreatedThisMonth");
   },
 });

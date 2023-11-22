@@ -73,8 +73,14 @@ export const GetAssignments = extendType({
                       }
                     : where.dateRange
                     ? {
-                        gte: where.dateRange.date1,
-                        lte: where.dateRange.date2,
+                        gte:
+                          typeof where.dateRange.date1 === "string"
+                            ? new Date(where.dateRange.date1)
+                            : where.dateRange.date1,
+                        lte:
+                          typeof where.dateRange.date2 === "string"
+                            ? new Date(where.dateRange.date2)
+                            : where.dateRange.date2,
                       }
                     : undefined,
                 }

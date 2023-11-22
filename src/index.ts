@@ -13,8 +13,8 @@ import http from "http";
 import { parseAuthHeader } from "./utils/auth/parseAuthHeader";
 import { eventBridge } from "./aws/eventBridge";
 import stripeRoutes from "./routes/stripe";
-import { isAuthorizedBase } from "./utils/auth/isAuthorizedBase";
 import authRouter from "./routes/auth";
+import errorHandlingPlugin from "./utils/apollo/errorHandlingPlugin";
 
 const main = async () => {
   const prisma = datasource;
@@ -23,7 +23,10 @@ const main = async () => {
 
   const server = new ApolloServer({
     schema,
-    plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
+    plugins: [
+      ApolloServerPluginDrainHttpServer({ httpServer }),
+      errorHandlingPlugin,
+    ],
   });
 
   await server.start();

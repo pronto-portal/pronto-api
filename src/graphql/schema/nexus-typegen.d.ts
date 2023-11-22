@@ -445,6 +445,7 @@ export interface NexusGenFieldTypes {
     phone: string | null; // String
     profilePic: string | null; // String
     remindersCount: number | null; // Int
+    remindersCreatedThisMonth: number | null; // Int
     role: NexusGenRootTypes['Role'] | null; // Role
     state: string | null; // String
     subscriptionEndDate: NexusGenScalars['DateTime'] | null; // DateTime
@@ -612,6 +613,7 @@ export interface NexusGenFieldTypeNames {
     phone: 'String'
     profilePic: 'String'
     remindersCount: 'Int'
+    remindersCreatedThisMonth: 'Int'
     role: 'Role'
     state: 'String'
     subscriptionEndDate: 'DateTime'
