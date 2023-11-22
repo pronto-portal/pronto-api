@@ -38,9 +38,12 @@ export const onSubscriptionDelete = async (event: Event<Subscription>) => {
     const productId = existingSubscriptionHasItems
       ? existingSubscription.items.data[0].price.product.toString()
       : "";
-    const product = await stripeClient.products.retrieve(productId);
+    const product = productId
+      ? await stripeClient.products.retrieve(productId)
+      : null;
 
-    const name = existingSubscriptionHasItems ? product.name : "Basic";
+    const name =
+      existingSubscriptionHasItems && product ? product.name : "Basic";
 
     const updatedUser = await Prisma.user.update({
       where: {
