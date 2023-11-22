@@ -11,7 +11,7 @@ import { onProductUpdated } from "../utils/stripe/onProductUpdated";
 import { json } from "body-parser";
 import getAuthPayload from "../utils/auth/getAuthPayload";
 import moment from "moment-timezone";
-import onCustomerCreate from "../utils/stripe/onCustomerCreate";
+import { onInvoiceCreated } from "../utils/stripe/onInvoiceCreated";
 
 const router = Router();
 
@@ -212,9 +212,6 @@ router.post(
         // Then define and call a method to handle the subscription update.
         // handleSubscriptionUpdated(subscription);
         break;
-      case "customer.created":
-        onCustomerCreate(event);
-        break;
       case "product.updated":
         onProductUpdated(event);
         break;
@@ -223,6 +220,9 @@ router.post(
         break;
       case "invoice.payment_succeeded":
         console.log("Invoice payment succeeded");
+        break;
+      case "invoice.created":
+        onInvoiceCreated(event);
         break;
       default:
         // Unexpected event type

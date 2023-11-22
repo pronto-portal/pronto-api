@@ -7,6 +7,8 @@ import { isTokenExpired } from "./istokenExpired";
 import { verifyGoogleToken } from "./verifyGoogleToken";
 import { NexusGenInputs } from "../../graphql/schema/nexus-typegen";
 import { refreshTokenExpireTime, tokenExpireTime } from "../constants/auth";
+import StripeClient from "../../datasource/stripe";
+import firstTimeUserOnCreate from "./firstTimeUserOnCreate";
 
 // Returns a user if auth is successful
 export const authenticate = async (
@@ -30,12 +32,7 @@ export const authenticate = async (
   const user =
     (await prisma.user.findUnique({ where: { id: sub } })) ||
     (userArgs !== undefined
-      ? await prisma.user.create({
-          data: {
-            id: sub,
-            ...userArgs,
-          },
-        })
+      ? await firstTimeUserOnCreate(userArgs, sub)
       : null);
 
   if (!user) {
