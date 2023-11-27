@@ -1,11 +1,19 @@
 import cors from "cors";
 
+const allowedOriginsFromEnv: string[] = [
+  process.env.API_GATEWAY_DNS!,
+  process.env.ALB_DNS ? `https://${process.env.ALB_DNS}` : undefined,
+].filter(
+  (origin) => origin !== undefined && origin !== "" && origin !== null
+) as string[];
+
 const corsConfig = cors({
   origin: [
     "http://localhost:3000",
     "https://prontotranslationservices.com",
     process.env.API_GATEWAY_DNS!,
     "https://checkout.stripe.com",
+    ...allowedOriginsFromEnv,
   ], // frontend domain
   credentials: true,
   methods: ["POST", "GET", "OPTIONS"],
