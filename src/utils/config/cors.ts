@@ -3,6 +3,7 @@ import cors from "cors";
 const corsConfig = cors({
   origin: [
     "http://localhost:3000",
+    "https://prontotranslationservices.com",
     process.env.API_GATEWAY_DNS!,
     "https://checkout.stripe.com",
   ], // frontend domain
