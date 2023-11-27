@@ -17,6 +17,7 @@ import authRouter from "./routes/auth";
 import errorHandlingPlugin from "./utils/apollo/errorHandlingPlugin";
 
 const main = async () => {
+  console.log("Starting server...");
   const prisma = datasource;
   const app = express();
   const httpServer = http.createServer(app);

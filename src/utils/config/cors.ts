@@ -7,6 +7,8 @@ const allowedOriginsFromEnv: string[] = [
   (origin) => origin !== undefined && origin !== "" && origin !== null
 ) as string[];
 
+console.log("allowedOriginsFromEnv: ", allowedOriginsFromEnv);
+
 const corsConfig = cors({
   origin: [
     "http://localhost:3000",
