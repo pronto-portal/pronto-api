@@ -32,7 +32,7 @@ const main = async () => {
 
   await server.start();
 
-  app.use(corsConfig);
+  //app.use(corsConfig);
   app.use(cookieParser());
 
   app.use("/stripe", stripeRoutes);
