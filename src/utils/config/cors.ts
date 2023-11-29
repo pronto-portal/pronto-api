@@ -10,13 +10,14 @@ const allowedOriginsFromEnv: string[] = [
 console.log("allowedOriginsFromEnv: ", allowedOriginsFromEnv);
 
 const corsConfig = cors({
-  origin: [
-    "http://localhost:3000",
-    "https://prontotranslationservices.com",
-    process.env.API_GATEWAY_DNS!,
-    "https://checkout.stripe.com",
-    ...allowedOriginsFromEnv,
-  ], // frontend domain
+  // origin: [
+  //   "http://localhost:3000",
+  //   "https://prontotranslationservices.com",
+  //   process.env.API_GATEWAY_DNS!,
+  //   "https://checkout.stripe.com",
+  //   ...allowedOriginsFromEnv,
+  // ], // frontend domain
+  origin: "*",
   credentials: true,
   methods: ["POST", "GET", "OPTIONS"],
   exposedHeaders: ["set-cookie", "Cookie"],
