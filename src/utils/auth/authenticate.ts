@@ -9,28 +9,40 @@ import { NexusGenInputs } from "../../graphql/schema/nexus-typegen";
 import { refreshTokenExpireTime, tokenExpireTime } from "../constants/auth";
 import StripeClient from "../../datasource/stripe";
 import firstTimeUserOnCreate from "./firstTimeUserOnCreate";
+import { Request, Response } from "express";
+import prisma from "../../datasource/datasource";
+import cookie from "cookie";
+
+interface AuthContext {
+  req: Request;
+  res: Response;
+}
+
+interface AuthPayload {
+  userArgs?: NexusGenInputs["CreateUserInput"];
+  sub?: string;
+  expiresIn?: number;
+}
 
 // Returns a user if auth is successful
 export const authenticate = async (
-  { res, req, prisma }: Pick<Context, "res" | "req" | "prisma">,
-  userArgs?: NexusGenInputs["CreateUserInput"]
+  { res, req }: AuthContext,
+  { userArgs, sub = "", expiresIn = 0 }: AuthPayload
 ): Promise<User> => {
-  const authToken = req.headers.authorization?.replace("Bearer ", "");
-
-  if (!authToken) {
-    console.log("Invalid token");
-    res.status(401).json({ message: "Invalid token" });
-    throw new Error("Invalid token");
-  }
-
+  // console.log("Authenticating...");
   // console.log("Verifying google sub...");
-
-  const { sub } = await verifyGoogleToken(authToken);
 
   // console.log(`Attempting auth for user with sub ${sub}`);
   // Check if first time user else create user
+  console.log("sub: ", sub);
+
   const user =
-    (await prisma.user.findUnique({ where: { id: sub } })) ||
+    (await prisma.user.update({
+      where: { id: sub },
+      data: {
+        profilePic: userArgs?.profilePic || undefined,
+      },
+    })) ||
     (userArgs !== undefined
       ? await firstTimeUserOnCreate(userArgs, sub)
       : null);
@@ -112,11 +124,19 @@ export const authenticate = async (
     });
   }
 
+  console.log("new Date(expiresIn * 1000): ", new Date(expiresIn));
   res.cookie("x-access-token", token, {
-    httpOnly: false,
-    secure: false,
+    httpOnly: process.env.NODE_ENV === "production",
+    secure: process.env.NODE_ENV === "production",
     sameSite: "none",
+    expires: new Date(expiresIn),
+    domain:
+      process.env.NODE_ENV === "production"
+        ? "https://prontotranslationservices.com"
+        : "",
   });
+
+  console.log("cookie set");
 
   return user;
 };

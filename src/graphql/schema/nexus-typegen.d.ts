@@ -122,6 +122,7 @@ export interface NexusGenInputs {
     firstName?: string | null; // String
     lastName?: string | null; // String
     phone?: string | null; // String
+    profilePic?: string | null; // String
   }
   DateRange: { // input type
     date1: NexusGenScalars['DateTime']; // DateTime!
@@ -362,7 +363,6 @@ export interface NexusGenFieldTypes {
     createAssignment: NexusGenRootTypes['Assignment']; // Assignment!
     createClaimant: NexusGenRootTypes['Claimant']; // Claimant!
     createReminder: NexusGenRootTypes['Reminder']; // Reminder!
-    createUser: NexusGenRootTypes['User'] | null; // User
     deleteAddress: NexusGenRootTypes['Address']; // Address!
     deleteAssignment: NexusGenRootTypes['Assignment']; // Assignment!
     deleteClaimant: NexusGenRootTypes['Claimant']; // Claimant!
@@ -530,7 +530,6 @@ export interface NexusGenFieldTypeNames {
     createAssignment: 'Assignment'
     createClaimant: 'Claimant'
     createReminder: 'Reminder'
-    createUser: 'User'
     deleteAddress: 'Address'
     deleteAssignment: 'Assignment'
     deleteClaimant: 'Claimant'
@@ -649,9 +648,6 @@ export interface NexusGenArgTypes {
     }
     createReminder: { // args
       input: NexusGenInputs['CreateReminderInput']; // CreateReminderInput!
-    }
-    createUser: { // args
-      input: NexusGenInputs['CreateUserInput']; // CreateUserInput!
     }
     deleteAddress: { // args
       input: NexusGenInputs['ByIdInput']; // ByIdInput!

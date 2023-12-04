@@ -147,6 +147,7 @@ input CreateUserInput {
   firstName: String
   lastName: String
   phone: String
+  profilePic: String
 }
 
 input DateRange {
@@ -211,7 +212,6 @@ type Mutation {
   createAssignment(input: CreateAssignmentInput!): Assignment!
   createClaimant(input: CreateClaimantInput!): Claimant!
   createReminder(input: CreateReminderInput!): Reminder!
-  createUser(input: CreateUserInput!): User
   deleteAddress(input: ByIdInput!): Address!
   deleteAssignment(input: ByIdInput!): Assignment!
   deleteClaimant(input: ByIdInput!): Claimant!

@@ -172,6 +172,7 @@ export const UserType = objectType({
       },
     });
 
+    t.string("profilePic");
     t.int("remindersCreatedThisMonth");
   },
 });
