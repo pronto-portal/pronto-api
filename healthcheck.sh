@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # Define the URL of the healthcheck route
 HEALTHCHECK_URL="http://localhost:4000/dev/healthcheck"
