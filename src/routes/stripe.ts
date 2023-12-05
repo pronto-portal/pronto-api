@@ -173,8 +173,8 @@ router.post(
     // If you are using an endpoint defined with the API or dashboard, look in your webhook settings
     // at https://dashboard.stripe.com/webhooks
     const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET!;
-    console.log("EVENT", request.body);
-    console.log("Endpoint Secret", endpointSecret);
+    // console.log("EVENT", request.body);
+    // console.log("Endpoint Secret", endpointSecret);
     // Only verify the event if you have an endpoint secret defined.
     // Otherwise use the basic event deserialized with JSON.parse
     if (endpointSecret) {

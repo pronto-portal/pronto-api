@@ -85,26 +85,37 @@ authRouter.get("/auth/google", (req, res) => {
 
 authRouter.get("/auth/google/callback", async (req, res) => {
   try {
+    console.log("attempting to authenticate");
     const { code } = req.query;
+    console.log("code: ", code);
     if (!code) {
       res.status(400).send("Invalid request: No code provided");
       return;
     }
 
+    console.log("token exists");
     // Exchange the authorization code for an access token
     const { tokens } = await oauth2Client.getToken(code as string);
+
+    console.log("token exists");
+
     oauth2Client.setCredentials(tokens);
     const oauth2 = google.oauth2({
       auth: oauth2Client,
       version: "v2",
     });
 
+    console.log("credentials set");
+
     // Retrieve user information
+    console.log("getting user data");
     const userInfo = await oauth2.userinfo.get();
+    console.log("got user data");
     const expiresIn = tokens.expiry_date;
     const userData = userInfo.data;
     if (userData) {
       console.log("userData: ", userData);
+      console.log("attempting to authenticate");
       const user = await authenticate(
         {
           req,
@@ -131,6 +142,7 @@ authRouter.get("/auth/google/callback", async (req, res) => {
     // ...
   } catch (error) {
     console.error("Error during OAuth callback", error);
+    res.status(500).send("Error during OAuth callback");
   }
 });
 
