@@ -9,7 +9,7 @@ import { User } from "@prisma/client";
 const authRouter = Router();
 const redirectUri =
   process.env.NODE_ENV === "production" && process.env.API_GATEWAY_URL
-    ? process.env.API_GATEWAY_URL
+    ? `${process.env.API_GATEWAY_URL}/auth/google/callback`
     : "http://localhost:4000/dev/auth/google/callback";
 const oauth2Client = new google.auth.OAuth2(
   process.env.GOOGLE_CLIENT_ID,
