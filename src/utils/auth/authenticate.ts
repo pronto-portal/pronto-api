@@ -128,7 +128,7 @@ export const authenticate = async (
   res.cookie("x-access-token", token, {
     httpOnly: process.env.NODE_ENV === "production",
     secure: process.env.NODE_ENV === "production",
-    sameSite: "none",
+    sameSite: "lax",
     expires: new Date(expiresIn),
     domain:
       process.env.NODE_ENV === "production"
