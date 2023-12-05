@@ -129,16 +129,20 @@ export const authenticate = async (
     });
   }
 
+  const domain =
+    process.env.NODE_ENV === "production"
+      ? "https://prontotranslationservices.com"
+      : "";
+
+  console.log("domain: ", domain);
+
   console.log("new Date(expiresIn * 1000): ", new Date(expiresIn));
   res.cookie("x-access-token", token, {
     httpOnly: process.env.NODE_ENV === "production",
     secure: process.env.NODE_ENV === "production",
     sameSite: "lax",
     expires: new Date(expiresIn),
-    domain:
-      process.env.NODE_ENV === "production"
-        ? "https://prontotranslationservices.com"
-        : "",
+    domain,
   });
 
   console.log("cookie set");

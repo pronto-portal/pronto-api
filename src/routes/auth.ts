@@ -33,6 +33,8 @@ interface LoginInput {
 // });
 
 authRouter.post("/signout", async (req, res) => {
+  console.log("signing out");
+  console.log("headers", req.headers);
   try {
     const authHeader = req.headers.authorization;
 
