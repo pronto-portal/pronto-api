@@ -1,17 +1,13 @@
 import { User } from "@prisma/client";
-import jwt, { JwtPayload } from "jsonwebtoken";
-import { Context } from "../../graphql/schema/context";
+import jwt from "jsonwebtoken";
 import { decryptRefreshToken } from "./decryptRefreshToken";
 import { encryptRefreshToken } from "./encryptRefreshToken";
 import { isTokenExpired } from "./istokenExpired";
-import { verifyGoogleToken } from "./verifyGoogleToken";
 import { NexusGenInputs } from "../../graphql/schema/nexus-typegen";
 import { refreshTokenExpireTime, tokenExpireTime } from "../constants/auth";
-import StripeClient from "../../datasource/stripe";
 import firstTimeUserOnCreate from "./firstTimeUserOnCreate";
 import { Request, Response } from "express";
 import prisma from "../../datasource/datasource";
-import cookie from "cookie";
 
 interface AuthContext {
   req: Request;
@@ -37,12 +33,21 @@ export const authenticate = async (
   console.log("sub: ", sub);
 
   const user =
-    (await prisma.user.update({
-      where: { id: sub },
-      data: {
-        profilePic: userArgs?.profilePic || undefined,
-      },
-    })) ||
+    (await prisma.user
+      .findUnique({
+        where: { id: sub },
+      })
+      .then((user) => {
+        if (user)
+          return prisma.user.update({
+            where: {
+              id: sub,
+            },
+            data: {
+              profilePic: userArgs?.profilePic || "",
+            },
+          });
+      })) ||
     (userArgs !== undefined
       ? await firstTimeUserOnCreate(userArgs, sub)
       : null);
