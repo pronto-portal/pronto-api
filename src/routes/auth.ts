@@ -134,7 +134,11 @@ authRouter.get("/auth/google/callback", async (req, res) => {
       );
       if (!user) throw new Error("User not found");
 
-      res.redirect("http://localhost:3000/");
+      res.redirect(
+        process.env.NODE_ENV === "production"
+          ? `https://prontotranslationservices.com/`
+          : `http://localhost:3000/`
+      );
     } else {
       return;
     }
