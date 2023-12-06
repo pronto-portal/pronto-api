@@ -48,7 +48,7 @@ const main = async () => {
     expressMiddleware(server, {
       context: async ({ req, res }) => {
         // API Gateway event and Lambda Context
-        const accessToken = parseAuthHeader(req.headers.authorization);
+        const accessToken = req.cookies["x-access-token"];
 
         let user: User | null = null;
 

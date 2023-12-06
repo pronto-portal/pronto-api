@@ -18,12 +18,18 @@ export const isAuthorizedBase = async (
   { res, req }: isAuthorizedBaseContext,
   roleName: RoleNames = "basic"
 ) => {
-  const token: string = parseAuthHeader(req.headers.authorization);
+  const authCookie = req.cookies["x-access-token"];
+  const token: string = authCookie;
+  // parseAuthHeader(req.headers.authorization)
 
+  console.log("req.headers.authorization", req.headers.authorization);
+  console.log("authCookie", authCookie);
   if (!token) return false;
 
   //console.log("Token found, decoding token");
   const decodedToken = decode(token) as User;
+
+  console.log("decodedToken", decodedToken);
 
   // check if token is expired, if it is expired check to see if the user has a valid and unexpired refresh token
   //console.log("Validating token");
