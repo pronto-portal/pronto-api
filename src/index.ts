@@ -35,16 +35,16 @@ const main = async () => {
   app.use(corsConfig);
   app.use(cookieParser());
 
-  app.use("/dev/stripe", stripeRoutes);
+  app.use("/stripe", stripeRoutes);
   app.use(json());
-  app.use("/dev", authRouter);
+  app.use("/", authRouter);
   // healthcheck route
-  app.use("/dev/healthcheck", (_req, res) => {
+  app.use("/healthcheck", (_req, res) => {
     res.status(200).send("OK");
   });
 
   app.use(
-    "/dev/graphql",
+    "/graphql",
     expressMiddleware(server, {
       context: async ({ req, res }) => {
         // API Gateway event and Lambda Context

@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # Define the URL of the healthcheck route
-HEALTHCHECK_URL="http://localhost:4000/dev/healthcheck"
+HEALTHCHECK_URL="http://localhost:4000/healthcheck"
 
 # Make a GET request to the healthcheck route
 response=$(curl -s -o /dev/null -w "%{http_code}" $HEALTHCHECK_URL)
