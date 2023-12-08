@@ -18,6 +18,7 @@ export const isAuthorizedBase = async (
   { res, req }: isAuthorizedBaseContext,
   roleName: RoleNames = "basic"
 ) => {
+  console.log("Cookies", req.cookies);
   const authCookie = req.cookies["x-access-token"];
   const token: string = authCookie;
   // parseAuthHeader(req.headers.authorization)
