@@ -2,7 +2,7 @@ import { extendType, nonNull } from "nexus";
 import { isAuthorized } from "../../../utils/auth/isAuthorized";
 import { CreateReminderInput, ReminderType } from "../../types";
 import { addressToString } from "../../../utils/helper/addressToString";
-import { Translate } from "../../../utils/helper/googleTranslate";
+import { TranslateText } from "../../../utils/helper/translateText";
 
 export const CreateReminder = extendType({
   type: "Mutation",
@@ -53,12 +53,10 @@ export const CreateReminder = extendType({
           claimantMessage || defaultReminderMessage;
 
         if (claimant) {
-          const [translations] = await Translate.translate(
+          translatedClaimantMessage = await TranslateText(
             claimantMessage || defaultReminderMessage,
             claimant.primaryLanguage || "en"
           );
-
-          translatedClaimantMessage = translations;
         }
         const reminder = await prisma.reminder.create({
           data: {

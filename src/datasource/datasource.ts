@@ -2,6 +2,7 @@ import { PrismaClient, Reminder, Role } from "@prisma/client";
 import { eventBridge } from "../aws/eventBridge";
 import { dateToCron } from "../utils/helper/dateToCron";
 
+// Reminders are linked to aws event bridge rules via a shared id between a reminder instance and a single event bridge rule
 const getAppDataSource = () => {
   const prisma = new PrismaClient();
 
@@ -76,28 +77,29 @@ const getAppDataSource = () => {
             const ruleName = `reminder-${reminder.id}`;
 
             console.log("Deleting rule");
-            eventBridge
-              .removeTargets({
-                Rule: ruleName,
-                Ids: [reminder.id!],
-              })
-              .promise()
-              .then(() => {
-                console.log("removed targets from ", reminder.id!);
-                eventBridge
-                  .deleteRule({
-                    Name: ruleName,
-                  })
-                  .promise()
-                  .then(async (data) => {
-                    console.log(`Successfully deleted rule ${ruleName}`);
-                    return data;
-                  })
-                  .catch(async (err) => {
-                    console.log(`Error deleting rule ${ruleName}`);
-                    return err;
-                  });
-              });
+            if (process.env.NODE_ENV === "production")
+              eventBridge
+                .removeTargets({
+                  Rule: ruleName,
+                  Ids: [reminder.id!],
+                })
+                .promise()
+                .then(() => {
+                  console.log("removed targets from ", reminder.id!);
+                  eventBridge
+                    .deleteRule({
+                      Name: ruleName,
+                    })
+                    .promise()
+                    .then(async (data) => {
+                      console.log(`Successfully deleted rule ${ruleName}`);
+                      return data;
+                    })
+                    .catch(async (err) => {
+                      console.log(`Error deleting rule ${ruleName}`);
+                      return err;
+                    });
+                });
 
             console.log("Deleted rule?");
             console.log(reminder);
@@ -132,73 +134,74 @@ const getAppDataSource = () => {
 
             const ruleName = `reminder-${reminder.id}`;
 
-            eventBridge
-              .putRule({
-                Name: ruleName,
-                Description: `reminder: ${reminder.id} created by user: ${reminder.createdById}`,
-                ScheduleExpression: `cron(${dateTimeCron})`,
-                State: "ENABLED",
-                RoleArn: process.env.EVENT_RULE_ROLE_ARN,
-              })
-              .promise()
-              .then(async (data) => {
-                const translator = assignment.assignedTo;
-                const claimant = assignment.claimant;
+            if (process.env.NODE_ENV === "production")
+              eventBridge
+                .putRule({
+                  Name: ruleName,
+                  Description: `reminder: ${reminder.id} created by user: ${reminder.createdById}`,
+                  ScheduleExpression: `cron(${dateTimeCron})`,
+                  State: "ENABLED",
+                  RoleArn: process.env.EVENT_RULE_ROLE_ARN,
+                })
+                .promise()
+                .then(async (data) => {
+                  const translator = assignment.assignedTo;
+                  const claimant = assignment.claimant;
 
-                if (translator && claimant) {
-                  const translatorPhone = translator.phone;
-                  const claimantPhone = claimant.phone;
+                  if (translator && claimant) {
+                    const translatorPhone = translator.phone;
+                    const claimantPhone = claimant.phone;
 
-                  await eventBridge
-                    .putTargets({
-                      Rule: ruleName,
-                      Targets: [
-                        {
-                          Id: reminder.id!,
-                          Arn: process.env.REMINDER_FUNCTION_ARN!,
-                          Input: JSON.stringify({
-                            payload: {
-                              translatorPhone,
-                              translatorMessage: args.data.translatorMessage,
-                              claimantPhone,
-                              claimantMessage: args.data.claimantMessage,
-                            },
-                          }),
-                        },
-                      ],
-                    })
-                    .promise()
-                    .catch(async () => {
-                      // Delete reminder since reminder has not actually been created:
-                      await prisma.reminder.delete({
-                        where: {
-                          id: reminder.id,
-                        },
+                    await eventBridge
+                      .putTargets({
+                        Rule: ruleName,
+                        Targets: [
+                          {
+                            Id: reminder.id!,
+                            Arn: process.env.REMINDER_FUNCTION_ARN!,
+                            Input: JSON.stringify({
+                              payload: {
+                                translatorPhone,
+                                translatorMessage: args.data.translatorMessage,
+                                claimantPhone,
+                                claimantMessage: args.data.claimantMessage,
+                              },
+                            }),
+                          },
+                        ],
+                      })
+                      .promise()
+                      .catch(async () => {
+                        // Delete reminder since reminder has not actually been created:
+                        await prisma.reminder.delete({
+                          where: {
+                            id: reminder.id,
+                          },
+                        });
                       });
-                    });
-                } else {
-                  throw new Error(
-                    "Assignment must have claimant and translator"
-                  );
-                }
+                  } else {
+                    throw new Error(
+                      "Assignment must have claimant and translator"
+                    );
+                  }
 
-                return data;
-              })
-              .catch(async (err) => {
-                await eventBridge
-                  .deleteRule({
-                    Name: ruleName,
-                  })
-                  .promise();
+                  return data;
+                })
+                .catch(async (err) => {
+                  await eventBridge
+                    .deleteRule({
+                      Name: ruleName,
+                    })
+                    .promise();
 
-                // Delete reminder since reminder has not actually been created:
-                await prisma.reminder.delete({
-                  where: {
-                    id: reminder.id,
-                  },
+                  // Delete reminder since reminder has not actually been created:
+                  await prisma.reminder.delete({
+                    where: {
+                      id: reminder.id,
+                    },
+                  });
+                  return err;
                 });
-                return err;
-              });
           }
 
           return reminder;
@@ -217,22 +220,23 @@ const getAppDataSource = () => {
               const ruleName = `reminder-${reminder.id}`;
               console.log(`ruleName: ${ruleName}`);
 
-              eventBridge
-                .putRule({
-                  Name: ruleName,
-                  ScheduleExpression: `cron(${dateToCron(
-                    dateTime.toISOString()
-                  )})`,
-                })
-                .promise()
-                .then((res) => {
-                  console.log("updated rule");
-                  console.log(res);
-                })
-                .catch((err) => {
-                  console.log("failed to update rule");
-                  console.log(err);
-                });
+              if (process.env.NODE_ENV === "production")
+                eventBridge
+                  .putRule({
+                    Name: ruleName,
+                    ScheduleExpression: `cron(${dateToCron(
+                      dateTime.toISOString()
+                    )})`,
+                  })
+                  .promise()
+                  .then((res) => {
+                    console.log("updated rule");
+                    console.log(res);
+                  })
+                  .catch((err) => {
+                    console.log("failed to update rule");
+                    console.log(err);
+                  });
             }
             return assignment;
           });

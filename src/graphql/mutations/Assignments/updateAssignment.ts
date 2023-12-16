@@ -2,7 +2,7 @@ import { extendType, nonNull } from "nexus";
 import { isAuthorized } from "../../../utils/auth/isAuthorized";
 import { DynamicUpdate } from "../../../types";
 import { UpdateAssignmentInput } from "../../types";
-import { dateToCron } from "../../../utils/helper/dateToCron";
+import { replaceAssignmentTranslatorAndUpdateReminder } from "../../../utils/helper/replaceAssignmentTranslatorAndUpdateReminder";
 
 export const UpdateAssignment = extendType({
   type: "Mutation",
@@ -36,6 +36,13 @@ export const UpdateAssignment = extendType({
         };
 
         if (translatorId) {
+          // I need to get the old translator Id here
+          await replaceAssignmentTranslatorAndUpdateReminder(
+            id,
+            translatorId,
+            user
+          );
+
           updateData = {
             ...updateData,
             assignedTo: {
