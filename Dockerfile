@@ -7,6 +7,7 @@ RUN apk --no-cache add curl && \
     npx prisma generate 
     
 ENV NODE_ENV=production
+ENV NODE_OPTIONS="--max-old-space-size=4096"
 
 RUN npm run build && \
     chmod 755 /app/healthcheck.sh
