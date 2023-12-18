@@ -132,6 +132,10 @@ const getAppDataSource = () => {
             const dateTime = (assignment.dateTime! as Date).toISOString();
             const dateTimeCron = dateToCron(dateTime);
 
+            console.log("Assignment Date time", assignment.dateTime);
+            console.log("Assignment Date time ISO", dateTime);
+            console.log("Assignment Date time Cron", dateTimeCron);
+
             const ruleName = `reminder-${reminder.id}`;
 
             if (process.env.NODE_ENV === "production")

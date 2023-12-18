@@ -2,6 +2,8 @@ import moment from "moment";
 
 export const dateToCron = (dateString: string) => {
   // todo: ensure all date string coming into the backend get converted into utc time
+
+  console.log("Date String", dateString);
   const dateTime = moment.utc(dateString);
 
   const day = dateTime.date();

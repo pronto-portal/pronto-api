@@ -18,6 +18,8 @@ export const CreateAssignment = extendType({
         // does not have authorizer middleware implemented.
         if (!user) throw new Error("No user found");
 
+        console.log("Create Assignment Date Time", dateTime);
+
         const assignment = await prisma.assignment.create({
           data: {
             claimant: {
