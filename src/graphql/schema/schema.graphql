@@ -56,6 +56,7 @@ type Assignment {
   createdBy: User
   dateTime: DateTime
   id: String
+  isCancelled: Boolean
   isComplete: Boolean
   translatorNoShow: Boolean
 }

@@ -311,6 +311,7 @@ export interface NexusGenFieldTypes {
     createdBy: NexusGenRootTypes['User'] | null; // User
     dateTime: NexusGenScalars['DateTime'] | null; // DateTime
     id: string | null; // String
+    isCancelled: boolean | null; // Boolean
     isComplete: boolean | null; // Boolean
     translatorNoShow: boolean | null; // Boolean
   }
@@ -478,6 +479,7 @@ export interface NexusGenFieldTypeNames {
     createdBy: 'User'
     dateTime: 'DateTime'
     id: 'String'
+    isCancelled: 'Boolean'
     isComplete: 'Boolean'
     translatorNoShow: 'Boolean'
   }

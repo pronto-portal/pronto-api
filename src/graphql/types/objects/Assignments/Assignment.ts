@@ -95,5 +95,6 @@ export const AssignmentType = objectType({
     t.boolean("isComplete");
     t.boolean("claimantNoShow");
     t.boolean("translatorNoShow");
+    t.boolean("isCancelled");
   },
 });
