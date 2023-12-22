@@ -83,6 +83,8 @@ export const GetAssignments = extendType({
                             : where.dateRange.date2,
                       }
                     : undefined,
+                  isCancelled:
+                    where.isCancelled !== null ? where.isCancelled : undefined,
                 }
               : {}),
           },

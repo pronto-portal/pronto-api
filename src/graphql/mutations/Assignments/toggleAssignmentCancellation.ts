@@ -13,7 +13,9 @@ export const ToggleAssignmentCancellation = extendType({
       args: {
         input: nonNull("ByIdInput"),
       },
-      async resolve(_, { assignmentId }, { prisma, user }: Context) {
+      async resolve(_, { input }, { prisma, user }: Context) {
+        const { id: assignmentId } = input;
+
         const assignment = await prisma.assignment.findUnique({
           where: { id: assignmentId, createdByUserId: user.id },
           include: {

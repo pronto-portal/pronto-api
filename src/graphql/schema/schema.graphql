@@ -67,6 +67,7 @@ input AssignmentsFilter {
   claimant: ClaimantsFilter
   date: DateTime
   dateRange: DateRange
+  isCancelled: Boolean
 }
 
 input ByEmailInput {
@@ -219,6 +220,7 @@ type Mutation {
   deleteNonUserTranslator(input: ByIdInput!): Translator
   deleteReminder(input: ByIdInput!): Reminder!
   disconnectTranslator(input: DisconnectTranslatorInput!): User
+  toggleAssignmentCancellation(input: ByIdInput!): Assignment
   updateAddress(input: UpdateAddressInput!): Address!
   updateAssignment(input: UpdateAssignmentInput!): Assignment!
   updateClaimant(input: UpdateClaimantInput!): Claimant!

@@ -64,6 +64,7 @@ export interface NexusGenInputs {
     claimant?: NexusGenInputs['ClaimantsFilter'] | null; // ClaimantsFilter
     date?: NexusGenScalars['DateTime'] | null; // DateTime
     dateRange?: NexusGenInputs['DateRange'] | null; // DateRange
+    isCancelled?: boolean | null; // Boolean
   }
   ByEmailInput: { // input type
     email: string; // String!
@@ -370,6 +371,7 @@ export interface NexusGenFieldTypes {
     deleteNonUserTranslator: NexusGenRootTypes['Translator'] | null; // Translator
     deleteReminder: NexusGenRootTypes['Reminder']; // Reminder!
     disconnectTranslator: NexusGenRootTypes['User'] | null; // User
+    toggleAssignmentCancellation: NexusGenRootTypes['Assignment'] | null; // Assignment
     updateAddress: NexusGenRootTypes['Address']; // Address!
     updateAssignment: NexusGenRootTypes['Assignment']; // Assignment!
     updateClaimant: NexusGenRootTypes['Claimant']; // Claimant!
@@ -538,6 +540,7 @@ export interface NexusGenFieldTypeNames {
     deleteNonUserTranslator: 'Translator'
     deleteReminder: 'Reminder'
     disconnectTranslator: 'User'
+    toggleAssignmentCancellation: 'Assignment'
     updateAddress: 'Address'
     updateAssignment: 'Assignment'
     updateClaimant: 'Claimant'
@@ -668,6 +671,9 @@ export interface NexusGenArgTypes {
     }
     disconnectTranslator: { // args
       input: NexusGenInputs['DisconnectTranslatorInput']; // DisconnectTranslatorInput!
+    }
+    toggleAssignmentCancellation: { // args
+      input: NexusGenInputs['ByIdInput']; // ByIdInput!
     }
     updateAddress: { // args
       input: NexusGenInputs['UpdateAddressInput']; // UpdateAddressInput!
