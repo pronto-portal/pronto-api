@@ -37,15 +37,28 @@ export const updateRule = async ({
       }
     }
 
-    console.log("Checking reminderId...");
+    console.log("Checking reminderId...", reminderId);
     const ruleName = getReminderRuleName(reminderId);
+
+    console.log("ruleName", ruleName);
 
     const currentRule = await eventBridge
       .describeRule({ Name: ruleName })
-      .promise();
+      .promise()
+      .catch((err) => {
+        console.log("updateRule eventbridge describeRule error", err);
+        return undefined;
+      });
+
     const currentRuleTargets = await eventBridge
       .listTargetsByRule({ Rule: ruleName })
-      .promise();
+      .promise()
+      .catch((err) => {
+        console.log("updateRule eventbridge listTargetsByRule error", err);
+        return {
+          Targets: [],
+        };
+      });
 
     const currentRuleTarget = currentRuleTargets.Targets?.find(
       (target) => target.Id === reminderId

@@ -36,11 +36,16 @@ const getAppDataSource = () => {
                     phone: true,
                   },
                 },
+                reminder: {
+                  select: {
+                    id: true,
+                  },
+                },
               },
             });
 
             if (assignment) {
-              const id = reminder.id!;
+              const id = assignment.reminder ? assignment.reminder.id : "";
               const claimantPhone = assignment.claimant!.phone;
 
               const translator = assignment.assignedTo;
