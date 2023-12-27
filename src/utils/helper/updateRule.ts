@@ -25,8 +25,10 @@ export const updateRule = async ({
 }: UpdateRuleArgs): Promise<{
   success: boolean;
 }> => {
+  console.log("Attempting to update rule...");
   try {
     if (translatorPhoneNumber && claimantPhoneNumber) {
+      console.log("Checking phone numbers...");
       const translatorPhoneIsValid = phoneNumberIsValid(translatorPhoneNumber);
       const claimantPhoneIsValid = phoneNumberIsValid(claimantPhoneNumber);
 
@@ -34,6 +36,8 @@ export const updateRule = async ({
         throw new Error("Invalid phone number");
       }
     }
+
+    console.log("Checking reminderId...");
     const ruleName = getReminderRuleName(reminderId);
 
     const currentRule = await eventBridge
@@ -52,13 +56,23 @@ export const updateRule = async ({
         ? JSON.parse(currentRuleTarget.Input)
         : undefined;
 
+    console.log("currentRule", currentRule);
+    console.log("currentRuleTargetInput", currentRuleTargetInput);
     // We can only update the target payload if it exists and if the rule exists
     if (currentRule && currentRuleTargetInput) {
+      console.log("Updating rule...");
       const currentDateTimeCron = currentRule.ScheduleExpression;
+
+      console.log("currentDateTimeCron", currentDateTimeCron);
 
       const dateTimeCronScheduledExpression = dateTime
         ? `cron(${dateToCron(dateTime.toString())})`
         : currentDateTimeCron;
+
+      console.log(
+        "dateTimeCronScheduledExpression",
+        dateTimeCronScheduledExpression
+      );
       const updatedRule = await eventBridge
         .putRule({
           Name: ruleName,
