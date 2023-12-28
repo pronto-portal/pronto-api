@@ -86,6 +86,9 @@ export const replaceAssignmentTranslatorAndUpdateReminder = async (
           // I need to create a new reminder here in aws and notify the new translator
           if (oldClaimant) {
             console.log("Creating new reminder...");
+            console.log("Assignment id", oldAssignment.id);
+            console.log("User id", user.id);
+
             await prisma.reminder
               .create({
                 data: {
@@ -93,7 +96,7 @@ export const replaceAssignmentTranslatorAndUpdateReminder = async (
                   translatorMessage: oldReminder.translatorMessage,
                   assignment: {
                     connect: {
-                      id,
+                      id: oldAssignment.id,
                     },
                   },
                   createdBy: {
