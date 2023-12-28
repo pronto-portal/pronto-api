@@ -61,16 +61,20 @@ const getAppDataSource = () => {
                 args.data.claimantMessage?.toString() ||
                 reminder.claimantMessage ||
                 "";
-
-              await updateRule({
-                reminderId: id,
-                translatorPhoneNumber: translatorPhone || undefined,
-                claimantPhoneNumber: claimantPhone,
-                translatorMessage,
-                claimantMessage,
-                claimantLanguage: assignment.claimant!.primaryLanguage ?? "en",
-                dateTime: assignment.dateTime!,
-              });
+              if (id)
+                await updateRule({
+                  reminderId: id,
+                  translatorPhoneNumber: translatorPhone || undefined,
+                  claimantPhoneNumber: claimantPhone,
+                  translatorMessage,
+                  claimantMessage,
+                  claimantLanguage:
+                    assignment.claimant!.primaryLanguage ?? "en",
+                  dateTime: assignment.dateTime!,
+                });
+              else {
+                console.log("No reminder id, cannot update rule");
+              }
 
               // todo: when updating translator/claimant phonenumber update the payload of this target
             }
@@ -175,11 +179,18 @@ const getAppDataSource = () => {
               const ruleName = `reminder-${reminder.id}`;
               console.log(`ruleName: ${ruleName}`);
 
-              if (process.env.NODE_ENV === "production")
+              if (
+                process.env.NODE_ENV === "production" &&
+                reminder &&
+                reminder.id
+              )
                 updateRule({
-                  reminderId: reminder.id!,
+                  reminderId: reminder.id,
                   dateTime: dateTime,
                 });
+              else {
+                console.log("No reminder id, cannot update rule");
+              }
             }
             return assignment;
           });

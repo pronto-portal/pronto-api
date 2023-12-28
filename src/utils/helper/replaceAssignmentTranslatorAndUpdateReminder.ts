@@ -41,19 +41,30 @@ export const replaceAssignmentTranslatorAndUpdateReminder = async (
                   Ids: [oldReminderId],
                 })
                 .promise()
-                .then(() =>
-                  eventBridge
+                .then(() => {
+                  console.log(
+                    "Successfully removed targets from rule",
+                    oldRuleName
+                  );
+                  return eventBridge
                     .deleteRule({
                       Name: oldRuleName,
                     })
                     .promise()
-                    .then(() =>
-                      sendSMS({
+                    .then(() => {
+                      console.log("Sending SMS to old translator...");
+                      return sendSMS({
                         message: `You have been unassigned from an appointment with ${oldClaimant.firstName} ${oldClaimant.lastName} on ${oldAssignment.dateTime}`,
                         phoneNumber: oldTranslatorPhone,
-                      })
-                    )
-                );
+                      });
+                    })
+                    .catch((err) =>
+                      console.log(
+                        "replaceAssignmentTranslatorAndUpdateReminder deleteRule",
+                        err
+                      )
+                    );
+                });
           }
 
           // I need to create a new reminder here in aws and notify the new translator
