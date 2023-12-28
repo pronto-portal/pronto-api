@@ -21,6 +21,8 @@ export const replaceAssignmentTranslatorAndUpdateReminder = async (
       },
     });
 
+    console.log("Old assignment", oldAssignment);
+
     if (oldAssignment) {
       const oldTranslatorId = oldAssignment.assignedToId;
       const oldReminder = oldAssignment.reminder
@@ -30,6 +32,8 @@ export const replaceAssignmentTranslatorAndUpdateReminder = async (
             },
           })
         : oldAssignment.reminder;
+
+      console.log("Old reminder", oldReminder);
 
       if (oldTranslatorId && oldTranslatorId !== translatorId) {
         // I need to delete the old reminder here in aws and notify the old translator
@@ -48,6 +52,7 @@ export const replaceAssignmentTranslatorAndUpdateReminder = async (
 
           if (oldTranslator && oldClaimant) {
             const oldTranslatorPhone = oldTranslator.phone!;
+            console.log("Old translator phone", oldTranslatorPhone);
 
             if (process.env.NODE_ENV === "production" && newTranslator)
               await sendSMS({
