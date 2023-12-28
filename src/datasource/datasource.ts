@@ -94,7 +94,13 @@ const getAppDataSource = () => {
                 claimantMessage: "",
                 claimantLanguage: "en",
                 sendSMSUpdate: false,
-              });
+              })
+                .then((delRuleRes) => {
+                  console.log("Deleted rule status: ", delRuleRes);
+                })
+                .catch(() => {
+                  console.log("Error deleting rule");
+                });
 
             console.log("Deleted rule?");
             console.log(reminder);

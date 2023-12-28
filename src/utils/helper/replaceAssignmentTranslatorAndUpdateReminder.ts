@@ -23,12 +23,17 @@ export const replaceAssignmentTranslatorAndUpdateReminder = async (
 
     if (oldAssignment) {
       const oldTranslatorId = oldAssignment.assignedToId;
-      const oldReminder = oldAssignment.reminder;
+      const oldReminder = oldAssignment.reminder
+        ? await prisma.reminder.delete({
+            where: {
+              id: oldAssignment.reminder.id,
+            },
+          })
+        : oldAssignment.reminder;
+
       if (oldTranslatorId && oldTranslatorId !== translatorId) {
         // I need to delete the old reminder here in aws and notify the old translator
         if (oldReminder) {
-          const oldReminderId = oldReminder.id;
-          const oldRuleName = `reminder-${oldReminderId}`;
           const oldTranslator = { ...oldAssignment.assignedTo };
           const oldClaimant = { ...oldAssignment.claimant };
 
@@ -45,42 +50,12 @@ export const replaceAssignmentTranslatorAndUpdateReminder = async (
             const oldTranslatorPhone = oldTranslator.phone!;
 
             if (process.env.NODE_ENV === "production" && newTranslator)
-              await eventBridge
-                .removeTargets({
-                  Rule: oldRuleName,
-                  Ids: [oldReminderId],
-                })
-                .promise()
-                .then(() => {
-                  console.log(
-                    "Successfully removed targets from rule",
-                    oldRuleName
-                  );
-                  return eventBridge
-                    .deleteRule({
-                      Name: oldRuleName,
-                    })
-                    .promise()
-                    .then(() => {
-                      console.log("Sending SMS to old translator...");
-                      return sendSMS({
-                        message: `You have been unassigned from an appointment with ${oldClaimant.firstName} ${oldClaimant.lastName} on ${oldAssignment.dateTime}`,
-                        phoneNumber: oldTranslatorPhone,
-                      }).then(() => {});
-                    })
-                    .catch((err) =>
-                      console.log(
-                        "replaceAssignmentTranslatorAndUpdateReminder deleteRule",
-                        err
-                      )
-                    );
-                })
-                .catch((err) => {
-                  console.log(
-                    "replaceAssignmentTranslatorAndUpdateReminder removeTargets",
-                    err
-                  );
-                });
+              await sendSMS({
+                message: `You have been unassigned from an appointment with ${oldClaimant.firstName} ${oldClaimant.lastName} on ${oldAssignment.dateTime}`,
+                phoneNumber: oldTranslatorPhone,
+              }).then(() => {
+                console.log("Unassigned SMS sent to old translator");
+              });
           }
 
           // I need to create a new reminder here in aws and notify the new translator

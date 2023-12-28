@@ -66,6 +66,7 @@ export const deleteRule = async ({
       success: response,
     };
   } catch (error) {
+    console.log("deleteRule error", error);
     return {
       success: false,
     };
