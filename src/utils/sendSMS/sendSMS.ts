@@ -8,14 +8,11 @@ interface SendSMSArgs {
 export const sendSMS = async ({ phoneNumber, message }: SendSMSArgs) => {
   console.log(
     "TWILIO ENV VARS",
-    process.env.TWILIO_ACCOUNT_SID,
+    process.env.TWILIO_SID,
     process.env.TWILIO_AUTH_TOKEN,
     process.env.TWILIO_PHONE
   );
-  const msg = client(
-    process.env.TWILIO_ACCOUNT_SID!,
-    process.env.TWILIO_AUTH_TOKEN!
-  )
+  const msg = client(process.env.TWILIO_SID!, process.env.TWILIO_AUTH_TOKEN!)
     .messages.create({
       from: process.env.TWILIO_PHONE!,
       to: phoneNumber,
