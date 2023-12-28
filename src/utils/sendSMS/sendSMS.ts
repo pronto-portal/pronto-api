@@ -6,7 +6,10 @@ interface SendSMSArgs {
 }
 
 export const sendSMS = async ({ phoneNumber, message }: SendSMSArgs) => {
-  const msg = client()
+  const msg = client(
+    process.env.TWILIO_ACCOUNT_SID!,
+    process.env.TWILIO_AUTH_TOKEN!
+  )
     .messages.create({
       from: process.env.TWILIO_PHONE!,
       to: phoneNumber,
