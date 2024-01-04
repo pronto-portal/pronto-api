@@ -3,6 +3,7 @@ import { phoneNumberIsValid } from "./phoneNumberIsValid";
 import { TranslateText } from "./translateText";
 import { dateToCron } from "./dateToCron";
 import { getReminderRuleName } from "./getReminderRuleName";
+import { cloneDeep } from "lodash";
 
 interface UpdateRuleArgs {
   reminderId: string;
@@ -27,13 +28,23 @@ export const updateRule = async ({
 }> => {
   console.log("Attempting to update rule...");
   try {
-    if (translatorPhoneNumber && claimantPhoneNumber) {
+    let validatedTranslatorPhonenumber = translatorPhoneNumber;
+    let validatedClaimantPhonenumber = claimantPhoneNumber;
+
+    if (translatorPhoneNumber) {
       console.log("Checking phone numbers...");
       const translatorPhoneIsValid = phoneNumberIsValid(translatorPhoneNumber);
+
+      if (!translatorPhoneIsValid) {
+        validatedTranslatorPhonenumber = ""; //throw new Error("Invalid translator phone number");
+      }
+    }
+
+    if (claimantPhoneNumber) {
       const claimantPhoneIsValid = phoneNumberIsValid(claimantPhoneNumber);
 
-      if (!translatorPhoneIsValid || !claimantPhoneIsValid) {
-        throw new Error("Invalid phone number");
+      if (!claimantPhoneIsValid) {
+        validatedClaimantPhonenumber = "";
       }
     }
 
@@ -66,7 +77,7 @@ export const updateRule = async ({
 
     const currentRuleTargetInput =
       currentRuleTarget && currentRuleTarget.Input
-        ? JSON.parse(currentRuleTarget.Input)
+        ? cloneDeep(JSON.parse(currentRuleTarget.Input))
         : undefined;
 
     console.log("currentRule", currentRule);
@@ -107,11 +118,13 @@ export const updateRule = async ({
         };
       }
 
-      if (translatorPhoneNumber) {
-        currentRuleTargetInput.payload.translatorPhone = translatorPhoneNumber;
+      if (validatedTranslatorPhonenumber) {
+        currentRuleTargetInput.payload.translatorPhone =
+          validatedTranslatorPhonenumber;
       }
-      if (claimantPhoneNumber) {
-        currentRuleTargetInput.payload.claimantPhone = claimantPhoneNumber;
+      if (validatedClaimantPhonenumber) {
+        currentRuleTargetInput.payload.claimantPhone =
+          validatedClaimantPhonenumber;
       }
       if (translatorMessage) {
         currentRuleTargetInput.payload.translatorMessage = translatorMessage;
