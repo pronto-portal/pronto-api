@@ -112,6 +112,7 @@ export interface NexusGenInputs {
   CreateReminderInput: { // input type
     assignmentId: string; // String!
     claimantMessage?: string | null; // String
+    cronSchedule?: string | null; // String
     translatorMessage?: string | null; // String
   }
   CreateRoleInput: { // input type
@@ -193,6 +194,7 @@ export interface NexusGenInputs {
   }
   UpdateReminderInput: { // input type
     claimantMessage?: string | null; // String
+    cronSchedule?: string | null; // String
     id: string; // String!
     translatorMessage?: string | null; // String
   }
@@ -403,6 +405,7 @@ export interface NexusGenFieldTypes {
     claimantMessage: string | null; // String
     createdBy: NexusGenRootTypes['User'] | null; // User
     createdById: string | null; // String
+    cronSchedule: string | null; // String
     id: string | null; // String
     translatorMessage: string | null; // String
   }
@@ -572,6 +575,7 @@ export interface NexusGenFieldTypeNames {
     claimantMessage: 'String'
     createdBy: 'User'
     createdById: 'String'
+    cronSchedule: 'String'
     id: 'String'
     translatorMessage: 'String'
   }

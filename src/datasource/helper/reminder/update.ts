@@ -63,6 +63,8 @@ export const UpdateReminder: UpdateReminderFunction = async ({
         reminder.translatorMessage ||
         "";
 
+      const cronString =
+        args.data.cronSchedule?.toString() || reminder.cronSchedule || "";
       const claimantMessage =
         args.data.claimantMessage?.toString() || reminder.claimantMessage || "";
       if (id)
@@ -73,7 +75,7 @@ export const UpdateReminder: UpdateReminderFunction = async ({
           translatorMessage,
           claimantMessage,
           claimantLanguage: assignment.claimant!.primaryLanguage ?? "en",
-          dateTime: assignment.dateTime!,
+          cronString,
         });
       else {
         console.log("No reminder id, cannot update rule");

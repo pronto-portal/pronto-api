@@ -13,7 +13,7 @@ interface CreateRuleArgs {
   translatorMessage: string;
   claimantMessage: string;
   claimantLanguage: string;
-  dateTime: Date;
+  cronString: string;
 }
 
 export const createRule = async ({
@@ -24,7 +24,7 @@ export const createRule = async ({
   translatorMessage,
   claimantMessage,
   claimantLanguage,
-  dateTime,
+  cronString,
 }: CreateRuleArgs): Promise<{
   success: boolean;
 }> => {
@@ -40,14 +40,13 @@ export const createRule = async ({
       claimantLanguage
     );
 
-    const dateTimeCron = dateToCron(dateTime.toString());
     const ruleName = getReminderRuleName(reminderId);
 
     const response = await eventBridge
       .putRule({
         Name: ruleName,
         Description: getReminderRuleDescription(createdById, reminderId),
-        ScheduleExpression: `cron(${dateTimeCron})`,
+        ScheduleExpression: `cron(${cronString})`,
         State: "ENABLED",
         RoleArn: process.env.EVENT_RULE_ROLE_ARN,
       })

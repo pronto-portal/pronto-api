@@ -1,4 +1,4 @@
-import { objectType } from "nexus";
+import { objectType, nullable } from "nexus";
 
 export const ReminderType = objectType({
   name: "Reminder",
@@ -39,5 +39,6 @@ export const ReminderType = objectType({
       },
     });
     t.string("createdById");
+    t.nullable.string("cronSchedule", { resolve: (root) => root.cronSchedule });
   },
 });

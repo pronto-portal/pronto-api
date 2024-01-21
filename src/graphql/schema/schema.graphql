@@ -136,6 +136,7 @@ input CreateClaimantInput {
 input CreateReminderInput {
   assignmentId: String!
   claimantMessage: String
+  cronSchedule: String
   translatorMessage: String
 }
 
@@ -259,6 +260,7 @@ type Reminder {
   claimantMessage: String
   createdBy: User
   createdById: String
+  cronSchedule: String
   id: String
   translatorMessage: String
 }
@@ -348,6 +350,7 @@ input UpdateNonUserTranslatorInput {
 
 input UpdateReminderInput {
   claimantMessage: String
+  cronSchedule: String
   id: String!
   translatorMessage: String
 }

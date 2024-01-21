@@ -15,7 +15,12 @@ export const CreateReminder = extendType({
         input: nonNull(CreateReminderInput),
       },
       async resolve(_, { input }, { prisma, user }) {
-        const { assignmentId, translatorMessage, claimantMessage } = input;
+        const {
+          assignmentId,
+          translatorMessage,
+          claimantMessage,
+          cronSchedule,
+        } = input;
 
         const assignment = await prisma.assignment.findFirst({
           where: {
@@ -62,6 +67,7 @@ export const CreateReminder = extendType({
           data: {
             translatorMessage: translatorMessage || defaultReminderMessage,
             claimantMessage: translatedClaimantMessage,
+            cronSchedule,
             assignment: {
               connect: {
                 id: assignmentId,

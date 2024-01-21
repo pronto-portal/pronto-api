@@ -3,6 +3,7 @@ import { Context } from "../../schema/context";
 import { isAuthorized } from "../../../utils/auth/isAuthorized";
 import { deleteRule } from "../../../utils/helper/deleteRule";
 import { createRule } from "../../../utils/helper/createRule";
+import { dateToCron } from "../../../utils/helper/dateToCron";
 
 export const ToggleAssignmentCancellation = extendType({
   type: "Mutation",
@@ -68,7 +69,7 @@ export const ToggleAssignmentCancellation = extendType({
                   translatorMessage: reminder.translatorMessage,
                   claimantMessage: reminder.claimantMessage,
                   claimantLanguage: claimant.primaryLanguage ?? "en",
-                  dateTime: assignment.dateTime,
+                  cronString: dateToCron(assignment.dateTime.toISOString()),
                 });
             }
 

@@ -5,6 +5,7 @@ import {
   DynamicQueryExtensionCb,
 } from "@prisma/client/runtime/library";
 import { updateRule } from "../../../utils/helper/updateRule";
+import { dateToCron } from "../../../utils/helper/dateToCron";
 
 type UpdateAssignmentFunctionType =
   | DynamicQueryExtensionCb<
@@ -33,7 +34,7 @@ export const UpdateAssignment: UpdateAssignmentFunctionType = async ({
       if (process.env.NODE_ENV === "production" && reminder && reminder.id)
         updateRule({
           reminderId: reminder.id,
-          dateTime: dateTime,
+          cronString: dateToCron(dateTime.toISOString()),
         });
       else {
         console.log("No reminder id, cannot update rule");

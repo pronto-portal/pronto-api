@@ -12,7 +12,7 @@ interface UpdateRuleArgs {
   translatorMessage?: string;
   claimantMessage?: string;
   claimantLanguage?: string;
-  dateTime?: Date;
+  cronString?: string;
 }
 
 export const updateRule = async ({
@@ -22,7 +22,7 @@ export const updateRule = async ({
   translatorMessage,
   claimantMessage,
   claimantLanguage,
-  dateTime,
+  cronString,
 }: UpdateRuleArgs): Promise<{
   success: boolean;
 }> => {
@@ -89,8 +89,8 @@ export const updateRule = async ({
 
       console.log("currentDateTimeCron", currentDateTimeCron);
 
-      const dateTimeCronScheduledExpression = dateTime
-        ? `cron(${dateToCron(dateTime.toString())})`
+      const dateTimeCronScheduledExpression = cronString
+        ? `cron(${cronString})`
         : currentDateTimeCron;
 
       console.log(

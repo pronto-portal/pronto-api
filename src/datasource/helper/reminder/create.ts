@@ -45,11 +45,11 @@ export const CreateReminder: CreateReminderFunctionType = async ({
 
   if (assignment) {
     const dateTime = (assignment.dateTime! as Date).toISOString();
-    const dateTimeCron = dateToCron(dateTime);
+    const cronString = reminder.cronSchedule || dateToCron(dateTime);
 
     console.log("Assignment Date time", assignment.dateTime);
     console.log("Assignment Date time ISO", dateTime);
-    console.log("Assignment Date time Cron", dateTimeCron);
+    console.log("Assignment Date time Cron", cronString);
 
     const ruleName = `reminder-${reminder.id}`;
 
@@ -62,7 +62,7 @@ export const CreateReminder: CreateReminderFunctionType = async ({
         translatorMessage: reminder.translatorMessage!,
         claimantMessage: reminder.claimantMessage!,
         claimantLanguage: assignment.claimant!.primaryLanguage ?? "en",
-        dateTime: assignment.dateTime,
+        cronString,
       }).then(({ success }) => {
         if (!success)
           eventBridge
