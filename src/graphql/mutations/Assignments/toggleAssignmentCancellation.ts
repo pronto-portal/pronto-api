@@ -70,6 +70,7 @@ export const ToggleAssignmentCancellation = extendType({
                   claimantMessage: reminder.claimantMessage,
                   claimantLanguage: claimant.primaryLanguage ?? "en",
                   cronString: dateToCron(assignment.dateTime.toISOString()),
+                  assignmentDate: assignment.dateTime,
                 });
             }
 

@@ -14,6 +14,7 @@ interface CreateRuleArgs {
   claimantMessage: string;
   claimantLanguage: string;
   cronString: string;
+  assignmentDate: Date;
 }
 
 export const createRule = async ({
@@ -25,6 +26,7 @@ export const createRule = async ({
   claimantMessage,
   claimantLanguage,
   cronString,
+  assignmentDate,
 }: CreateRuleArgs): Promise<{
   success: boolean;
 }> => {
@@ -65,6 +67,8 @@ export const createRule = async ({
                     translatorMessage,
                     claimantPhone: claimantPhoneNumber,
                     claimantMessage: translatedClaimantMessage,
+                    ruleName,
+                    assignmentDate: assignmentDate.toISOString(),
                   },
                 }),
               },
