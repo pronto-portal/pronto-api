@@ -316,6 +316,7 @@ export interface NexusGenFieldTypes {
     id: string | null; // String
     isCancelled: boolean | null; // Boolean
     isComplete: boolean | null; // Boolean
+    reminder: NexusGenRootTypes['Reminder'] | null; // Reminder
     translatorNoShow: boolean | null; // Boolean
   }
   Claimant: { // field return type
@@ -486,6 +487,7 @@ export interface NexusGenFieldTypeNames {
     id: 'String'
     isCancelled: 'Boolean'
     isComplete: 'Boolean'
+    reminder: 'Reminder'
     translatorNoShow: 'Boolean'
   }
   Claimant: { // field return type name

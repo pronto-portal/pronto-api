@@ -58,6 +58,7 @@ type Assignment {
   id: String
   isCancelled: Boolean
   isComplete: Boolean
+  reminder: Reminder
   translatorNoShow: Boolean
 }
 
