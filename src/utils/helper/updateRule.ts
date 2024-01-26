@@ -1,7 +1,5 @@
 import { eventBridge } from "../../aws/eventBridge";
 import { phoneNumberIsValid } from "./phoneNumberIsValid";
-import { TranslateText } from "./translateText";
-import { dateToCron } from "./dateToCron";
 import { getReminderRuleName } from "./getReminderRuleName";
 import { cloneDeep } from "lodash";
 
@@ -11,7 +9,6 @@ interface UpdateRuleArgs {
   claimantPhoneNumber?: string;
   translatorMessage?: string;
   claimantMessage?: string;
-  claimantLanguage?: string;
   cronString?: string;
 }
 
@@ -21,7 +18,6 @@ export const updateRule = async ({
   claimantPhoneNumber,
   translatorMessage,
   claimantMessage,
-  claimantLanguage,
   cronString,
 }: UpdateRuleArgs): Promise<{
   success: boolean;
@@ -129,13 +125,8 @@ export const updateRule = async ({
       if (translatorMessage) {
         currentRuleTargetInput.payload.translatorMessage = translatorMessage;
       }
-      if (claimantMessage && claimantLanguage) {
-        const translatedClaimantMessage = await TranslateText(
-          claimantMessage,
-          claimantLanguage
-        );
-        currentRuleTargetInput.payload.claimantMessage =
-          translatedClaimantMessage;
+      if (claimantMessage) {
+        currentRuleTargetInput.payload.claimantMessage = claimantMessage;
       }
 
       const updatedRuleTarget = await eventBridge

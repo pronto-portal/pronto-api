@@ -6,6 +6,7 @@ import {
 } from "@prisma/client/runtime/library";
 import { updateRule } from "../../../utils/helper/updateRule";
 import prisma from "../../base";
+import parseReminderMessages from "../../../utils/helper/parseReminderMessages";
 
 type UpdateReminderFunction =
   | DynamicQueryExtensionCb<
@@ -26,17 +27,9 @@ export const UpdateReminder: UpdateReminderFunction = async ({
         id: reminder.assignmentId,
       },
       include: {
-        claimant: {
-          select: {
-            phone: true,
-            primaryLanguage: true,
-          },
-        },
-        assignedTo: {
-          select: {
-            phone: true,
-          },
-        },
+        claimant: true,
+        assignedTo: true,
+        address: true,
         assignedToUser: {
           select: {
             phone: true,
@@ -58,15 +51,26 @@ export const UpdateReminder: UpdateReminderFunction = async ({
       const translatorPhone = translator!.phone;
 
       console.log("Updating rule");
-      const translatorMessage =
+      const unparsedTranslatorMessage =
         args.data.translatorMessage?.toString() ||
         reminder.translatorMessage ||
         "";
 
       const cronString =
         args.data.cronSchedule?.toString() || reminder.cronSchedule || "";
-      const claimantMessage =
+      const unparsedClaimantMessage =
         args.data.claimantMessage?.toString() || reminder.claimantMessage || "";
+
+      const { translatorMessage, claimantMessage } =
+        await parseReminderMessages(
+          unparsedTranslatorMessage,
+          unparsedClaimantMessage,
+          assignment.claimant,
+          translator,
+          assignment.address,
+          assignment.dateTime
+        );
+
       if (id)
         await updateRule({
           reminderId: id,
@@ -74,7 +78,6 @@ export const UpdateReminder: UpdateReminderFunction = async ({
           claimantPhoneNumber: claimantPhone,
           translatorMessage,
           claimantMessage,
-          claimantLanguage: assignment.claimant!.primaryLanguage ?? "en",
           cronString,
         });
       else {
