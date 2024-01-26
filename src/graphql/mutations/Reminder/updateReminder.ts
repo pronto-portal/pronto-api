@@ -13,7 +13,7 @@ export const UpdateReminder = extendType({
         input: nonNull(UpdateReminderinput),
       },
       async resolve(_, { input }, { prisma, user }) {
-        const { id, translatorMessage, claimantMessage } = input;
+        const { id, translatorMessage, claimantMessage, cronSchedule } = input;
 
         return await prisma.reminder.update({
           where: {
@@ -33,6 +33,7 @@ export const UpdateReminder = extendType({
           data: {
             translatorMessage: translatorMessage || undefined,
             claimantMessage: claimantMessage || undefined,
+            cronSchedule: cronSchedule || undefined,
           },
         });
       },

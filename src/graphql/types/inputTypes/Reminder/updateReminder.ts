@@ -6,5 +6,6 @@ export const UpdateReminderinput = inputObjectType({
     t.nonNull.string("id");
     t.string("translatorMessage");
     t.string("claimantMessage");
+    t.string("cronSchedule");
   },
 });

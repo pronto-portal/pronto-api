@@ -91,6 +91,7 @@ model Assignment {
   isComplete       Boolean            @default(false)
   claimantNoShow   Boolean            @default(false)
   translatorNoShow Boolean            @default(false)
+  isCancelled      Boolean            @default(false)
   reminder         Reminder?
   assignedTo       NonUserTranslator? @relation("nonUserTaskedAssignments", fields: [assignedToId], references: [id])
   assignedToId     String?
@@ -127,6 +128,7 @@ model Reminder {
   assignmentId      String     @unique
   claimantMessage   String
   translatorMessage String
+  cronSchedule      String?
   createdBy         User       @relation(fields: [createdById], references: [id])
   createdById       String
 }

@@ -16,5 +16,6 @@ export const AssignmentsFilter = inputObjectType({
       type: "DateRange",
     });
     t.nullable.date("date");
+    t.nullable.boolean("isCancelled");
   },
 });

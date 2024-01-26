@@ -4,7 +4,8 @@ export const dateToCron = (dateString: string) => {
   // todo: ensure all date string coming into the backend get converted into utc time
 
   console.log("Date String", dateString);
-  const dateTime = moment.utc(dateString);
+  const dateObj = new Date(dateString);
+  const dateTime = moment.utc(dateObj);
 
   const day = dateTime.date();
   const month = dateTime.month() + 1;

@@ -64,6 +64,7 @@ export interface NexusGenInputs {
     claimant?: NexusGenInputs['ClaimantsFilter'] | null; // ClaimantsFilter
     date?: NexusGenScalars['DateTime'] | null; // DateTime
     dateRange?: NexusGenInputs['DateRange'] | null; // DateRange
+    isCancelled?: boolean | null; // Boolean
   }
   ByEmailInput: { // input type
     email: string; // String!
@@ -111,6 +112,7 @@ export interface NexusGenInputs {
   CreateReminderInput: { // input type
     assignmentId: string; // String!
     claimantMessage?: string | null; // String
+    cronSchedule?: string | null; // String
     translatorMessage?: string | null; // String
   }
   CreateRoleInput: { // input type
@@ -192,6 +194,7 @@ export interface NexusGenInputs {
   }
   UpdateReminderInput: { // input type
     claimantMessage?: string | null; // String
+    cronSchedule?: string | null; // String
     id: string; // String!
     translatorMessage?: string | null; // String
   }
@@ -311,7 +314,9 @@ export interface NexusGenFieldTypes {
     createdBy: NexusGenRootTypes['User'] | null; // User
     dateTime: NexusGenScalars['DateTime'] | null; // DateTime
     id: string | null; // String
+    isCancelled: boolean | null; // Boolean
     isComplete: boolean | null; // Boolean
+    reminder: NexusGenRootTypes['Reminder'] | null; // Reminder
     translatorNoShow: boolean | null; // Boolean
   }
   Claimant: { // field return type
@@ -369,6 +374,7 @@ export interface NexusGenFieldTypes {
     deleteNonUserTranslator: NexusGenRootTypes['Translator'] | null; // Translator
     deleteReminder: NexusGenRootTypes['Reminder']; // Reminder!
     disconnectTranslator: NexusGenRootTypes['User'] | null; // User
+    toggleAssignmentCancellation: NexusGenRootTypes['Assignment'] | null; // Assignment
     updateAddress: NexusGenRootTypes['Address']; // Address!
     updateAssignment: NexusGenRootTypes['Assignment']; // Assignment!
     updateClaimant: NexusGenRootTypes['Claimant']; // Claimant!
@@ -400,6 +406,7 @@ export interface NexusGenFieldTypes {
     claimantMessage: string | null; // String
     createdBy: NexusGenRootTypes['User'] | null; // User
     createdById: string | null; // String
+    cronSchedule: string | null; // String
     id: string | null; // String
     translatorMessage: string | null; // String
   }
@@ -478,7 +485,9 @@ export interface NexusGenFieldTypeNames {
     createdBy: 'User'
     dateTime: 'DateTime'
     id: 'String'
+    isCancelled: 'Boolean'
     isComplete: 'Boolean'
+    reminder: 'Reminder'
     translatorNoShow: 'Boolean'
   }
   Claimant: { // field return type name
@@ -536,6 +545,7 @@ export interface NexusGenFieldTypeNames {
     deleteNonUserTranslator: 'Translator'
     deleteReminder: 'Reminder'
     disconnectTranslator: 'User'
+    toggleAssignmentCancellation: 'Assignment'
     updateAddress: 'Address'
     updateAssignment: 'Assignment'
     updateClaimant: 'Claimant'
@@ -567,6 +577,7 @@ export interface NexusGenFieldTypeNames {
     claimantMessage: 'String'
     createdBy: 'User'
     createdById: 'String'
+    cronSchedule: 'String'
     id: 'String'
     translatorMessage: 'String'
   }
@@ -666,6 +677,9 @@ export interface NexusGenArgTypes {
     }
     disconnectTranslator: { // args
       input: NexusGenInputs['DisconnectTranslatorInput']; // DisconnectTranslatorInput!
+    }
+    toggleAssignmentCancellation: { // args
+      input: NexusGenInputs['ByIdInput']; // ByIdInput!
     }
     updateAddress: { // args
       input: NexusGenInputs['UpdateAddressInput']; // UpdateAddressInput!

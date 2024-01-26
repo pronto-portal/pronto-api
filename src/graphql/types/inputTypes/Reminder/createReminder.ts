@@ -6,5 +6,6 @@ export const CreateReminderInput = inputObjectType({
     t.nonNull.string("assignmentId");
     t.string("translatorMessage");
     t.string("claimantMessage");
+    t.string("cronSchedule");
   },
 });

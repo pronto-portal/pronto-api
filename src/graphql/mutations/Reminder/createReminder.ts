@@ -2,7 +2,7 @@ import { extendType, nonNull } from "nexus";
 import { isAuthorized } from "../../../utils/auth/isAuthorized";
 import { CreateReminderInput, ReminderType } from "../../types";
 import { addressToString } from "../../../utils/helper/addressToString";
-import { TranslateText } from "../../../utils/helper/translateText";
+import parseReminderMessages from "../../../utils/helper/parseReminderMessages";
 
 export const CreateReminder = extendType({
   type: "Mutation",
@@ -15,7 +15,12 @@ export const CreateReminder = extendType({
         input: nonNull(CreateReminderInput),
       },
       async resolve(_, { input }, { prisma, user }) {
-        const { assignmentId, translatorMessage, claimantMessage } = input;
+        const {
+          assignmentId,
+          translatorMessage,
+          claimantMessage,
+          cronSchedule,
+        } = input;
 
         const assignment = await prisma.assignment.findFirst({
           where: {
@@ -49,19 +54,25 @@ export const CreateReminder = extendType({
 
         if (!assignment) throw new Error("You do not own this assignment");
 
-        let translatedClaimantMessage =
-          claimantMessage || defaultReminderMessage;
+        const translator = assignment.assignedTo;
 
-        if (claimant) {
-          translatedClaimantMessage = await TranslateText(
-            claimantMessage || defaultReminderMessage,
-            claimant.primaryLanguage || "en"
-          );
-        }
+        const {
+          translatorMessage: parsedTranslatorMessage,
+          claimantMessage: parsedClaimantMessage,
+        } = await parseReminderMessages(
+          translatorMessage || defaultReminderMessage,
+          claimantMessage || defaultReminderMessage,
+          claimant,
+          translator,
+          address,
+          assignment.dateTime
+        );
+
         const reminder = await prisma.reminder.create({
           data: {
-            translatorMessage: translatorMessage || defaultReminderMessage,
-            claimantMessage: translatedClaimantMessage,
+            translatorMessage: parsedTranslatorMessage,
+            claimantMessage: parsedClaimantMessage,
+            cronSchedule,
             assignment: {
               connect: {
                 id: assignmentId,
