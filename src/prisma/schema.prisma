@@ -128,7 +128,7 @@ model Reminder {
   assignmentId      String     @unique
   claimantMessage   String
   translatorMessage String
-  cronSchedule      String?
+  cronSchedule      String     @default("")
   createdBy         User       @relation(fields: [createdById], references: [id])
   createdById       String
 }

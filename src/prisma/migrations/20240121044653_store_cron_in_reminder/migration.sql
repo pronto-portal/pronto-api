@@ -5,4 +5,4 @@
 
 */
 -- AlterTable
-ALTER TABLE "Reminder" ADD COLUMN     "cronSchedule" TEXT NOT NULL;
+ALTER TABLE "Reminder" ADD COLUMN     "cronSchedule" TEXT DEFAULT '';
