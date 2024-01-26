@@ -72,7 +72,7 @@ export const CreateReminder = extendType({
           data: {
             translatorMessage: parsedTranslatorMessage,
             claimantMessage: parsedClaimantMessage,
-            cronSchedule,
+            cronSchedule: cronSchedule || "",
             assignment: {
               connect: {
                 id: assignmentId,
