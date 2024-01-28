@@ -45,6 +45,7 @@ export const createRule = async ({
 
     const ruleName = getReminderRuleName(reminderId);
 
+    console.log("attempting to put rule");
     const response = await eventBridge
       .putRule({
         Name: ruleName,
@@ -79,6 +80,10 @@ export const createRule = async ({
           .promise()
           .then(() => true)
           .catch(() => false);
+      })
+      .catch((err) => {
+        console.log("put rule error", err);
+        return false;
       });
 
     console.log("createRule response", response);
