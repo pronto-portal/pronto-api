@@ -46,6 +46,7 @@ export const createRule = async ({
     const ruleName = getReminderRuleName(reminderId);
 
     console.log("attempting to put rule");
+    console.log("schedule expression", `cron(${cronString})`);
     const response = await eventBridge
       .putRule({
         Name: ruleName,
