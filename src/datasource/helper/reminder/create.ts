@@ -55,8 +55,11 @@ export const CreateReminder: CreateReminderFunctionType = async ({
     console.log("Assignment Date time Cron", cronString);
 
     const ruleName = `reminder-${reminder.id}`;
+    console.log("Rule Name: ", ruleName);
+    console.log("is prod? ", process.env.NODE_ENV === "production");
 
-    if (process.env.NODE_ENV === "production")
+    if (process.env.NODE_ENV === "production") {
+      console.log("creating rule");
       createRule({
         reminderId: reminder.id!,
         createdById: reminder.createdById!,
@@ -84,6 +87,7 @@ export const CreateReminder: CreateReminderFunctionType = async ({
 
         // Delete reminder since reminder has not actually been created:
       });
+    }
   }
 
   return reminder;

@@ -35,6 +35,7 @@ export const createRule = async ({
     const claimantPhoneIsValid = phoneNumberIsValid(claimantPhoneNumber);
 
     if (!translatorPhoneIsValid || !claimantPhoneIsValid) {
+      console.log("Invalid phone number");
       throw new Error("Invalid phone number");
     }
     const translatedClaimantMessage = await TranslateText(
@@ -54,6 +55,7 @@ export const createRule = async ({
       })
       .promise()
       .then(() => {
+        console.log("putting targets");
         return eventBridge
           .putTargets({
             Rule: ruleName,
