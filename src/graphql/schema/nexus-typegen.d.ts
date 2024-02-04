@@ -170,6 +170,7 @@ export interface NexusGenInputs {
     dateTime?: NexusGenScalars['DateTime'] | null; // DateTime
     id: string; // String!
     isComplete?: boolean | null; // Boolean
+    reminder?: NexusGenInputs['UpdateReminderInput'] | null; // UpdateReminderInput
     translatorId?: string | null; // String
     translatorNoShow?: boolean | null; // Boolean
   }

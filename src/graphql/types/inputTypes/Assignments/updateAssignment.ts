@@ -16,5 +16,8 @@ export const UpdateAssignmentInput = inputObjectType({
     t.nullable.boolean("isComplete");
     t.nullable.boolean("claimantNoShow");
     t.nullable.boolean("translatorNoShow");
+    t.nullable.field("reminder", {
+      type: "UpdateReminderInput",
+    });
   },
 });

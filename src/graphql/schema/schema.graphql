@@ -324,6 +324,7 @@ input UpdateAssignmentInput {
   dateTime: DateTime
   id: String!
   isComplete: Boolean
+  reminder: UpdateReminderInput
   translatorId: String
   translatorNoShow: Boolean
 }
