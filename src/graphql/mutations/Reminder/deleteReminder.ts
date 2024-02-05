@@ -26,8 +26,6 @@ export const DeleteReminder = extendType({
             },
           })
           .then((rem) => {
-            console.log("Successfully deleted reminder with an id of ", id);
-            console.log("________________________________________");
             return prisma.user
               .update({
                 where: {
@@ -39,15 +37,7 @@ export const DeleteReminder = extendType({
                   },
                 },
               })
-              .then(() => rem)
-              .catch((uErr) => {
-                console.error("USER ERROR ERROR ERROR", uErr);
-                return uErr;
-              });
-          })
-          .catch((err) => {
-            console.error("ERROR ERROR ERROR", err);
-            return err;
+              .then(() => rem);
           });
 
         return reminder;

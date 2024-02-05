@@ -95,14 +95,15 @@ export const AssignmentType = objectType({
     t.field("reminder", {
       type: "Reminder",
       async resolve(root, __, { prisma }: Context) {
-        const { reminder } = await prisma.assignment.findUniqueOrThrow({
+        const assignment = await prisma.assignment.findUnique({
           where: { id: root.id },
           include: {
             reminder: true,
           },
         });
 
-        return reminder;
+        if (!assignment) return null;
+        return assignment.reminder;
       },
     });
     t.boolean("isComplete");

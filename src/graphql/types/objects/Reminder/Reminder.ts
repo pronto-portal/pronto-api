@@ -9,7 +9,7 @@ export const ReminderType = objectType({
     t.field("assignment", {
       type: "Assignment",
       async resolve(root, _, { prisma, user }) {
-        const { assignment } = await prisma.reminder.findUniqueOrThrow({
+        const reminder = await prisma.reminder.findUnique({
           where: { id: root.id },
           include: {
             assignment: {
@@ -21,7 +21,9 @@ export const ReminderType = objectType({
           },
         });
 
-        return assignment;
+        if (!reminder) return null;
+
+        return reminder.assignment;
       },
     });
     t.string("assignmentId");
