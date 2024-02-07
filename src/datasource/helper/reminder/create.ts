@@ -73,16 +73,32 @@ export const CreateReminder: CreateReminderFunctionType = async ({
       }).then(({ success }) => {
         if (!success)
           eventBridge
-            .deleteRule({
-              Name: ruleName,
+            .removeTargets({
+              Rule: ruleName,
+              Ids: [reminder.id!],
             })
             .promise()
-            .then(() => {
-              prisma.reminder.delete({
-                where: {
-                  id: reminder.id,
-                },
-              });
+            .then(() =>
+              eventBridge
+                .deleteRule({
+                  Name: ruleName,
+                })
+                .promise()
+                .then(() => {
+                  prisma.reminder.delete({
+                    where: {
+                      id: reminder.id,
+                    },
+                  });
+                })
+                .catch((err) => {
+                  console.log("Err ", err);
+                  return err;
+                })
+            )
+            .catch((err) => {
+              console.log("Err ", err);
+              return err;
             });
 
         // Delete reminder since reminder has not actually been created:

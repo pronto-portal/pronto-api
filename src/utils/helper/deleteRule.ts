@@ -39,26 +39,38 @@ export const deleteRule = async ({
     const ruleName = getReminderRuleName(reminderId);
 
     const response = await eventBridge
-      .deleteRule({
-        Name: ruleName,
+      .removeTargets({
+        Rule: ruleName,
+        Ids: [reminderId],
       })
       .promise()
-      .then(() => {
-        if (!sendSMSUpdate) {
-          return true;
-        }
-
-        return sendSMS({
-          phoneNumber: translatorPhoneNumber,
-          message: translatorMessage,
-        }).then(() => {
-          return sendSMS({
-            phoneNumber: claimantPhoneNumber,
-            message: translatedClaimantMessage,
+      .then(() =>
+        eventBridge
+          .deleteRule({
+            Name: ruleName,
           })
-            .then(() => true)
-            .catch(() => false);
-        });
+          .promise()
+          .then(() => {
+            if (!sendSMSUpdate) {
+              return true;
+            }
+
+            return sendSMS({
+              phoneNumber: translatorPhoneNumber,
+              message: translatorMessage,
+            }).then(() => {
+              return sendSMS({
+                phoneNumber: claimantPhoneNumber,
+                message: translatedClaimantMessage,
+              })
+                .then(() => true)
+                .catch(() => false);
+            });
+          })
+      )
+      .catch((err) => {
+        console.log("deleteRule error", err);
+        return err;
       });
 
     console.log("deleteRule response", response);

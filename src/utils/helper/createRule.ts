@@ -80,7 +80,10 @@ export const createRule = async ({
           })
           .promise()
           .then(() => true)
-          .catch(() => false);
+          .catch((err) => {
+            console.log("put targets error", err);
+            return false;
+          });
       })
       .catch((err) => {
         console.log("put rule error", err);
