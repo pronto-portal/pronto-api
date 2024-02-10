@@ -1,5 +1,5 @@
 import { Router } from "express";
-import prisma from "../datasource/datasource";
+import prisma from "../datasource/base";
 import { authenticate } from "../utils/auth/authenticate";
 import { google } from "googleapis";
 import { decode } from "jsonwebtoken";

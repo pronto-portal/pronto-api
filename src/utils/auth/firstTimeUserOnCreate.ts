@@ -1,5 +1,5 @@
 import { User } from "@prisma/client";
-import prisma from "../../datasource/datasource";
+import prisma from "../../datasource/base";
 import StripeClient from "../../datasource/stripe";
 import { NexusGenInputs } from "../../graphql/schema/nexus-typegen";
 

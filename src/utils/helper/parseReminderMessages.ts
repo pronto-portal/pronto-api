@@ -4,10 +4,12 @@ import substituteWordsReminderMessage, {
 } from "./substituteWordsReminderMessage";
 import formatAMPM from "./formatAMPM";
 import { TranslateText } from "./translateText";
+import moment from "moment";
 
 const parseReminderMessages = async (
   translatorMessage: string,
   claimantMessage: string,
+  localTimeZone: string,
   claimant?: Claimant | null,
   translator?: NonUserTranslator | null,
   address?: Address | null,
@@ -26,11 +28,12 @@ const parseReminderMessages = async (
   console.log("Date time ", dateTime);
   const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
+  const localDate = moment.utc(dateTime).tz(localTimeZone).toDate();
   console.log("Time zone ", timezone);
   const dateWords: Word[] = dateTime
     ? [
-        { label: "Date", word: dateTime.toLocaleDateString() },
-        { label: "Time", word: formatAMPM(dateTime) },
+        { label: "Date", word: localDate.toLocaleDateString() },
+        { label: "Time", word: formatAMPM(localDate) },
       ]
     : [];
 

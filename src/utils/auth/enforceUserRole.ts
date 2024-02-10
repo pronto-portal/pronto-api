@@ -1,6 +1,6 @@
 import { User } from "@prisma/client";
 import { RoleNames } from "../../types";
-import prisma from "../../datasource/datasource";
+import prisma from "../../datasource/base";
 
 export const enforceUserRole = async (
   user?: User,

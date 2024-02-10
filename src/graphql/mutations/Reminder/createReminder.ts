@@ -14,7 +14,7 @@ export const CreateReminder = extendType({
       args: {
         input: nonNull(CreateReminderInput),
       },
-      async resolve(_, { input }, { prisma, user }) {
+      async resolve(_, { input }, { prisma, user, req }) {
         const {
           assignmentId,
           translatorMessage,
@@ -56,12 +56,15 @@ export const CreateReminder = extendType({
 
         const translator = assignment.assignedTo;
 
+        const localTimezone = req.headers["X-Timezone"] as string;
+
         const {
           translatorMessage: parsedTranslatorMessage,
           claimantMessage: parsedClaimantMessage,
         } = await parseReminderMessages(
           translatorMessage || defaultReminderMessage,
           claimantMessage || defaultReminderMessage,
+          localTimezone,
           claimant,
           translator,
           address,

@@ -1,4 +1,4 @@
-import prisma from "../../datasource/datasource";
+import prisma from "../../datasource/base";
 import { sendSMS } from "../sendSMS";
 import { User } from "@prisma/client";
 

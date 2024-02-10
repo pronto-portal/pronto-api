@@ -1,6 +1,6 @@
 // product.updated
 import stripeClient from "../../datasource/stripe";
-import Prisma from "../../datasource/datasource";
+import prisma from "../../datasource/base";
 import { Product } from "../../types/stripe/product";
 import { Event } from "../../types/stripe/event";
 
@@ -30,7 +30,7 @@ export const onProductUpdated = async (event: Event<Product>) => {
         remindersLimit: +remindersLimit,
       };
 
-      const role = await Prisma.role.upsert({
+      const role = await prisma.role.upsert({
         where: {
           name: data.name,
         },

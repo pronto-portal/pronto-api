@@ -1,5 +1,5 @@
 // invoice.created
-import Prisma from "../../datasource/datasource";
+import prisma from "../../datasource/base";
 import { Event } from "../../types/stripe/event";
 import Invoice from "../../types/stripe/invoice";
 
@@ -9,7 +9,7 @@ export const onInvoiceCreated = async (event: Event<Invoice>) => {
     const email = invoice.customer_email;
 
     if (email)
-      return await Prisma.user.update({
+      return await prisma.user.update({
         where: { email },
         data: {
           remindersCreatedThisMonth: 0,

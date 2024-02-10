@@ -1,6 +1,6 @@
 // customer.subscription.created
 import stripeClient from "../../datasource/stripe";
-import Prisma from "../../datasource/datasource";
+import prisma from "../../datasource/base";
 import { Subscription } from "../../types/stripe/subscription";
 import { Event } from "../../types/stripe/event";
 import moment from "moment";
@@ -12,7 +12,7 @@ export const onSubscriptionDelete = async (event: Event<Subscription>) => {
       subscriptionResponse.id
     );
     const customer = subscription.customer.toString();
-    const user = await Prisma.user.findUnique({
+    const user = await prisma.user.findUnique({
       where: {
         customerId: customer,
       },
@@ -45,7 +45,7 @@ export const onSubscriptionDelete = async (event: Event<Subscription>) => {
     const name =
       existingSubscriptionHasItems && product ? product.name : "Basic";
 
-    const updatedUser = await Prisma.user.update({
+    const updatedUser = await prisma.user.update({
       where: {
         email,
       },

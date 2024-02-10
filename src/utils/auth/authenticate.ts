@@ -7,7 +7,7 @@ import { NexusGenInputs } from "../../graphql/schema/nexus-typegen";
 import { refreshTokenExpireTime, tokenExpireTime } from "../constants/auth";
 import firstTimeUserOnCreate from "./firstTimeUserOnCreate";
 import { Request, Response } from "express";
-import prisma from "../../datasource/datasource";
+import prisma from "../../datasource/base";
 
 interface AuthContext {
   req: Request;

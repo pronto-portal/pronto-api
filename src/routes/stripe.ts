@@ -3,7 +3,7 @@ import { Router, raw } from "express";
 import { BaseError } from "../types/errors";
 import { isAuthorizedExpress } from "../utils/auth/isAuthorizedExpress";
 import stripe from "../datasource/stripe";
-import prisma from "../datasource/datasource";
+import prisma from "../datasource/base";
 import { onProductDelete } from "../utils/stripe/onProductDelete";
 import { onSubscriptionCreate } from "../utils/stripe/onSubscriptionCreate";
 import { onSubscriptionDelete } from "../utils/stripe/onSubscriptionDelete";

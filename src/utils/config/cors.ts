@@ -28,6 +28,7 @@ const corsConfig = cors({
     "Accept",
     "X-XSS-Protection",
     "Authorization",
+    "X-Timezone",
   ],
 });
 

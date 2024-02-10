@@ -6,7 +6,7 @@ import { parseAuthHeader } from "./parseAuthHeader";
 import { tokenExpireTime } from "../constants/auth";
 import { enforceUserRole } from "./enforceUserRole";
 import { RoleNames } from "../../types";
-import prisma from "../../datasource/datasource";
+import prisma from "../../datasource/base";
 import { User } from "@prisma/client";
 
 interface isAuthorizedBaseContext {

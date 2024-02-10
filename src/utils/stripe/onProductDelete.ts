@@ -1,6 +1,6 @@
 // product.created
 import stripeClient from "../../datasource/stripe";
-import Prisma from "../../datasource/datasource";
+import prisma from "../../datasource/base";
 import { Product } from "../../types/stripe/product";
 import { Event } from "../../types/stripe/event";
 
@@ -9,7 +9,7 @@ export const onProductDelete = async (event: Event<Product>) => {
     const product = event.data.object;
     const name = product.name;
 
-    const deletedRole = await Prisma.role.delete({
+    const deletedRole = await prisma.role.delete({
       where: {
         name,
       },

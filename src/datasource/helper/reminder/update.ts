@@ -3,6 +3,7 @@ import {
   Args_2,
   DefaultArgs,
   DynamicQueryExtensionCb,
+  DynamicQueryExtensionCbArgs,
 } from "@prisma/client/runtime/library";
 import { updateRule } from "../../../utils/helper/updateRule";
 import prisma from "../../base";
@@ -17,10 +18,20 @@ type UpdateReminderFunction =
     >
   | undefined;
 
-export const UpdateReminder: UpdateReminderFunction = async ({
+type FunctionArgs = DynamicQueryExtensionCbArgs<
+  Prisma.TypeMap<Args_2 & DefaultArgs>,
+  "model",
+  "Reminder",
+  "update"
+> & {
+  localTimeZone: string;
+};
+
+export const UpdateReminder = async ({
   args,
   query,
-}) => {
+  localTimeZone,
+}: FunctionArgs) => {
   return await query({ ...args }).then(async (reminder) => {
     const assignment = await prisma.assignment.findUnique({
       where: {
@@ -65,6 +76,7 @@ export const UpdateReminder: UpdateReminderFunction = async ({
         await parseReminderMessages(
           unparsedTranslatorMessage,
           unparsedClaimantMessage,
+          localTimeZone,
           assignment.claimant,
           translator,
           assignment.address,

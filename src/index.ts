@@ -4,7 +4,7 @@ import { expressMiddleware } from "@apollo/server/express4";
 import express from "express";
 import { json } from "body-parser";
 import corsConfig from "./utils/config/cors";
-import datasource from "./datasource/datasource";
+import getAppDataSource from "./datasource/datasource";
 import schema from "./graphql/schema/schema";
 import cookieParser from "cookie-parser";
 import jwt from "jsonwebtoken";
@@ -18,7 +18,6 @@ import errorHandlingPlugin from "./utils/apollo/errorHandlingPlugin";
 
 const main = async () => {
   console.log("Starting server...");
-  const prisma = datasource;
   const app = express();
   const httpServer = http.createServer(app);
 
@@ -46,9 +45,11 @@ const main = async () => {
   app.use(
     "/graphql",
     expressMiddleware(server, {
-      context: async ({ req, res }) => {
+      context: async (context) => {
+        const { req, res } = context;
         // API Gateway event and Lambda Context
         const accessToken = req.cookies["x-access-token"];
+        const prisma = getAppDataSource(context);
 
         let user: User | null = null;
 

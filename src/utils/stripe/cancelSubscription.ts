@@ -1,7 +1,7 @@
-import Prisma from "../../datasource/datasource";
+import prisma from "../../datasource/base";
 
 const cancelSubscription = async (email: string) => {
-  return await Prisma.user.update({
+  return await prisma.user.update({
     where: {
       email,
     },

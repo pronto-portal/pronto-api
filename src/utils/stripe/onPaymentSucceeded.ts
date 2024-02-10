@@ -1,5 +1,5 @@
 import stripeClient from "../../datasource/stripe";
-import prisma from "../../datasource/datasource";
+import prisma from "../../datasource/base";
 import { Event } from "../../types/stripe/event";
 import Invoice from "../../types/stripe/invoice";
 

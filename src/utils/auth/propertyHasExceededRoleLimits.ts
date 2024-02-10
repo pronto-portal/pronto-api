@@ -1,5 +1,5 @@
 import { Role, User } from "@prisma/client";
-import prisma from "../../datasource/datasource";
+import prisma from "../../datasource/base";
 import EnforceLimitOnProperties from "../../types/enforceLimitOnProperties";
 
 const propertyHasExceededRoleLimits = async (
