@@ -22,12 +22,19 @@ const parseReminderMessages = async (
     ? [{ label: "Address", word: formattedAddressText }]
     : [];
 
+  console.log("----------------------------");
+  console.log("Date time ", dateTime);
+  const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+  console.log("Time zone ", timezone);
   const dateWords: Word[] = dateTime
     ? [
         { label: "Date", word: dateTime.toLocaleDateString() },
         { label: "Time", word: formatAMPM(dateTime) },
       ]
     : [];
+
+  console.log("dateWords", dateWords);
 
   const sharedWords: Word[] = [...dateWords, ...addressWords];
 
