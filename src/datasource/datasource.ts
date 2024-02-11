@@ -18,7 +18,7 @@ const getAppDataSource = (context?: ExpressContextFunctionArgument) => {
           return UpdateReminder({
             ...params,
             localTimeZone: context
-              ? (context.req.headers["X-Timezone"] as string)
+              ? (context.req.headers["x-timezone"] as string)
               : "UTC",
           });
         },

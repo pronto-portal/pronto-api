@@ -56,7 +56,9 @@ export const CreateReminder = extendType({
 
         const translator = assignment.assignedTo;
 
-        const localTimezone = req.headers["X-Timezone"] as string;
+        const localTimezone = req.headers["x-timezone"] as string;
+        console.log("Request headers", req.headers);
+        console.log("localTimezone", localTimezone);
 
         const {
           translatorMessage: parsedTranslatorMessage,

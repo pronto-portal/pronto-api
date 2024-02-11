@@ -4,12 +4,12 @@ import substituteWordsReminderMessage, {
 } from "./substituteWordsReminderMessage";
 import formatAMPM from "./formatAMPM";
 import { TranslateText } from "./translateText";
-import moment from "moment";
+import moment from "moment-timezone";
 
 const parseReminderMessages = async (
   translatorMessage: string,
   claimantMessage: string,
-  localTimeZone: string,
+  localTimeZone: string = "UTC",
   claimant?: Claimant | null,
   translator?: NonUserTranslator | null,
   address?: Address | null,
@@ -27,8 +27,18 @@ const parseReminderMessages = async (
   console.log("----------------------------");
   console.log("Date time ", dateTime);
   const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  console.log("localTimeZone", localTimeZone);
+
+  console.log("moment utc", moment.utc(dateTime));
+  console.log("typeof datetime", typeof dateTime);
+  console.log(
+    "moment.utc(dateTime).tz(localTimeZone)",
+    moment.utc(dateTime).tz(localTimeZone)
+  );
 
   const localDate = moment.utc(dateTime).tz(localTimeZone).toDate();
+
+  console.log("Local date", localDate);
   console.log("Time zone ", timezone);
   const dateWords: Word[] = dateTime
     ? [
