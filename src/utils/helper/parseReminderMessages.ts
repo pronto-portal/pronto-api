@@ -36,7 +36,7 @@ const parseReminderMessages = async (
   );
 
   const momentLocalDate = moment.utc(dateTime).tz(localTimeZone);
-  const localDate = momentLocalDate.toLocaleString();
+  const localDate = momentLocalDate.format("MMM DD YYYY");
 
   console.log("Local date", localDate);
   console.log("Time zone ", timezone);
