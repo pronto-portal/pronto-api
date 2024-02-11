@@ -2,7 +2,6 @@ import { Address, Claimant, NonUserTranslator } from "@prisma/client";
 import substituteWordsReminderMessage, {
   Word,
 } from "./substituteWordsReminderMessage";
-import formatAMPM from "./formatAMPM";
 import { TranslateText } from "./translateText";
 import moment from "moment-timezone";
 
@@ -36,14 +35,16 @@ const parseReminderMessages = async (
     moment.utc(dateTime).tz(localTimeZone)
   );
 
-  const localDate = moment.utc(dateTime).tz(localTimeZone).toDate();
+  const momentLocalDate = moment.utc(dateTime).tz(localTimeZone);
+  const localDate = momentLocalDate.toLocaleString();
 
   console.log("Local date", localDate);
   console.log("Time zone ", timezone);
+  console.log("Moment local time", momentLocalDate.format("h:mm A"));
   const dateWords: Word[] = dateTime
     ? [
-        { label: "Date", word: localDate.toLocaleDateString() },
-        { label: "Time", word: formatAMPM(localDate) },
+        { label: "Date", word: localDate },
+        { label: "Time", word: momentLocalDate.format("h:mm A") },
       ]
     : [];
 
