@@ -59,8 +59,10 @@ export const ToggleAssignmentCancellation = extendType({
                     assignedTo.lastName
                   } on ${assignment.dateTime.toLocaleDateString()} has been cancelled.`,
                   claimantLanguage: claimant.primaryLanguage ?? "en",
+                  claimantOptedOut: claimant.optedOut,
+                  translatorOptedOut: assignedTo.optedOut,
                 });
-              else
+              else {
                 createRule({
                   reminderId: reminder.id,
                   createdById: reminder.createdById,
@@ -71,7 +73,10 @@ export const ToggleAssignmentCancellation = extendType({
                   claimantLanguage: claimant.primaryLanguage ?? "en",
                   cronString: dateToCron(assignment.dateTime.toISOString()),
                   assignmentDate: assignment.dateTime,
+                  claimantOptedOut: claimant.optedOut,
+                  translatorOptedOut: assignedTo.optedOut,
                 });
+              }
             }
 
             return data;

@@ -276,6 +276,7 @@ export interface NexusGenObjects {
     id?: string | null; // String
     languages?: string[] | null; // [String!]
     lastName?: string | null; // String
+    optedOut?: boolean | null; // Boolean
     phone?: string | null; // String
     state?: string | null; // String
     updatedAt?: NexusGenScalars['DateTime'] | null; // DateTime
@@ -327,6 +328,7 @@ export interface NexusGenFieldTypes {
     id: string | null; // String
     languages: Array<string | null> | null; // [String]
     lastName: string | null; // String
+    optedOut: boolean | null; // Boolean
     phone: string | null; // String
     primaryLanguage: string | null; // String
     user: NexusGenRootTypes['User'] | null; // User
@@ -430,6 +432,7 @@ export interface NexusGenFieldTypes {
     id: string | null; // String
     languages: string[] | null; // [String!]
     lastName: string | null; // String
+    optedOut: boolean | null; // Boolean
     phone: string | null; // String
     state: string | null; // String
     updatedAt: NexusGenScalars['DateTime'] | null; // DateTime
@@ -498,6 +501,7 @@ export interface NexusGenFieldTypeNames {
     id: 'String'
     languages: 'String'
     lastName: 'String'
+    optedOut: 'Boolean'
     phone: 'String'
     primaryLanguage: 'String'
     user: 'User'
@@ -601,6 +605,7 @@ export interface NexusGenFieldTypeNames {
     id: 'String'
     languages: 'String'
     lastName: 'String'
+    optedOut: 'Boolean'
     phone: 'String'
     state: 'String'
     updatedAt: 'DateTime'

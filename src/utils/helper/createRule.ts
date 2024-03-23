@@ -15,6 +15,8 @@ interface CreateRuleArgs {
   claimantLanguage: string;
   cronString: string;
   assignmentDate: Date;
+  claimantOptedOut: boolean;
+  translatorOptedOut: boolean;
 }
 
 export const createRule = async ({
@@ -27,6 +29,8 @@ export const createRule = async ({
   claimantLanguage,
   cronString,
   assignmentDate,
+  claimantOptedOut,
+  translatorOptedOut,
 }: CreateRuleArgs): Promise<{
   success: boolean;
 }> => {
@@ -67,10 +71,14 @@ export const createRule = async ({
                 Arn: process.env.REMINDER_FUNCTION_ARN!,
                 Input: JSON.stringify({
                   payload: {
-                    translatorPhone: translatorPhoneNumber,
+                    translatorPhone: !translatorOptedOut
+                      ? translatorPhoneNumber
+                      : "",
                     translatorMessage,
                     claimantPhone: claimantPhoneNumber,
-                    claimantMessage: translatedClaimantMessage,
+                    claimantMessage: !claimantOptedOut
+                      ? translatedClaimantMessage
+                      : "",
                     ruleName,
                     assignmentDate: assignmentDate.toISOString(),
                   },

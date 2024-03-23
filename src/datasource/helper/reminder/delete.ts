@@ -30,6 +30,8 @@ export const DeleteReminder: DeleteReminderFunctionType = async ({
         claimantMessage: "",
         claimantLanguage: "en",
         sendSMSUpdate: false,
+        claimantOptedOut: false,
+        translatorOptedOut: false,
       })
         .then((delRuleRes) => {
           console.log("Deleted rule status: ", delRuleRes);

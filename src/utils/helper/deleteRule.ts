@@ -12,6 +12,8 @@ interface DeleteRuleArgs {
   claimantMessage: string;
   claimantLanguage: string;
   sendSMSUpdate?: boolean;
+  claimantOptedOut: boolean;
+  translatorOptedOut: boolean;
 }
 
 export const deleteRule = async ({
@@ -22,6 +24,8 @@ export const deleteRule = async ({
   claimantMessage,
   claimantLanguage,
   sendSMSUpdate = true,
+  claimantOptedOut,
+  translatorOptedOut,
 }: DeleteRuleArgs): Promise<{
   success: boolean;
 }> => {
@@ -58,10 +62,12 @@ export const deleteRule = async ({
             return sendSMS({
               phoneNumber: translatorPhoneNumber,
               message: translatorMessage,
+              recepientIsOptedOut: translatorOptedOut,
             }).then(() => {
               return sendSMS({
                 phoneNumber: claimantPhoneNumber,
                 message: translatedClaimantMessage,
+                recepientIsOptedOut: claimantOptedOut,
               })
                 .then(() => true)
                 .catch(() => false);

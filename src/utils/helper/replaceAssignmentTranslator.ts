@@ -52,6 +52,7 @@ export const replaceAssignmentTranslator = async (
               await sendSMS({
                 message: `You have been unassigned from an appointment with ${oldClaimant.firstName} ${oldClaimant.lastName} on ${oldAssignment.dateTime}`,
                 phoneNumber: oldTranslatorPhone,
+                recepientIsOptedOut: !!oldTranslator.optedOut,
               }).then(() => {
                 console.log("Unassigned SMS sent to old translator");
               });

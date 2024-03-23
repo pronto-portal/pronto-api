@@ -67,6 +67,7 @@ model NonUserTranslator {
   languages   String[]     @default([])
   createdBy   User         @relation("nonUserTranslators", fields: [createdById], references: [id])
   createdById String
+  optedOut    Boolean      @default(false)
 }
 
 model RefreshToken {
@@ -108,6 +109,7 @@ model Claimant {
   assignment      Assignment[]
   languages       String[]     @default([])
   primaryLanguage String?      @db.VarChar(120)
+  optedOut        Boolean      @default(false)
 }
 
 model Address {

@@ -86,6 +86,7 @@ type Claimant {
   id: String
   languages: [String]
   lastName: String
+  optedOut: Boolean
   phone: String
   primaryLanguage: String
   user: User
@@ -291,6 +292,7 @@ type Translator {
   id: String
   languages: [String!]
   lastName: String
+  optedOut: Boolean
   phone: String
   state: String
   updatedAt: DateTime

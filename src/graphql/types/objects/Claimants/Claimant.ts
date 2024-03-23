@@ -43,5 +43,6 @@ export const ClaimantType = objectType({
       });
     t.list.string("languages");
     t.string("primaryLanguage");
+    t.boolean("optedOut");
   },
 });
