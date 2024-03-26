@@ -1,6 +1,8 @@
 import { extendType, nonNull } from "nexus";
 import { CreateClaimantInput } from "../../types";
 import { isAuthorized } from "../../../utils/auth/isAuthorized";
+import { TranslateText } from "../../../utils/helper/translateText";
+import { sendSMS } from "../../../utils/sendSMS";
 
 export const CreateClaimant = extendType({
   type: "Mutation",
@@ -38,6 +40,23 @@ export const CreateClaimant = extendType({
             },
           },
         });
+
+        if (claimant) {
+          let claimantConsentMessage = `You have been added as a claimant to ${user.firstName} ${user.lastName}'s network. Reply YES to receive reminders for your upcoming appointment.`;
+
+          if (claimant.primaryLanguage) {
+            claimantConsentMessage = await TranslateText(
+              claimantConsentMessage,
+              claimant.primaryLanguage
+            );
+          }
+
+          sendSMS({
+            phoneNumber: claimant.phone,
+            message: claimantConsentMessage,
+            recepientIsOptedOut: false,
+          });
+        }
 
         return claimant;
       },

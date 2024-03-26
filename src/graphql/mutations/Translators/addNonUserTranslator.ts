@@ -1,5 +1,6 @@
 import { extendType, nonNull } from "nexus";
 import { isAuthorized } from "../../../utils/auth/isAuthorized";
+import { sendSMS } from "../../../utils/sendSMS";
 
 export const AddNonUserTranslator = extendType({
   type: "Mutation",
@@ -15,22 +16,33 @@ export const AddNonUserTranslator = extendType({
         const { email, firstName, lastName, phone, languages, city, state } =
           input;
 
-        const addTranslator = await prisma.nonUserTranslator.create({
-          data: {
-            email,
-            createdBy: {
-              connect: {
-                id: user.id,
+        const addTranslator = await prisma.nonUserTranslator
+          .create({
+            data: {
+              email,
+              createdBy: {
+                connect: {
+                  id: user.id,
+                },
               },
+              firstName,
+              lastName,
+              phone,
+              city,
+              state,
+              languages: languages || [],
             },
-            firstName,
-            lastName,
-            phone,
-            city,
-            state,
-            languages: languages || [],
-          },
-        });
+          })
+          .then((translator) => {
+            if (translator.phone)
+              sendSMS({
+                phoneNumber: translator.phone,
+                message: `You have been added as a translator to ${user.firstName} ${user.lastName}'s network. Reply YES to receive reminders for your assignments.`,
+                recepientIsOptedOut: false,
+              });
+
+            return translator;
+          });
 
         return addTranslator;
       },
