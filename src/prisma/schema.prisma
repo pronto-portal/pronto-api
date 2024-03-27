@@ -58,6 +58,7 @@ model NonUserTranslator {
   updatedAt   DateTime     @updatedAt
   email       String       @unique() @db.VarChar(120)
   phone       String?      @db.VarChar(30)
+  phoneId     PhoneNumber? @relation(fields: [phone], references: [number])
   firstName   String?      @db.VarChar(120)
   lastName    String?      @db.VarChar(120)
   profilePic  String?      @default("") @db.VarChar(255)
@@ -106,6 +107,7 @@ model Claimant {
   lastName        String       @db.VarChar(120)
   email           String       @db.VarChar(120)
   phone           String       @db.VarChar(30)
+  phoneId         PhoneNumber? @relation(fields: [phone], references: [number])
   assignment      Assignment[]
   languages       String[]     @default([])
   primaryLanguage String?      @db.VarChar(120)
@@ -134,3 +136,13 @@ model Reminder {
   createdBy         User       @relation(fields: [createdById], references: [id])
   createdById       String
 }
+
+model PhoneNumber {
+  claimant Claimant[]
+  translator NonUserTranslator[]
+  number String @id @db.VarChar(30)
+  optedOut Boolean @default(true)
+  dateTimeOptedOut DateTime?
+  dateTimeOptedIn DateTime?
+}
+
