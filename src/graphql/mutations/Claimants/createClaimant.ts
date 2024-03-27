@@ -30,7 +30,6 @@ export const CreateClaimant = extendType({
             email,
             firstName,
             lastName,
-            phone,
             languages: languages ?? [],
             primaryLanguage,
             user: {
@@ -38,6 +37,19 @@ export const CreateClaimant = extendType({
                 id: user.id,
               },
             },
+            phoneRef: {
+              connectOrCreate: {
+                where: {
+                  number: phone,
+                },
+                create: {
+                  number: phone,
+                },
+              },
+            },
+          },
+          include: {
+            phoneRef: true,
           },
         });
 
@@ -54,7 +66,7 @@ export const CreateClaimant = extendType({
           sendSMS({
             phoneNumber: claimant.phone,
             message: claimantConsentMessage,
-            recepientIsOptedOut: false,
+            recepientIsOptedOut: claimant.phoneRef?.optedOut || false,
           });
         }
 

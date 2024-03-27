@@ -58,7 +58,7 @@ model NonUserTranslator {
   updatedAt   DateTime     @updatedAt
   email       String       @unique() @db.VarChar(120)
   phone       String?      @db.VarChar(30)
-  phoneId     PhoneNumber? @relation(fields: [phone], references: [number])
+  phoneRef     PhoneNumber? @relation(fields: [phone], references: [number])
   firstName   String?      @db.VarChar(120)
   lastName    String?      @db.VarChar(120)
   profilePic  String?      @default("") @db.VarChar(255)
@@ -107,7 +107,7 @@ model Claimant {
   lastName        String       @db.VarChar(120)
   email           String       @db.VarChar(120)
   phone           String       @db.VarChar(30)
-  phoneId         PhoneNumber? @relation(fields: [phone], references: [number])
+  phoneRef         PhoneNumber? @relation(fields: [phone], references: [number])
   assignment      Assignment[]
   languages       String[]     @default([])
   primaryLanguage String?      @db.VarChar(120)

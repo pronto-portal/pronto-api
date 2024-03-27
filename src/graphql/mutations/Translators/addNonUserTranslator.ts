@@ -27,10 +27,22 @@ export const AddNonUserTranslator = extendType({
               },
               firstName,
               lastName,
-              phone,
               city,
               state,
               languages: languages || [],
+              phoneRef: {
+                connectOrCreate: {
+                  where: {
+                    number: phone,
+                  },
+                  create: {
+                    number: phone,
+                  },
+                },
+              },
+            },
+            include: {
+              phoneRef: true,
             },
           })
           .then((translator) => {
@@ -38,7 +50,7 @@ export const AddNonUserTranslator = extendType({
               sendSMS({
                 phoneNumber: translator.phone,
                 message: `You have been added as a translator to ${user.firstName} ${user.lastName}'s network. Reply YES to receive reminders for your assignments.`,
-                recepientIsOptedOut: false,
+                recepientIsOptedOut: translator.phoneRef?.optedOut || false,
               });
 
             return translator;

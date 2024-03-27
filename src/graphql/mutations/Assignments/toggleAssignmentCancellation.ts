@@ -21,8 +21,16 @@ export const ToggleAssignmentCancellation = extendType({
           where: { id: assignmentId, createdByUserId: user.id },
           include: {
             reminder: true,
-            assignedTo: true,
-            claimant: true,
+            assignedTo: {
+              include: {
+                phoneRef: true,
+              },
+            },
+            claimant: {
+              include: {
+                phoneRef: true,
+              },
+            },
           },
         });
 
@@ -59,8 +67,8 @@ export const ToggleAssignmentCancellation = extendType({
                     assignedTo.lastName
                   } on ${assignment.dateTime.toLocaleDateString()} has been cancelled.`,
                   claimantLanguage: claimant.primaryLanguage ?? "en",
-                  claimantOptedOut: claimant.optedOut,
-                  translatorOptedOut: assignedTo.optedOut,
+                  claimantOptedOut: claimant.phoneRef?.optedOut || false,
+                  translatorOptedOut: assignedTo.phoneRef?.optedOut || false,
                 });
               else {
                 createRule({
@@ -73,8 +81,8 @@ export const ToggleAssignmentCancellation = extendType({
                   claimantLanguage: claimant.primaryLanguage ?? "en",
                   cronString: dateToCron(assignment.dateTime.toISOString()),
                   assignmentDate: assignment.dateTime,
-                  claimantOptedOut: claimant.optedOut,
-                  translatorOptedOut: assignedTo.optedOut,
+                  claimantOptedOut: claimant.phoneRef?.optedOut || false,
+                  translatorOptedOut: assignedTo.phoneRef?.optedOut || false,
                 });
               }
             }

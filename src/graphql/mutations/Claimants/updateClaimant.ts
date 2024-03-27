@@ -27,9 +27,20 @@ export const UpdateClaimant = extendType({
             firstName: firstName || undefined,
             lastName: lastName || undefined,
             email: email || undefined,
-            phone: phone || undefined,
             primaryLanguage: primaryLanguage || undefined,
             languages: languages || undefined,
+            phoneRef: phone
+              ? {
+                  connectOrCreate: {
+                    where: {
+                      number: phone,
+                    },
+                    create: {
+                      number: phone,
+                    },
+                  },
+                }
+              : undefined,
           },
         });
 

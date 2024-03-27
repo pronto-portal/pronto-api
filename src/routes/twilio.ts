@@ -19,7 +19,7 @@ router.post(
   async (req, res) => {
     const twiml = new MessagingResponse();
     const messageBody: string = req.body.Body.toLowerCase();
-    const phone = req.body.From;
+    const number = req.body.From;
 
     const translatedToEnglishMessageBody = (
       await TranslateText(messageBody, "en")
@@ -28,23 +28,15 @@ router.post(
     if (messageBody === "stop") {
       twiml.message("You have successfully unsubscribed from our service.");
 
-      if (phone) {
+      if (number) {
         // Todo, create phone number table to query for phone numbers
-        prisma.claimant.updateMany({
+        prisma.phoneNumber.update({
           where: {
-            phone,
+            number,
           },
           data: {
             optedOut: true,
-          },
-        });
-
-        prisma.nonUserTranslator.updateMany({
-          where: {
-            phone,
-          },
-          data: {
-            optedOut: true,
+            dateTimeOptedOut: new Date(),
           },
         });
       }
@@ -54,22 +46,14 @@ router.post(
         "You have successfully subscribed to our service. You will now receive reminders for your upcoming appointments. Reply STOP to unsubscribe."
       );
 
-      if (phone) {
-        prisma.claimant.updateMany({
+      if (number) {
+        prisma.phoneNumber.updateMany({
           where: {
-            phone,
+            number,
           },
           data: {
             optedOut: false,
-          },
-        });
-
-        prisma.nonUserTranslator.updateMany({
-          where: {
-            phone,
-          },
-          data: {
-            optedOut: false,
+            dateTimeOptedIn: new Date(),
           },
         });
       }

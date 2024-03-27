@@ -32,6 +32,7 @@ export const CreateReminder: CreateReminderFunctionType = async ({
       claimant: {
         select: {
           phone: true,
+          phoneRef: true,
           primaryLanguage: true,
           optedOut: true,
         },
@@ -39,6 +40,7 @@ export const CreateReminder: CreateReminderFunctionType = async ({
       assignedTo: {
         select: {
           phone: true,
+          phoneRef: true,
           optedOut: true,
         },
       },
@@ -72,8 +74,8 @@ export const CreateReminder: CreateReminderFunctionType = async ({
         claimantLanguage: assignment.claimant!.primaryLanguage ?? "en",
         cronString,
         assignmentDate: assignment.dateTime,
-        claimantOptedOut: assignment.claimant!.optedOut,
-        translatorOptedOut: assignment.assignedTo!.optedOut,
+        claimantOptedOut: assignment.claimant!.phoneRef?.optedOut || false,
+        translatorOptedOut: assignment.assignedTo!.phoneRef?.optedOut || false,
       }).then(({ success }) => {
         if (!success)
           eventBridge

@@ -18,7 +18,7 @@ input AddNonUserTranslatorInput {
   firstName: String!
   languages: [String!]
   lastName: String!
-  phone: String
+  phone: String!
   state: String
 }
 

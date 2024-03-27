@@ -45,7 +45,7 @@ export interface NexusGenInputs {
     firstName: string; // String!
     languages?: string[] | null; // [String!]
     lastName: string; // String!
-    phone?: string | null; // String
+    phone: string; // String!
     state?: string | null; // String
   }
   AddTranslatorInput: { // input type

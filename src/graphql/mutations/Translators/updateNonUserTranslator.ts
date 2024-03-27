@@ -29,10 +29,21 @@ export const UpdateNonUserTranslator = extendType({
             email: email || undefined,
             firstName: firstName || undefined,
             lastName: lastName || undefined,
-            phone: phone || undefined,
             city: city || undefined,
             state: state || undefined,
             languages: languages || undefined,
+            phoneRef: phone
+              ? {
+                  connectOrCreate: {
+                    where: {
+                      number: phone,
+                    },
+                    create: {
+                      number: phone,
+                    },
+                  },
+                }
+              : undefined,
           },
         });
         return updateTranslator;

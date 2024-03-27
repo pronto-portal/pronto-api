@@ -14,8 +14,16 @@ export const replaceAssignmentTranslator = async (
       },
       include: {
         reminder: true,
-        assignedTo: true,
-        claimant: true,
+        assignedTo: {
+          include: {
+            phoneRef: true,
+          },
+        },
+        claimant: {
+          include: {
+            phoneRef: true,
+          },
+        },
         address: true,
       },
     });
@@ -52,7 +60,7 @@ export const replaceAssignmentTranslator = async (
               await sendSMS({
                 message: `You have been unassigned from an appointment with ${oldClaimant.firstName} ${oldClaimant.lastName} on ${oldAssignment.dateTime}`,
                 phoneNumber: oldTranslatorPhone,
-                recepientIsOptedOut: !!oldTranslator.optedOut,
+                recepientIsOptedOut: oldTranslator.phoneRef?.optedOut || false,
               }).then(() => {
                 console.log("Unassigned SMS sent to old translator");
               });
