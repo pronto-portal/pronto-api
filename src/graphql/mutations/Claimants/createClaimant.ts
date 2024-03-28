@@ -75,7 +75,7 @@ export const CreateClaimant = extendType({
             sendSMS({
               phoneNumber: claimant.phone,
               message: claimantConsentMessage,
-              recepientIsOptedOut: claimant.phoneRef?.optedOut || false,
+              recepientIsOptedOut: false,
             });
           }
         }
