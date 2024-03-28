@@ -63,11 +63,21 @@ export const CreateClaimant = extendType({
             );
           }
 
-          sendSMS({
-            phoneNumber: claimant.phone,
-            message: claimantConsentMessage,
-            recepientIsOptedOut: claimant.phoneRef?.optedOut || false,
-          });
+          console.log("claimant.phoneRef", claimant.phoneRef);
+          console.log(
+            "claimant.phoneRef.dateTimeOptedOut",
+            claimant.phoneRef?.dateTimeOptedOut
+          );
+          if (claimant.phoneRef && !claimant.phoneRef.dateTimeOptedOut) {
+            console.log(
+              "This is the first time the claimant is being added to the network."
+            );
+            sendSMS({
+              phoneNumber: claimant.phone,
+              message: claimantConsentMessage,
+              recepientIsOptedOut: claimant.phoneRef?.optedOut || false,
+            });
+          }
         }
 
         return claimant;

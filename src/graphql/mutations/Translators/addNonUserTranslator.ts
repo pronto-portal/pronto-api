@@ -16,47 +16,55 @@ export const AddNonUserTranslator = extendType({
         const { email, firstName, lastName, phone, languages, city, state } =
           input;
 
-        const addTranslator = await prisma.nonUserTranslator
-          .create({
-            data: {
-              email,
-              createdBy: {
-                connect: {
-                  id: user.id,
-                },
+        const translator = await prisma.nonUserTranslator.create({
+          data: {
+            email,
+            createdBy: {
+              connect: {
+                id: user.id,
               },
-              firstName,
-              lastName,
-              city,
-              state,
-              languages: languages || [],
-              phoneRef: {
-                connectOrCreate: {
-                  where: {
-                    number: phone,
-                  },
-                  create: {
-                    number: phone,
-                  },
+            },
+            firstName,
+            lastName,
+            city,
+            state,
+            languages: languages || [],
+            phoneRef: {
+              connectOrCreate: {
+                where: {
+                  number: phone,
+                },
+                create: {
+                  number: phone,
                 },
               },
             },
-            include: {
-              phoneRef: true,
-            },
-          })
-          .then((translator) => {
-            if (translator.phone)
-              sendSMS({
-                phoneNumber: translator.phone,
-                message: `You have been added as a translator to ${user.firstName} ${user.lastName}'s network. Reply YES to receive reminders for your assignments.`,
-                recepientIsOptedOut: translator.phoneRef?.optedOut || false,
-              });
+          },
+          include: {
+            phoneRef: true,
+          },
+        });
 
-            return translator;
-          });
+        if (translator && translator.phone) {
+          console.log("translator.phoneRef", translator.phoneRef);
+          console.log(
+            "translator.phoneRef.dateTimeOptedOut",
+            translator.phoneRef?.dateTimeOptedOut
+          );
 
-        return addTranslator;
+          if (translator.phoneRef && !translator.phoneRef.dateTimeOptedOut) {
+            console.log(
+              "Translator has never initially opted out therefore this is the first time they are being added to the network."
+            );
+            sendSMS({
+              phoneNumber: translator.phone,
+              message: `You have been added as a translator to ${user.firstName} ${user.lastName}'s network. Reply YES to receive reminders for your assignments.`,
+              recepientIsOptedOut: false,
+            });
+          }
+        }
+
+        return translator;
       },
     });
   },
